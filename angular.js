@@ -13941,7 +13941,7 @@ console.log('jvascript initialisation happened here..');
 
         var $interpolateMinErr = angular.$interpolateMinErr = minErr('$interpolate');
         $interpolateMinErr.throwNoconcat = function(text) {
-            console.log('');
+            console.log('$interpolateMinErr.throwNoconcat #13944');
         throw $interpolateMinErr('noconcat',
             'Error while interpolating: {0}\nStrict Contextual Escaping disallows ' +
             'interpolations that concatenate multiple expressions when a trusted value is ' +
@@ -13949,7 +13949,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         $interpolateMinErr.interr = function(text, err) {
-            console.log('');
+            console.log('$interpolateMinErr.interr #13952');
         return $interpolateMinErr('interr', 'Can\'t interpolate: {0}\n{1}', text, err.toString());
         };
 
@@ -13998,7 +13998,7 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         function $InterpolateProvider() {
-            console.log('');
+            console.log('$InterpolateProvider #14001');
         var startSymbol = '{{';
         var endSymbol = '}}';
 
@@ -14012,6 +14012,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {string|self} Returns the symbol when used as getter and self if used as setter.
         */
         this.startSymbol = function(value) {
+            console.log("anonymous inner function #14015");
             if (value) {
             startSymbol = value;
             return this;
@@ -14029,6 +14030,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {string|self} Returns the symbol when used as getter and self if used as setter.
         */
         this.endSymbol = function(value) {
+            console.log("anonymous inner function #14033");
             if (value) {
             endSymbol = value;
             return this;
@@ -14038,23 +14040,28 @@ console.log('jvascript initialisation happened here..');
 
 
         this.$get = ['$parse', '$exceptionHandler', '$sce', function($parse, $exceptionHandler, $sce) {
+            console.log("anonymous inner function #this.$get");
             var startSymbolLength = startSymbol.length,
                 endSymbolLength = endSymbol.length,
                 escapedStartRegexp = new RegExp(startSymbol.replace(/./g, escape), 'g'),
                 escapedEndRegexp = new RegExp(endSymbol.replace(/./g, escape), 'g');
 
             function escape(ch) {
+                console.log("anonymous inner function escape#14050");
             return '\\\\\\' + ch;
             }
 
             function unescapeText(text) {
+                console.log("anonymous inner function unescapeText #14055");
             return text.replace(escapedStartRegexp, startSymbol).
                 replace(escapedEndRegexp, endSymbol);
             }
 
             // TODO: this is the same as the constantWatchDelegate in parse.js
             function constantWatchDelegate(scope, listener, objectEquality, constantInterp) {
+                console.log("anonymous inner function constantWatchDelegate #14062");
             var unwatch = scope.$watch(function constantInterpolateWatch(scope) {
+                console.log("anonymous inner function scope.$watch #14064");
                 unwatch();
                 return constantInterp(scope);
             }, listener, objectEquality);
@@ -14180,6 +14187,7 @@ console.log('jvascript initialisation happened here..');
             * - `context`: evaluation context for all expressions embedded in the interpolated text
             */
             function $interpolate(text, mustHaveExpression, trustedContext, allOrNothing) {
+                console.log("anonymous inner function $interpolate#14190");
             var contextAllowsConcatenation = trustedContext === $sce.URL || trustedContext === $sce.MEDIA_URL;
 
             // Provide a quick exit and simplified result function for text with no interpolation
@@ -14236,7 +14244,7 @@ console.log('jvascript initialisation happened here..');
             // objects rather than simple strings
             // (we don't modify the expression if the input consists of only a single trusted input)
             var interceptor = contextAllowsConcatenation && singleExpression ? undefined : parseStringifyInterceptor;
-            parseFns = expressions.map(function(exp) { return $parse(exp, interceptor); });
+            parseFns = expressions.map(function(exp) { console.log("anonymous inner function #14247"); return $parse(exp, interceptor); });
 
             // Concatenating expressions makes it hard to reason about whether some combination of
             // concatenated values are unsafe to use and could easily lead to XSS.  By requiring that a
@@ -14253,6 +14261,7 @@ console.log('jvascript initialisation happened here..');
 
             if (!mustHaveExpression || expressions.length) {
                 var compute = function(values) {
+                    console.log("anonymous inner function compute #14264");
                 for (var i = 0, ii = expressions.length; i < ii; i++) {
                     if (allOrNothing && isUndefined(values[i])) return;
                     concat[expressionPositions[i]] = values[i];
@@ -14270,6 +14279,7 @@ console.log('jvascript initialisation happened here..');
                 };
 
                 return extend(function interpolationFn(context) {
+                    console.log("anonymous inner function extend #14282");
                     var i = 0;
                     var ii = expressions.length;
                     var values = new Array(ii);
@@ -14289,8 +14299,10 @@ console.log('jvascript initialisation happened here..');
                 exp: text, //just for compatibility with regular watchers created via $watch
                 expressions: expressions,
                 $$watchDelegate: function(scope, listener) {
+                    console.log("anonymous inner function $$watchDelegate #14302");
                     var lastValue;
                     return scope.$watchGroup(parseFns, /** @this */ function interpolateFnWatcher(values, oldValues) {
+                        console.log("anonymous inner function interpolateFnWatcher #14305");
                     var currValue = compute(values);
                     listener.call(this, currValue, values !== oldValues ? lastValue : currValue, scope);
                     lastValue = currValue;
@@ -14300,6 +14312,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function parseStringifyInterceptor(value) {
+                console.log("anonymous inner function parseStringifyInterceptor #14315");
                 try {
                 // In concatenable contexts, getTrusted comes at the end, to avoid sanitizing individual
                 // parts of a full URL. We don't care about losing the trustedness here.
@@ -14328,6 +14341,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {string} start symbol.
             */
             $interpolate.startSymbol = function() {
+                console.log("anonymous inner function $interpolate.startSymbol #14344");
             return startSymbol;
             };
 
@@ -14344,6 +14358,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {string} end symbol.
             */
             $interpolate.endSymbol = function() {
+                console.log("anonymous inner function $interpolate.endSymbol #14361");
             return endSymbol;
             };
 
@@ -14355,16 +14370,19 @@ console.log('jvascript initialisation happened here..');
 
         /** @this */
         function $IntervalProvider() {
-            console.log('');
+            console.log('$IntervalProvider #14373');
         this.$get = ['$$intervalFactory', '$window',
             function($$intervalFactory,   $window) {
+                console.log("anonymous inner function #14376");
             var intervals = {};
             var setIntervalFn = function(tick, delay, deferred) {
+                console.log("anonymous inner function #14379");
             var id = $window.setInterval(tick, delay);
             intervals[id] = deferred;
             return id;
             };
             var clearIntervalFn = function(id) {
+                console.log("anonymous inner function clearIntervalFn #14385");
             $window.clearInterval(id);
             delete intervals[id];
             };
@@ -14508,6 +14526,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {boolean} Returns `true` if the task was successfully canceled.
             */
             interval.cancel = function(promise) {
+                console.log("anonymous inner function interval.cancel #14529");
             if (!promise) return false;
 
             if (!promise.hasOwnProperty('$$intervalId')) {
@@ -14534,11 +14553,14 @@ console.log('jvascript initialisation happened here..');
 
         /** @this */
         function $$IntervalFactoryProvider() {
-            console.log('');
+            console.log('$$IntervalFactoryProvider #14556');
         this.$get = ['$browser', '$q', '$$q', '$rootScope',
             function($browser,   $q,   $$q,   $rootScope) {
+                console.log("anonymous inner function #14559");
             return function intervalFactory(setIntervalFn, clearIntervalFn) {
+                console.log("anonymous inner function #14561");
             return function intervalFn(fn, delay, count, invokeApply) {
+                console.log("anonymous inner function #14563");
                 var hasParams = arguments.length > 4,
                     args = hasParams ? sliceArgs(arguments, 4) : [],
                     iteration = 0,
@@ -14549,6 +14571,7 @@ console.log('jvascript initialisation happened here..');
                 count = isDefined(count) ? count : 0;
 
                 function callback() {
+                    console.log("anonymous inner function callback #14574");
                 if (!hasParams) {
                     fn(iteration);
                 } else {
@@ -14557,6 +14580,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 function tick() {
+                    console.log("anonymous inner function tick #14583");
                 if (skipApply) {
                     $browser.defer(callback);
                 } else {
@@ -14590,13 +14614,16 @@ console.log('jvascript initialisation happened here..');
         * how they vary compared to the requested url.
         */
         var $jsonpCallbacksProvider = /** @this */ function() {
-            console.log('');
+            console.log('$jsonpCallbacksProvider #14617');
         this.$get = function() {
+            console.log("anonymous inner function this.$get #14619");
             var callbacks = angular.callbacks;
             var callbackMap = {};
 
             function createCallback(callbackId) {
+                console.log("anonymous inner function createCallback #14624");
             var callback = function(data) {
+                console.log("anonymous inner function callback #14626");
                 callback.data = data;
                 callback.called = true;
             };
@@ -14615,6 +14642,7 @@ console.log('jvascript initialisation happened here..');
             * to pass to the server, which will be used to call the callback with its payload in the JSONP response.
             */
             createCallback: function(url) {
+                console.log("anonymous inner function createCallback: #14645");
                 var callbackId = '_' + (callbacks.$$counter++).toString(36);
                 var callbackPath = 'angular.callbacks.' + callbackId;
                 var callback = createCallback(callbackId);
@@ -14631,6 +14659,7 @@ console.log('jvascript initialisation happened here..');
             * callback that was passed in the request.
             */
             wasCalled: function(callbackPath) {
+                console.log("anonymous inner function wasCalled: #14662");
                 return callbackMap[callbackPath].called;
             },
             /**
@@ -14643,6 +14672,7 @@ console.log('jvascript initialisation happened here..');
             * in the JSONP response.
             */
             getResponse: function(callbackPath) {
+                console.log("anonymous inner function getResponse #14675");
                 return callbackMap[callbackPath].data;
             },
             /**
@@ -14654,6 +14684,7 @@ console.log('jvascript initialisation happened here..');
             * completed or timed-out.
             */
             removeCallback: function(callbackPath) {
+                console.log("anonymous inner function removeCallback #14687");
                 var callback = callbackMap[callbackPath];
                 delete callbacks[callback.id];
                 delete callbackMap[callbackPath];
@@ -14687,7 +14718,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {string}
         */
         function encodePath(path) {
-            console.log('');
+            console.log('encodePath #14721');
         var segments = path.split('/'),
             i = segments.length;
 
@@ -14700,7 +14731,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function decodePath(path, html5Mode) {
-            console.log('');
+            console.log('decodePath #14734');
         var segments = path.split('/'),
             i = segments.length;
 
@@ -14716,7 +14747,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function normalizePath(pathValue, searchValue, hashValue) {
-            console.log('');
+            console.log('normalizePath #14750');
         var search = toKeyValue(searchValue),
             hash = hashValue ? '#' + encodeUriSegment(hashValue) : '',
             path = encodePath(pathValue);
@@ -14725,7 +14756,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function parseAbsoluteUrl(absoluteUrl, locationObj) {
-            console.log('');
+            console.log('parseAbsoluteUrl #14759');
         var parsedUrl = urlResolve(absoluteUrl);
 
         locationObj.$$protocol = parsedUrl.protocol;
@@ -14735,7 +14766,7 @@ console.log('jvascript initialisation happened here..');
 
         var DOUBLE_SLASH_REGEX = /^\s*[\\/]{2,}/;
         function parseAppUrl(url, locationObj, html5Mode) {
-            console.log('');
+            console.log('parseAppUrl #14769');
 
         if (DOUBLE_SLASH_REGEX.test(url)) {
             throw $locationMinErr('badpath', 'Invalid url "{0}".', url);
@@ -14758,7 +14789,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function startsWith(str, search) {
-            console.log('');
+            console.log('startsWith #14792');
         return str.slice(0, search.length) === search;
         }
 
@@ -14770,26 +14801,26 @@ console.log('jvascript initialisation happened here..');
         *                   the expected string.
         */
         function stripBaseUrl(base, url) {
-            console.log('');
+            console.log('stripBaseUrl #14804');
         if (startsWith(url, base)) {
             return url.substr(base.length);
         }
         }
 
         function stripHash(url) {
-            console.log('');
+            console.log('stripHash #14811');
         var index = url.indexOf('#');
         return index === -1 ? url : url.substr(0, index);
         }
 
         function stripFile(url) {
-            console.log('');
+            console.log('stripFile #14817');
         return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
         }
 
         /* return the server only (scheme://host:port) */
         function serverBase(url) {
-            console.log('');
+            console.log('serverBase #14823');
         return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
         }
 
@@ -14804,7 +14835,7 @@ console.log('jvascript initialisation happened here..');
         * @param {string} basePrefix URL path prefix
         */
         function LocationHtml5Url(appBase, appBaseNoFile, basePrefix) {
-            console.log('');
+            console.log('LocationHtml5Url LocationHtml5Url #14838');
         this.$$html5 = true;
         basePrefix = basePrefix || '';
         parseAbsoluteUrl(appBase, this);
@@ -14816,6 +14847,7 @@ console.log('jvascript initialisation happened here..');
         * @private
         */
         this.$$parse = function(url) {
+            console.log("anonymous inner function $$parse #14850");
             var pathUrl = stripBaseUrl(appBaseNoFile, url);
             if (!isString(pathUrl)) {
             throw $locationMinErr('ipthprfx', 'Invalid url "{0}", missing path prefix "{1}".', url,
@@ -14832,10 +14864,12 @@ console.log('jvascript initialisation happened here..');
         };
 
         this.$$normalizeUrl = function(url) {
+            console.log("anonymous inner function this.$$normalizeUrl #14867");
             return appBaseNoFile + url.substr(1); // first char is always '/'
         };
 
         this.$$parseLinkUrl = function(url, relHref) {
+            console.log("anonymous inner function this.$$parseLinkUrl #14872");
             if (relHref && relHref[0] === '#') {
             // special case for links to hash fragments:
             // keep the old url and only replace the hash fragment
@@ -14877,7 +14911,7 @@ console.log('jvascript initialisation happened here..');
         * @param {string} hashPrefix hashbang prefix
         */
         function LocationHashbangUrl(appBase, appBaseNoFile, hashPrefix) {
-            console.log('');
+            console.log('LocationHashbangUrl #14914');
 
         parseAbsoluteUrl(appBase, this);
 
@@ -14888,11 +14922,11 @@ console.log('jvascript initialisation happened here..');
         * @private
         */
         this.$$parse = function(url) {
+            console.log("anonymous inner function this.$$parse #14925");
             var withoutBaseUrl = stripBaseUrl(appBase, url) || stripBaseUrl(appBaseNoFile, url);
             var withoutHashUrl;
 
             if (!isUndefined(withoutBaseUrl) && withoutBaseUrl.charAt(0) === '#') {
-
             // The rest of the URL starts with a hash so we have
             // got either a hashbang path or a plain hash fragment
             withoutHashUrl = stripBaseUrl(hashPrefix, withoutBaseUrl);
@@ -14934,6 +14968,7 @@ console.log('jvascript initialisation happened here..');
             * do not include drive names for routing.
             */
             function removeWindowsDriveName(path, url, base) {
+                console.log("anonymous inner function removeWindowsDriveName #14971");
             /*
             Matches paths for file protocol on windows,
             such as /C:/foo/bar, and captures only /foo/bar.
@@ -14958,10 +14993,12 @@ console.log('jvascript initialisation happened here..');
         };
 
         this.$$normalizeUrl = function(url) {
+            console.log("anonymous inner function this.$$normalizeUrl #14996");
             return appBase + (url ? hashPrefix + url : '');
         };
 
         this.$$parseLinkUrl = function(url, relHref) {
+            console.log("anonymous inner function this.$$parseLinkUrl #15001");
             if (stripHash(appBase) === stripHash(url)) {
             this.$$parse(url);
             return true;
@@ -14982,11 +15019,12 @@ console.log('jvascript initialisation happened here..');
         * @param {string} hashPrefix hashbang prefix
         */
         function LocationHashbangInHtml5Url(appBase, appBaseNoFile, hashPrefix) {
-            console.log('');
+            console.log('LocationHashbangInHtml5Url #15022');
         this.$$html5 = true;
         LocationHashbangUrl.apply(this, arguments);
 
         this.$$parseLinkUrl = function(url, relHref) {
+            console.log("anonymous inner function $$parseLinkUrl #15027");
             if (relHref && relHref[0] === '#') {
             // special case for links to hash fragments:
             // keep the old url and only replace the hash fragment
@@ -15011,6 +15049,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         this.$$normalizeUrl = function(url) {
+            console.log("anonymous inner function $$normalizeUrl #15052");
             // include hashPrefix in $$absUrl when $$url is empty so IE9 does not reload page because of removal of '#'
             return appBase + hashPrefix + url;
         };
@@ -15042,6 +15081,7 @@ console.log('jvascript initialisation happened here..');
         * @private
         */
         $$compose: function() {
+            console.log("anonymous inner function $$compose #15084");
             this.$$url = normalizePath(this.$$path, this.$$search, this.$$hash);
             this.$$absUrl = this.$$normalizeUrl(this.$$url);
             this.$$urlUpdatedByLocation = true;
@@ -15090,6 +15130,7 @@ console.log('jvascript initialisation happened here..');
         * @return {string} url
         */
         url: function(url) {
+            console.log("anonymous inner function url #15133");
             if (isUndefined(url)) {
             return this.$$url;
             }
@@ -15195,6 +15236,7 @@ console.log('jvascript initialisation happened here..');
         * @return {(string|object)} path if called with no parameters, or `$location` if called with a parameter
         */
         path: locationGetterSetter('$$path', function(path) {
+            console.log("anonymous inner function path: locationGetterSetter # 15239");
             path = path !== null ? path.toString() : '';
             return path.charAt(0) === '/' ? path : '/' + path;
         }),
@@ -15245,6 +15287,7 @@ console.log('jvascript initialisation happened here..');
         * one or more arguments returns `$location` object itself.
         */
         search: function(search, paramValue) {
+            console.log("anonymous inner function search [switch] #15290");
             switch (arguments.length) {
             case 0:
                 return this.$$search;
@@ -15256,6 +15299,7 @@ console.log('jvascript initialisation happened here..');
                 search = copy(search, {});
                 // remove object undefined or null properties
                 forEach(search, function(value, key) {
+                    console.log("anonymous inner function #15302");
                     if (value == null) delete search[key];
                 });
 
@@ -15299,6 +15343,7 @@ console.log('jvascript initialisation happened here..');
         * @return {string} hash
         */
         hash: locationGetterSetter('$$hash', function(hash) {
+            console.log("anonymous inner function #15346");
             return hash !== null ? hash.toString() : '';
         }),
 
@@ -15311,13 +15356,14 @@ console.log('jvascript initialisation happened here..');
         * record, instead of adding a new one.
         */
         replace: function() {
+            console.log("anonymous inner function #15359");
             this.$$replace = true;
             return this;
         }
         };
 
         forEach([LocationHashbangInHtml5Url, LocationHashbangUrl, LocationHtml5Url], function(Location) {
-            console.log('');
+            console.log('anonymous inner function #15366');
         Location.prototype = Object.create(locationPrototype);
 
         /**
@@ -15340,6 +15386,7 @@ console.log('jvascript initialisation happened here..');
         * @return {object} state
         */
         Location.prototype.state = function(state) {
+            console.log("anonymous inner function Location.prototype.state #15389");
             if (!arguments.length) {
             return this.$$state;
             }
@@ -15360,16 +15407,18 @@ console.log('jvascript initialisation happened here..');
 
 
         function locationGetter(property) {
-            console.log('');
+            console.log('locationGetter #15410');
         return /** @this */ function() {
+            console.log("anonymous inner function #15412");
             return this[property];
         };
         }
 
 
         function locationGetterSetter(property, preprocess) {
-            console.log('');
+            console.log('locationGetterSetter #15418');
         return /** @this */ function(value) {
+            console.log("anonymous inner function #15421");
             if (isUndefined(value)) {
             return this[property];
             }
@@ -15417,7 +15466,7 @@ console.log('jvascript initialisation happened here..');
         * Use the `$locationProvider` to configure how the application deep linking paths are stored.
         */
         function $LocationProvider() {
-            console.log('');
+            console.log('$LocationProvider #15469');
         var hashPrefix = '!',
             html5Mode = {
                 enabled: false,
@@ -15434,6 +15483,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {*} current value if used as getter or itself (chaining) if used as setter
         */
         this.hashPrefix = function(prefix) {
+            console.log("anonymous inner function this.hashPrefix #15486");
             if (isDefined(prefix)) {
             hashPrefix = prefix;
             return this;
@@ -15466,6 +15516,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {Object} html5Mode object if used as getter or itself (chaining) if used as setter
         */
         this.html5Mode = function(mode) {
+            console.log("anonymous inner function #15519");
             if (isBoolean(mode)) {
             html5Mode.enabled = mode;
             return this;
@@ -15530,6 +15581,7 @@ console.log('jvascript initialisation happened here..');
 
         this.$get = ['$rootScope', '$browser', '$sniffer', '$rootElement', '$window',
             function($rootScope, $browser, $sniffer, $rootElement, $window) {
+                console.log("anonymous inner function #15584");
             var $location,
                 LocationMode,
                 baseHref = $browser.baseHref(), // if base[href] is undefined, it defaults to ''
@@ -15560,10 +15612,12 @@ console.log('jvascript initialisation happened here..');
             //  such as $location.absUrl() vs $browser.url()
             // See https://github.com/angular/angular.js/issues/16592
             function urlsEqual(a, b) {
+                console.log("anonymous inner function urlsEqual #15615");
             return a === b || urlResolve(a).href === urlResolve(b).href;
             }
 
             function setBrowserUrlWithFallback(url, replace, state) {
+                console.log("anonymous inner function setBrowserUrlWithFallback #15620");
             var oldUrl = $location.url();
             var oldState = $location.$$state;
             try {
@@ -15583,6 +15637,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             $rootElement.on('click', function(event) {
+                console.log("anonymous inner function $rootElement.on #15640");
             var rewriteLinks = html5Mode.rewriteLinks;
             // TODO(vojta): rewrite link when opening in new tab/window (in legacy browser)
             // currently we open nice url link and redirect then
@@ -15637,6 +15692,7 @@ console.log('jvascript initialisation happened here..');
 
             // update $location when $browser url changes
             $browser.onUrlChange(function(newUrl, newState) {
+                console.log("anonymous inner function $browser.onUrlChange #15695");
 
             if (!startsWith(newUrl, appBaseNoFile)) {
                 // If we are navigating outside of the app then force a reload
@@ -15645,6 +15701,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             $rootScope.$evalAsync(function() {
+                console.log("anonymous inner function $rootScope.$evalAsync #15704");
                 var oldUrl = $location.absUrl();
                 var oldState = $location.$$state;
                 var defaultPrevented;
@@ -15672,6 +15729,7 @@ console.log('jvascript initialisation happened here..');
 
             // update browser
             $rootScope.$watch(function $locationWatch() {
+                console.log("anonymous inner function $rootScope.$watch #15732");
             if (initializing || $location.$$urlUpdatedByLocation) {
                 $location.$$urlUpdatedByLocation = false;
 
@@ -15686,6 +15744,7 @@ console.log('jvascript initialisation happened here..');
                 initializing = false;
 
                 $rootScope.$evalAsync(function() {
+                    console.log("anonymous inner function $rootScope.$evalAsync #15747");
                     var newUrl = $location.absUrl();
                     var defaultPrevented = $rootScope.$broadcast('$locationChangeStart', newUrl, oldUrl,
                         $location.$$state, oldState).defaultPrevented;
@@ -15717,6 +15776,7 @@ console.log('jvascript initialisation happened here..');
             return $location;
 
             function afterLocationChange(oldUrl, oldState) {
+                console.log("anonymous inner function afterLocationChange #15779");
             $rootScope.$broadcast('$locationChangeSuccess', $location.absUrl(), oldUrl,
                 $location.$$state, oldState);
             }
@@ -15778,7 +15838,7 @@ console.log('jvascript initialisation happened here..');
         * Use the `$logProvider` to configure how the application logs messages
         */
         function $LogProvider() {
-            console.log('');
+            console.log('$LogProvider #15841');
         var debug = true,
             self = this;
 
@@ -15790,6 +15850,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {*} current value if used as getter or itself (chaining) if used as setter
         */
         this.debugEnabled = function(flag) {
+            console.log("anonymous inner function debugEnabled #15853");
             if (isDefined(flag)) {
             debug = flag;
             return this;
@@ -15799,6 +15860,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         this.$get = ['$window', function($window) {
+            console.log("anonymous inner function #15863");
             // Support: IE 9-11, Edge 12-14+
             // IE/Edge display errors in such a way that it requires the user to click in 4 places
             // to see the stack trace. There is no way to feature-detect it so there's a chance
@@ -15853,9 +15915,11 @@ console.log('jvascript initialisation happened here..');
             * Write a debug message
             */
             debug: (function() {
+                console.log("anonymous inner function #15918");
                 var fn = consoleLog('debug');
 
                 return function() {
+                    console.log("anonymous inner function #15922");
                 if (debug) {
                     fn.apply(self, arguments);
                 }
@@ -15864,6 +15928,7 @@ console.log('jvascript initialisation happened here..');
             };
 
             function formatError(arg) {
+                console.log("anonymous inner function formatError #15931");
             if (isError(arg)) {
                 if (arg.stack && formatStackTrace) {
                 arg = (arg.message && arg.stack.indexOf(arg.message) === -1)
@@ -15877,12 +15942,14 @@ console.log('jvascript initialisation happened here..');
             }
 
             function consoleLog(type) {
+                console.log("anonymous inner function consoleLog #15945");
             var console = $window.console || {},
                 logFn = console[type] || console.log || noop;
 
             return function() {
                 var args = [];
                 forEach(arguments, function(arg) {
+                    console.log("anonymous inner function #15952");
                 args.push(formatError(arg));
                 });
                 // Support: IE 9 only
@@ -15925,7 +15992,7 @@ console.log('jvascript initialisation happened here..');
 
 
         function getStringValue(name) {
-            console.log('');
+            console.log('getStringValue #15995');
         // Property names must be strings. This means that non-string objects cannot be used
         // as keys in an object. Any non-string object, including a number, is typecasted
         // into a string via the toString method.
@@ -15956,14 +16023,16 @@ console.log('jvascript initialisation happened here..');
         * @constructor
         */
         var Lexer = function Lexer(options) {
-            console.log('');
+            console.log('Lexer #16026');
         this.options = options;
         };
 
         Lexer.prototype = {
+            
         constructor: Lexer,
 
         lex: function(text) {
+            console.log("anonymous inner function lex #16035");
             this.text = text;
             this.index = 0;
             this.tokens = [];
@@ -16000,53 +16069,63 @@ console.log('jvascript initialisation happened here..');
         },
 
         is: function(ch, chars) {
+            console.log("anonymous inner function is #16072");
             return chars.indexOf(ch) !== -1;
         },
 
         peek: function(i) {
+            console.log("anonymous inner function peek #16077");
             var num = i || 1;
             return (this.index + num < this.text.length) ? this.text.charAt(this.index + num) : false;
         },
 
         isNumber: function(ch) {
+            console.log("anonymous inner function isNumber #16083");
             return ('0' <= ch && ch <= '9') && typeof ch === 'string';
         },
 
         isWhitespace: function(ch) {
+            console.log("anonymous inner function isWhitespace #16088");
             // IE treats non-breaking space as \u00A0
             return (ch === ' ' || ch === '\r' || ch === '\t' ||
                     ch === '\n' || ch === '\v' || ch === '\u00A0');
         },
 
         isIdentifierStart: function(ch) {
+            console.log("anonymous inner function isIdentifierStart #16095");
             return this.options.isIdentifierStart ?
                 this.options.isIdentifierStart(ch, this.codePointAt(ch)) :
                 this.isValidIdentifierStart(ch);
         },
 
         isValidIdentifierStart: function(ch) {
+            console.log("anonymous inner function isValidIdentifierStart #16102");
             return ('a' <= ch && ch <= 'z' ||
                     'A' <= ch && ch <= 'Z' ||
                     '_' === ch || ch === '$');
         },
 
         isIdentifierContinue: function(ch) {
+            console.log("anonymous inner function isIdentifierContinue #16109");
             return this.options.isIdentifierContinue ?
                 this.options.isIdentifierContinue(ch, this.codePointAt(ch)) :
                 this.isValidIdentifierContinue(ch);
         },
 
         isValidIdentifierContinue: function(ch, cp) {
+            console.log("anonymous inner function isValidIdentifierContinue #16116");
             return this.isValidIdentifierStart(ch, cp) || this.isNumber(ch);
         },
 
         codePointAt: function(ch) {
+            console.log("anonymous inner function codePointAt #16121");
             if (ch.length === 1) return ch.charCodeAt(0);
             // eslint-disable-next-line no-bitwise
             return (ch.charCodeAt(0) << 10) + ch.charCodeAt(1) - 0x35FDC00;
         },
 
         peekMultichar: function() {
+            console.log("anonymous inner function peekMultichar #16128");
             var ch = this.text.charAt(this.index);
             var peek = this.peek();
             if (!peek) {
@@ -16061,10 +16140,12 @@ console.log('jvascript initialisation happened here..');
         },
 
         isExpOperator: function(ch) {
+            console.log("anonymous inner function isExpOperator#16143");
             return (ch === '-' || ch === '+' || this.isNumber(ch));
         },
 
         throwError: function(error, start, end) {
+            console.log("anonymous inner function throwError#16148");
             end = end || this.index;
             var colStr = (isDefined(start)
                     ? 's ' + start +  '-' + this.index + ' [' + this.text.substring(start, end) + ']'
@@ -16074,6 +16155,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         readNumber: function() {
+            console.log("anonymous inner function readNumber#16158");
             var number = '';
             var start = this.index;
             while (this.index < this.text.length) {
@@ -16107,6 +16189,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         readIdent: function() {
+            console.log("anonymous inner function readIdent #16192");
             var start = this.index;
             this.index += this.peekMultichar().length;
             while (this.index < this.text.length) {
@@ -16124,6 +16207,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         readString: function(quote) {
+            console.log("anonymous inner function readString#16210");
             var start = this.index;
             this.index++;
             var string = '';
@@ -16166,7 +16250,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         var AST = function AST(lexer, options) {
-            console.log('');
+            console.log('AST #16253');
         this.lexer = lexer;
         this.options = options;
         };
@@ -16193,7 +16277,7 @@ console.log('jvascript initialisation happened here..');
 
         AST.prototype = {
         ast: function(text) {
-            console.log('');
+            console.log('ast #16280');
             this.text = text;
             this.tokens = this.lexer.lex(text);
 
@@ -16207,6 +16291,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         program: function() {
+            console.log("anonymous inner function program #16294");
             var body = [];
             while (true) {
             if (this.tokens.length > 0 && !this.peek('}', ')', ';', ']'))
@@ -16218,10 +16303,12 @@ console.log('jvascript initialisation happened here..');
         },
 
         expressionStatement: function() {
+            console.log("anonymous inner function expressionStatement #16306");
             return { type: AST.ExpressionStatement, expression: this.filterChain() };
         },
 
         filterChain: function() {
+            console.log("anonymous inner function filterChain #16311");
             var left = this.expression();
             while (this.expect('|')) {
             left = this.filter(left);
@@ -16230,10 +16317,12 @@ console.log('jvascript initialisation happened here..');
         },
 
         expression: function() {
+            console.log("anonymous inner function expression #16320");
             return this.assignment();
         },
 
         assignment: function() {
+            console.log("anonymous inner function assignment #16325");
             var result = this.ternary();
             if (this.expect('=')) {
             if (!isAssignable(result)) {
@@ -16246,6 +16335,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         ternary: function() {
+            console.log("anonymous inner function ternary #16338");
             var test = this.logicalOR();
             var alternate;
             var consequent;
@@ -16260,6 +16350,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         logicalOR: function() {
+            console.log("anonymous inner function logicalOR #16353");
             var left = this.logicalAND();
             while (this.expect('||')) {
             left = { type: AST.LogicalExpression, operator: '||', left: left, right: this.logicalAND() };
@@ -16268,6 +16359,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         logicalAND: function() {
+            console.log("anonymous inner function logicalAND#16362");
             var left = this.equality();
             while (this.expect('&&')) {
             left = { type: AST.LogicalExpression, operator: '&&', left: left, right: this.equality()};
@@ -16276,6 +16368,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         equality: function() {
+            console.log("anonymous inner function equality#16371");
             var left = this.relational();
             var token;
             while ((token = this.expect('==','!=','===','!=='))) {
@@ -16285,6 +16378,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         relational: function() {
+            console.log("anonymous inner function relational#16381");
             var left = this.additive();
             var token;
             while ((token = this.expect('<', '>', '<=', '>='))) {
@@ -16294,6 +16388,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         additive: function() {
+            console.log("anonymous inner function additive#16391");
             var left = this.multiplicative();
             var token;
             while ((token = this.expect('+','-'))) {
@@ -16303,6 +16398,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         multiplicative: function() {
+            console.log("anonymous inner function multiplicative#16401");
             var left = this.unary();
             var token;
             while ((token = this.expect('*','/','%'))) {
@@ -16312,6 +16408,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         unary: function() {
+            console.log("anonymous inner function unary#16411");
             var token;
             if ((token = this.expect('+', '-', '!'))) {
             return { type: AST.UnaryExpression, operator: token.text, prefix: true, argument: this.unary() };
@@ -16321,6 +16418,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         primary: function() {
+            console.log("anonymous inner function primary#16421");
             var primary;
             if (this.expect('(')) {
             primary = this.filterChain();
@@ -16359,6 +16457,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         filter: function(baseExpression) {
+            console.log("anonymous inner function filter#16460");
             var args = [baseExpression];
             var result = {type: AST.CallExpression, callee: this.identifier(), arguments: args, filter: true};
 
@@ -16370,6 +16469,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         parseArguments: function() {
+            console.log("anonymous inner function parseArguments #16472");
             var args = [];
             if (this.peekToken().text !== ')') {
             do {
@@ -16380,6 +16480,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         identifier: function() {
+            console.log("anonymous inner function identifier #16483");
             var token = this.consume();
             if (!token.identifier) {
             this.throwError('is not a valid identifier', token);
@@ -16388,11 +16489,13 @@ console.log('jvascript initialisation happened here..');
         },
 
         constant: function() {
+            console.log("anonymous inner function constant #16492");
             // TODO check that it is a constant
             return { type: AST.Literal, value: this.consume().value };
         },
 
         arrayDeclaration: function() {
+            console.log("anonymous inner function arrayDeclaration#16498");
             var elements = [];
             if (this.peekToken().text !== ']') {
             do {
@@ -16409,6 +16512,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         object: function() {
+            console.log("anonymous inner function object#16515");
             var properties = [], property;
             if (this.peekToken().text !== '}') {
             do {
@@ -16450,12 +16554,14 @@ console.log('jvascript initialisation happened here..');
         },
 
         throwError: function(msg, token) {
+            console.log("anonymous inner function throwError#16557");
             throw $parseMinErr('syntax',
                 'Syntax Error: Token \'{0}\' {1} at column {2} of the expression [{3}] starting at [{4}].',
                 token.text, msg, (token.index + 1), this.text, this.text.substring(token.index));
         },
 
         consume: function(e1) {
+            console.log("anonymous inner function consume#16564");
             if (this.tokens.length === 0) {
             throw $parseMinErr('ueoe', 'Unexpected end of expression: {0}', this.text);
             }
@@ -16468,6 +16574,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         peekToken: function() {
+            console.log("anonymous inner function peekToken#16577");
             if (this.tokens.length === 0) {
             throw $parseMinErr('ueoe', 'Unexpected end of expression: {0}', this.text);
             }
@@ -16475,10 +16582,12 @@ console.log('jvascript initialisation happened here..');
         },
 
         peek: function(e1, e2, e3, e4) {
+            console.log("anonymous inner function peek#16585");
             return this.peekAhead(0, e1, e2, e3, e4);
         },
 
         peekAhead: function(i, e1, e2, e3, e4) {
+            console.log("anonymous inner function peekAhead#16590");
             if (this.tokens.length > i) {
             var token = this.tokens[i];
             var t = token.text;
@@ -16491,6 +16600,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         expect: function(e1, e2, e3, e4) {
+            console.log("anonymous inner function expect#16603");
             var token = this.peek(e1, e2, e3, e4);
             if (token) {
             this.tokens.shift();
@@ -16506,19 +16616,19 @@ console.log('jvascript initialisation happened here..');
         };
 
         function ifDefined(v, d) {
-            console.log('');
+            console.log('ifDefined #16619');
         return typeof v !== 'undefined' ? v : d;
         }
 
         function plusFn(l, r) {
-            console.log('');
+            console.log('plusFn #16624');
         if (typeof l === 'undefined') return r;
         if (typeof r === 'undefined') return l;
         return l + r;
         }
 
         function isStateless($filter, filterName) {
-            console.log('');
+            console.log('isStateless #16631');
         var fn = $filter(filterName);
         return !fn.$stateful;
         }
@@ -16528,7 +16638,7 @@ console.log('jvascript initialisation happened here..');
 
         // Detect nodes which could depend on non-shallow state of objects
         function isPure(node, parentIsPure) {
-            console.log('');
+            console.log('isPure #16641');
         switch (node.type) {
             // Computed members might invoke a stateful toString()
             case AST.MemberExpression:
@@ -16554,7 +16664,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function findConstantAndWatchExpressions(ast, $filter, parentIsPure) {
-            console.log('');
+            console.log('findConstantAndWatchExpressions #16667');
         var allConstants;
         var argsToWatch;
         var isStatelessFilter;
@@ -16565,6 +16675,7 @@ console.log('jvascript initialisation happened here..');
         case AST.Program:
             allConstants = true;
             forEach(ast.body, function(expr) {
+                console.log("anonymous inner function #16678");
             findConstantAndWatchExpressions(expr.expression, $filter, astIsPure);
             allConstants = allConstants && expr.expression.constant;
             });
@@ -16615,6 +16726,7 @@ console.log('jvascript initialisation happened here..');
             allConstants = isStatelessFilter;
             argsToWatch = [];
             forEach(ast.arguments, function(expr) {
+                console.log("anonymous inner function #16729");
             findConstantAndWatchExpressions(expr, $filter, astIsPure);
             allConstants = allConstants && expr.constant;
             argsToWatch.push.apply(argsToWatch, expr.toWatch);
@@ -16632,6 +16744,7 @@ console.log('jvascript initialisation happened here..');
             allConstants = true;
             argsToWatch = [];
             forEach(ast.elements, function(expr) {
+                console.log("anonymous inner function #16747");
             findConstantAndWatchExpressions(expr, $filter, astIsPure);
             allConstants = allConstants && expr.constant;
             argsToWatch.push.apply(argsToWatch, expr.toWatch);
@@ -16643,6 +16756,7 @@ console.log('jvascript initialisation happened here..');
             allConstants = true;
             argsToWatch = [];
             forEach(ast.properties, function(property) {
+                console.log("anonymous inner function #16759");
             findConstantAndWatchExpressions(property.value, $filter, astIsPure);
             allConstants = allConstants && property.value.constant;
             argsToWatch.push.apply(argsToWatch, property.value.toWatch);
@@ -16668,7 +16782,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function getInputs(body) {
-            console.log('');
+            console.log('getInputs #16785');
         if (body.length !== 1) return;
         var lastExpression = body[0].expression;
         var candidate = lastExpression.toWatch;
@@ -16677,19 +16791,19 @@ console.log('jvascript initialisation happened here..');
         }
 
         function isAssignable(ast) {
-            console.log('');
+            console.log('isAssignable #16794');
         return ast.type === AST.Identifier || ast.type === AST.MemberExpression;
         }
 
         function assignableAST(ast) {
-            console.log('');
+            console.log('assignableAST #16799');
         if (ast.body.length === 1 && isAssignable(ast.body[0].expression)) {
             return {type: AST.AssignmentExpression, left: ast.body[0].expression, right: {type: AST.NGValueParameter}, operator: '='};
         }
         }
 
         function isLiteral(ast) {
-            console.log('');
+            console.log('isLiteral #16806');
         return ast.body.length === 0 ||
             ast.body.length === 1 && (
             ast.body[0].expression.type === AST.Literal ||
@@ -16698,18 +16812,18 @@ console.log('jvascript initialisation happened here..');
         }
 
         function isConstant(ast) {
-            console.log('');
+            console.log('isConstant #16815');
         return ast.constant;
         }
 
         function ASTCompiler($filter) {
-            console.log('');
+            console.log('ASTCompiler #16820');
         this.$filter = $filter;
         }
 
         ASTCompiler.prototype = {
         compile: function(ast) {
-            console.log('');
+            console.log('compile #16826');
             var self = this;
             this.state = {
             nextId: 0,
@@ -16732,6 +16846,7 @@ console.log('jvascript initialisation happened here..');
             var toWatch = getInputs(ast.body);
             self.stage = 'inputs';
             forEach(toWatch, function(watch, key) {
+                console.log("anonymous inner function #16849");
             var fnKey = 'fn' + key;
             self.state[fnKey] = {vars: [], body: [], own: {}};
             self.state.computing = fnKey;
@@ -16773,32 +16888,37 @@ console.log('jvascript initialisation happened here..');
         STRICT: 'strict',
 
         watchFns: function() {
+            console.log("anonymous inner function watchFns#16891");
             var result = [];
             var inputs = this.state.inputs;
             var self = this;
             forEach(inputs, function(input) {
+                console.log("anonymous inner function #16896");
             result.push('var ' + input.name + '=' + self.generateFunction(input.name, 's'));
             if (input.isPure) {
                 result.push(input.name, '.isPure=' + JSON.stringify(input.isPure) + ';');
             }
             });
             if (inputs.length) {
-            result.push('fn.inputs=[' + inputs.map(function(i) { return i.name; }).join(',') + '];');
+            result.push('fn.inputs=[' + inputs.map(function(i) { console.log("anonymous inner function #16903");return i.name; }).join(',') + '];');
             }
             return result.join('');
         },
 
         generateFunction: function(name, params) {
-            return 'function(' + params + '){' +
+            console.log("anonymous inner function generateFunction#16909");
+            return 'function(' + params + '){' + 'console.log("#16910");'+
                 this.varsPrefix(name) +
                 this.body(name) +
                 '};';
         },
 
         filterPrefix: function() {
+            console.log("anonymous inner function filterPrefix #16917");
             var parts = [];
             var self = this;
             forEach(this.state.filters, function(id, filter) {
+                console.log("anonymous inner function #16921");
             parts.push(id + '=$filter(' + self.escape(filter) + ')');
             });
             if (parts.length) return 'var ' + parts.join(',') + ';';
@@ -16806,14 +16926,17 @@ console.log('jvascript initialisation happened here..');
         },
 
         varsPrefix: function(section) {
+            console.log("anonymous inner function #16929");
             return this.state[section].vars.length ? 'var ' + this.state[section].vars.join(',') + ';' : '';
         },
 
         body: function(section) {
+            console.log("anonymous inner function body #16934");
             return this.state[section].body.join('');
         },
 
         recurse: function(ast, intoId, nameId, recursionFn, create, skipWatchIdCheck) {
+            console.log("anonymous inner function recurse #16939");
             var left, right, self = this, args, expression, computed;
             recursionFn = recursionFn || noop;
             if (!skipWatchIdCheck && isDefined(ast.watchId)) {
@@ -16827,7 +16950,8 @@ console.log('jvascript initialisation happened here..');
             switch (ast.type) {
             case AST.Program:
             forEach(ast.body, function(expression, pos) {
-                self.recurse(expression.expression, undefined, undefined, function(expr) { right = expr; });
+                console.log("anonymous inner function #16953");
+                self.recurse(expression.expression, undefined, undefined, function(expr) { console.log("anonymous inner function #16954");right = expr; });
                 if (pos !== ast.body.length - 1) {
                 self.current().body.push(right, ';');
                 } else {
@@ -16841,14 +16965,14 @@ console.log('jvascript initialisation happened here..');
             recursionFn(intoId || expression);
             break;
             case AST.UnaryExpression:
-            this.recurse(ast.argument, undefined, undefined, function(expr) { right = expr; });
+            this.recurse(ast.argument, undefined, undefined, function(expr) { console.log("anonymous inner function #16968");right = expr; });
             expression = ast.operator + '(' + this.ifDefined(right, 0) + ')';
             this.assign(intoId, expression);
             recursionFn(expression);
             break;
             case AST.BinaryExpression:
-            this.recurse(ast.left, undefined, undefined, function(expr) { left = expr; });
-            this.recurse(ast.right, undefined, undefined, function(expr) { right = expr; });
+            this.recurse(ast.left, undefined, undefined, function(expr) { console.log("anonymous inner function #16974");left = expr; });
+            this.recurse(ast.right, undefined, undefined, function(expr) { console.log("anonymous inner function #16975");right = expr; });
             if (ast.operator === '+') {
                 expression = this.plus(left, right);
             } else if (ast.operator === '-') {
@@ -16880,7 +17004,9 @@ console.log('jvascript initialisation happened here..');
             }
             self.if_(self.stage === 'inputs' || self.not(self.getHasOwnProperty('l', ast.name)),
                 function() {
+                    console.log("anonymous inner function #17007");
                 self.if_(self.stage === 'inputs' || 's', function() {
+                    console.log("anonymous inner function #17009");
                     if (create && create !== 1) {
                     self.if_(
                         self.isNull(self.nonComputedMember('s', ast.name)),
@@ -16896,7 +17022,9 @@ console.log('jvascript initialisation happened here..');
             left = nameId && (nameId.context = this.nextId()) || this.nextId();
             intoId = intoId || this.nextId();
             self.recurse(ast.object, left, undefined, function() {
+                console.log("anonymous inner function #17025");
                 self.if_(self.notNull(left), function() {
+                    console.log("anonymous inner function #17027");
                 if (ast.computed) {
                     right = self.nextId();
                     self.recurse(ast.property, right);
@@ -16922,6 +17050,7 @@ console.log('jvascript initialisation happened here..');
                     }
                 }
                 }, function() {
+                    console.log("anonymous inner function #17053");
                 self.assign(intoId, 'undefined');
                 });
                 recursionFn(intoId);
@@ -16933,6 +17062,7 @@ console.log('jvascript initialisation happened here..');
                 right = self.filter(ast.callee.name);
                 args = [];
                 forEach(ast.arguments, function(expr) {
+                    console.log("anonymous inner function #17065");
                 var argument = self.nextId();
                 self.recurse(expr, argument);
                 args.push(argument);
@@ -16945,9 +17075,13 @@ console.log('jvascript initialisation happened here..');
                 left = {};
                 args = [];
                 self.recurse(ast.callee, right, left, function() {
+                    console.log("anonymous inner function #17078");
                 self.if_(self.notNull(right), function() {
+                    console.log("anonymous inner function #17080");
                     forEach(ast.arguments, function(expr) {
+                        console.log("anonymous inner function #17082");
                     self.recurse(expr, ast.constant ? undefined : self.nextId(), undefined, function(argument) {
+                        console.log("anonymous inner function #17084");
                         args.push(argument);
                     });
                     });
@@ -16958,6 +17092,7 @@ console.log('jvascript initialisation happened here..');
                     }
                     self.assign(intoId, expression);
                 }, function() {
+                    console.log("anonymous inner function #17095");
                     self.assign(intoId, 'undefined');
                 });
                 recursionFn(intoId);
@@ -16968,7 +17103,9 @@ console.log('jvascript initialisation happened here..');
             right = this.nextId();
             left = {};
             this.recurse(ast.left, undefined, left, function() {
+                console.log("anonymous inner function #17106");
                 self.if_(self.notNull(left.context), function() {
+                    console.log("anonymous inner function #17108");
                 self.recurse(ast.right, right);
                 expression = self.member(left.context, left.name, left.computed) + ast.operator + right;
                 self.assign(intoId, expression);
@@ -16979,7 +17116,9 @@ console.log('jvascript initialisation happened here..');
             case AST.ArrayExpression:
             args = [];
             forEach(ast.elements, function(expr) {
+                console.log("anonymous inner function #17119");
                 self.recurse(expr, ast.constant ? undefined : self.nextId(), undefined, function(argument) {
+                    console.log("anonymous inner function #17121");
                 args.push(argument);
                 });
             });
@@ -16991,6 +17130,7 @@ console.log('jvascript initialisation happened here..');
             args = [];
             computed = false;
             forEach(ast.properties, function(property) {
+                console.log("anonymous inner function #17133");
                 if (property.computed) {
                 computed = true;
                 }
@@ -16999,6 +17139,7 @@ console.log('jvascript initialisation happened here..');
                 intoId = intoId || this.nextId();
                 this.assign(intoId, '{}');
                 forEach(ast.properties, function(property) {
+                    console.log("anonymous inner function #17142");
                 if (property.computed) {
                     left = self.nextId();
                     self.recurse(property.key, left);
@@ -17013,7 +17154,9 @@ console.log('jvascript initialisation happened here..');
                 });
             } else {
                 forEach(ast.properties, function(property) {
+                    console.log("anonymous inner function #17157");
                 self.recurse(property.value, ast.constant ? undefined : self.nextId(), undefined, function(expr) {
+                    console.log("anonymous inner function #17159");
                     args.push(self.escape(
                         property.key.type === AST.Identifier ? property.key.name :
                         ('' + property.key.value)) +
@@ -17041,6 +17184,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         getHasOwnProperty: function(element, property) {
+            console.log("anonymous inner function #17187");
             var key = element + '.' + property;
             var own = this.current().own;
             if (!own.hasOwnProperty(key)) {
@@ -17050,12 +17194,14 @@ console.log('jvascript initialisation happened here..');
         },
 
         assign: function(id, value) {
+            console.log("anonymous inner function #17197");
             if (!id) return;
             this.current().body.push(id, '=', value, ';');
             return id;
         },
 
         filter: function(filterName) {
+            console.log("anonymous inner function #17204");
             if (!this.state.filters.hasOwnProperty(filterName)) {
             this.state.filters[filterName] = this.nextId(true);
             }
@@ -17063,18 +17209,22 @@ console.log('jvascript initialisation happened here..');
         },
 
         ifDefined: function(id, defaultValue) {
+            console.log("anonymous inner function #17212");
             return 'ifDefined(' + id + ',' + this.escape(defaultValue) + ')';
         },
 
         plus: function(left, right) {
+            console.log("anonymous inner function #17217");
             return 'plus(' + left + ',' + right + ')';
         },
 
         return_: function(id) {
+            console.log("anonymous inner function #17222");
             this.current().body.push('return ', id, ';');
         },
 
         if_: function(test, alternate, consequent) {
+            console.log("anonymous inner function #17227");
             if (test === true) {
             alternate();
             } else {
@@ -17091,18 +17241,22 @@ console.log('jvascript initialisation happened here..');
         },
 
         not: function(expression) {
+            console.log("anonymous inner function #17244");
             return '!(' + expression + ')';
         },
 
         isNull: function(expression) {
+            console.log("anonymous inner function #17249");
             return expression + '==null';
         },
 
         notNull: function(expression) {
+            console.log("anonymous inner function #17254");
             return expression + '!=null';
         },
 
         nonComputedMember: function(left, right) {
+            console.log("anonymous inner function #17259");
             var SAFE_IDENTIFIER = /^[$_a-zA-Z][$_a-zA-Z0-9]*$/;
             var UNSAFE_CHARACTERS = /[^$_a-zA-Z0-9]/g;
             if (SAFE_IDENTIFIER.test(right)) {
@@ -17113,28 +17267,35 @@ console.log('jvascript initialisation happened here..');
         },
 
         computedMember: function(left, right) {
+            console.log("anonymous inner function #17270");
             return left + '[' + right + ']';
         },
 
         member: function(left, right, computed) {
+            console.log("anonymous inner function #17275");
             if (computed) return this.computedMember(left, right);
             return this.nonComputedMember(left, right);
         },
 
         getStringValue: function(item) {
+            console.log("anonymous inner function #17281");
             this.assign(item, 'getStringValue(' + item + ')');
         },
 
         lazyRecurse: function(ast, intoId, nameId, recursionFn, create, skipWatchIdCheck) {
+            console.log("anonymous inner function #17286");
             var self = this;
             return function() {
+                console.log("anonymous inner function #17289");
             self.recurse(ast, intoId, nameId, recursionFn, create, skipWatchIdCheck);
             };
         },
 
         lazyAssign: function(id, value) {
+            console.log("anonymous inner function #17295");
             var self = this;
             return function() {
+                console.log("anonymous inner function #17298");
             self.assign(id, value);
             };
         },
@@ -17142,10 +17303,12 @@ console.log('jvascript initialisation happened here..');
         stringEscapeRegex: /[^ a-zA-Z0-9]/g,
 
         stringEscapeFn: function(c) {
+            console.log("anonymous inner function #17306");
             return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
         },
 
         escape: function(value) {
+            console.log("anonymous inner function #17311");
             if (isString(value)) return '\'' + value.replace(this.stringEscapeRegex, this.stringEscapeFn) + '\'';
             if (isNumber(value)) return value.toString();
             if (value === true) return 'true';
@@ -17157,6 +17320,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         nextId: function(skip, init) {
+            console.log("anonymous inner function #17323");
             var id = 'v' + (this.state.nextId++);
             if (!skip) {
             this.current().vars.push(id + (init ? '=' + init : ''));
@@ -17165,19 +17329,20 @@ console.log('jvascript initialisation happened here..');
         },
 
         current: function() {
+            console.log("anonymous inner function #17332");
             return this.state[this.state.computing];
         }
         };
 
 
         function ASTInterpreter($filter) {
-            console.log('');
+            console.log('ASTInterpreter #17339');
         this.$filter = $filter;
         }
 
         ASTInterpreter.prototype = {
         compile: function(ast) {
-            console.log('');
+            console.log('compile #17345');
             var self = this;
             findConstantAndWatchExpressions(ast, self.$filter);
             var assignable;
@@ -17190,6 +17355,7 @@ console.log('jvascript initialisation happened here..');
             if (toWatch) {
             inputs = [];
             forEach(toWatch, function(watch, key) {
+                console.log("anonymous inner function #17358");
                 var input = self.recurse(watch);
                 input.isPure = watch.isPure;
                 watch.input = input;
@@ -17199,19 +17365,23 @@ console.log('jvascript initialisation happened here..');
             }
             var expressions = [];
             forEach(ast.body, function(expression) {
+                console.log("anonymous inner function #17368");
             expressions.push(self.recurse(expression.expression));
             });
             var fn = ast.body.length === 0 ? noop :
                     ast.body.length === 1 ? expressions[0] :
                     function(scope, locals) {
+                        console.log("anonymous inner function #17374");
                     var lastValue;
                     forEach(expressions, function(exp) {
+                        console.log("anonymous inner function #17377");
                         lastValue = exp(scope, locals);
                     });
                     return lastValue;
                     };
             if (assign) {
             fn.assign = function(scope, value, locals) {
+                console.log("anonymous inner function #17384");
                 return assign(scope, locals, value);
             };
             }
@@ -17222,6 +17392,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         recurse: function(ast, context, create) {
+            console.log("anonymous inner function #17395");
             var left, right, self = this, args;
             if (ast.input) {
             return this.inputs(ast.input, ast.watchId);
@@ -17261,12 +17432,14 @@ console.log('jvascript initialisation happened here..');
             case AST.CallExpression:
             args = [];
             forEach(ast.arguments, function(expr) {
+                console.log("anonymous inner function #17435");
                 args.push(self.recurse(expr));
             });
             if (ast.filter) right = this.$filter(ast.callee.name);
             if (!ast.filter) right = this.recurse(ast.callee, true);
             return ast.filter ?
                 function(scope, locals, assign, inputs) {
+                    console.log("anonymous inner function #17442");
                 var values = [];
                 for (var i = 0; i < args.length; ++i) {
                     values.push(args[i](scope, locals, assign, inputs));
@@ -17275,6 +17448,7 @@ console.log('jvascript initialisation happened here..');
                 return context ? {context: undefined, name: undefined, value: value} : value;
                 } :
                 function(scope, locals, assign, inputs) {
+                    console.log("anonymous inner function #17451");
                 var rhs = right(scope, locals, assign, inputs);
                 var value;
                 if (rhs.value != null) {
@@ -17290,6 +17464,7 @@ console.log('jvascript initialisation happened here..');
             left = this.recurse(ast.left, true, 1);
             right = this.recurse(ast.right);
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17467");
                 var lhs = left(scope, locals, assign, inputs);
                 var rhs = right(scope, locals, assign, inputs);
                 lhs.context[lhs.name] = rhs;
@@ -17298,9 +17473,11 @@ console.log('jvascript initialisation happened here..');
             case AST.ArrayExpression:
             args = [];
             forEach(ast.elements, function(expr) {
+                console.log("anonymous inner function #17476");
                 args.push(self.recurse(expr));
             });
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17480");
                 var value = [];
                 for (var i = 0; i < args.length; ++i) {
                 value.push(args[i](scope, locals, assign, inputs));
@@ -17310,6 +17487,7 @@ console.log('jvascript initialisation happened here..');
             case AST.ObjectExpression:
             args = [];
             forEach(ast.properties, function(property) {
+                console.log("anonymous inner function #17490");
                 if (property.computed) {
                 args.push({key: self.recurse(property.key),
                             computed: true,
@@ -17325,6 +17503,7 @@ console.log('jvascript initialisation happened here..');
                 }
             });
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17506");
                 var value = {};
                 for (var i = 0; i < args.length; ++i) {
                 if (args[i].computed) {
@@ -17337,21 +17516,26 @@ console.log('jvascript initialisation happened here..');
             };
             case AST.ThisExpression:
             return function(scope) {
+                console.log("anonymous inner function #17519");
                 return context ? {value: scope} : scope;
             };
             case AST.LocalsExpression:
             return function(scope, locals) {
+                console.log("anonymous inner function #17524");
                 return context ? {value: locals} : locals;
             };
             case AST.NGValueParameter:
             return function(scope, locals, assign) {
+                console.log("anonymous inner function #17529");
                 return context ? {value: assign} : assign;
             };
             }
         },
 
         'unary+': function(argument, context) {
+            console.log("anonymous inner function #17536");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17538");
             var arg = argument(scope, locals, assign, inputs);
             if (isDefined(arg)) {
                 arg = +arg;
@@ -17362,7 +17546,9 @@ console.log('jvascript initialisation happened here..');
             };
         },
         'unary-': function(argument, context) {
+            console.log("anonymous inner function #17549");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17551");
             var arg = argument(scope, locals, assign, inputs);
             if (isDefined(arg)) {
                 arg = -arg;
@@ -17373,13 +17559,17 @@ console.log('jvascript initialisation happened here..');
             };
         },
         'unary!': function(argument, context) {
+            console.log("anonymous inner function #17562");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17564");
             var arg = !argument(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary+': function(left, right, context) {
+            console.log("anonymous inner function #17570");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17572");
             var lhs = left(scope, locals, assign, inputs);
             var rhs = right(scope, locals, assign, inputs);
             var arg = plusFn(lhs, rhs);
@@ -17387,7 +17577,9 @@ console.log('jvascript initialisation happened here..');
             };
         },
         'binary-': function(left, right, context) {
+            console.log("anonymous inner function #17580");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17582");
             var lhs = left(scope, locals, assign, inputs);
             var rhs = right(scope, locals, assign, inputs);
             var arg = (isDefined(lhs) ? lhs : 0) - (isDefined(rhs) ? rhs : 0);
@@ -17395,96 +17587,127 @@ console.log('jvascript initialisation happened here..');
             };
         },
         'binary*': function(left, right, context) {
+            console.log("anonymous inner function #17590");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17592");
             var arg = left(scope, locals, assign, inputs) * right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary/': function(left, right, context) {
+            console.log("anonymous inner function #17598");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17600");
             var arg = left(scope, locals, assign, inputs) / right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary%': function(left, right, context) {
+            console.log("anonymous inner function #17606");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17608");
             var arg = left(scope, locals, assign, inputs) % right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary===': function(left, right, context) {
+            console.log("anonymous inner function #17614");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17616");
             var arg = left(scope, locals, assign, inputs) === right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary!==': function(left, right, context) {
+            console.log("anonymous inner function #17622");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17624");
             var arg = left(scope, locals, assign, inputs) !== right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary==': function(left, right, context) {
+            console.log("anonymous inner function #17630");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17632");
             // eslint-disable-next-line eqeqeq
             var arg = left(scope, locals, assign, inputs) == right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary!=': function(left, right, context) {
+            console.log("anonymous inner function #17639");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17641");
             // eslint-disable-next-line eqeqeq
             var arg = left(scope, locals, assign, inputs) != right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary<': function(left, right, context) {
+            console.log("anonymous inner function #17648");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17650");
             var arg = left(scope, locals, assign, inputs) < right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary>': function(left, right, context) {
+            console.log("anonymous inner function #17656");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17658");
             var arg = left(scope, locals, assign, inputs) > right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary<=': function(left, right, context) {
+            console.log("anonymous inner function #17664");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17666");
             var arg = left(scope, locals, assign, inputs) <= right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary>=': function(left, right, context) {
+            console.log("anonymous inner function #17672");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17674");
             var arg = left(scope, locals, assign, inputs) >= right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary&&': function(left, right, context) {
+            console.log("anonymous inner function #17680");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17682");
             var arg = left(scope, locals, assign, inputs) && right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'binary||': function(left, right, context) {
+            console.log("anonymous inner function #17688");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17690");
             var arg = left(scope, locals, assign, inputs) || right(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         'ternary?:': function(test, alternate, consequent, context) {
+            console.log("anonymous inner function #17696");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17698");
             var arg = test(scope, locals, assign, inputs) ? alternate(scope, locals, assign, inputs) : consequent(scope, locals, assign, inputs);
             return context ? {value: arg} : arg;
             };
         },
         value: function(value, context) {
-            return function() { return context ? {context: undefined, name: undefined, value: value} : value; };
+            console.log("anonymous inner function #17704");
+            return function() { console.log("anonymous inner function #17705");return context ? {context: undefined, name: undefined, value: value} : value; };
         },
         identifier: function(name, context, create) {
+            console.log("anonymous inner function #17708");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17710");
             var base = locals && (name in locals) ? locals : scope;
             if (create && create !== 1 && base && base[name] == null) {
                 base[name] = {};
@@ -17498,7 +17721,9 @@ console.log('jvascript initialisation happened here..');
             };
         },
         computedMember: function(left, right, context, create) {
+            console.log("anonymous inner function #17724");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17726");
             var lhs = left(scope, locals, assign, inputs);
             var rhs;
             var value;
@@ -17520,7 +17745,9 @@ console.log('jvascript initialisation happened here..');
             };
         },
         nonComputedMember: function(left, right, context, create) {
+            console.log("anonymous inner function #17748");
             return function(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #17750");
             var lhs = left(scope, locals, assign, inputs);
             if (create && create !== 1) {
                 if (lhs && lhs[right] == null) {
@@ -17536,7 +17763,9 @@ console.log('jvascript initialisation happened here..');
             };
         },
         inputs: function(input, watchId) {
+            console.log("anonymous inner function #17766");
             return function(scope, value, locals, inputs) {
+                console.log("anonymous inner function #17768");
             if (inputs) return inputs[watchId];
             return input(scope, value, locals);
             };
@@ -17547,7 +17776,7 @@ console.log('jvascript initialisation happened here..');
         * @constructor
         */
         function Parser(lexer, $filter, options) {
-            console.log('');
+            console.log('Parser #17779');
         this.ast = new AST(lexer, options);
         this.astCompiler = options.csp ? new ASTInterpreter($filter) :
                                         new ASTCompiler($filter);
@@ -17557,7 +17786,7 @@ console.log('jvascript initialisation happened here..');
         constructor: Parser,
 
         parse: function(text) {
-            console.log('');
+            console.log('parse #17789');
             var ast = this.getAst(text);
             var fn = this.astCompiler.compile(ast.ast);
             fn.literal = isLiteral(ast.ast);
@@ -17567,6 +17796,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         getAst: function(exp) {
+            console.log("anonymous inner function #17799");
             var oneTime = false;
             exp = exp.trim();
 
@@ -17582,7 +17812,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         function getValueOf(value) {
-            console.log('');
+            console.log('getValueOf #17815');
         return isFunction(value.valueOf) ? value.valueOf() : objectValueOf.call(value);
         }
 
@@ -17639,7 +17869,7 @@ console.log('jvascript initialisation happened here..');
         *  service.
         */
         function $ParseProvider() {
-            console.log('');
+            console.log('$ParseProvider #17872');
         var cache = createMap();
         var literals = {
             'true': true,
@@ -17661,6 +17891,7 @@ console.log('jvascript initialisation happened here..');
         *
         **/
         this.addLiteral = function(literalName, literalValue) {
+            console.log("anonymous inner function #17894");
             literals[literalName] = literalValue;
         };
 
@@ -17689,12 +17920,14 @@ console.log('jvascript initialisation happened here..');
         *   a valid identifier continue character.
         */
         this.setIdentifierFns = function(identifierStart, identifierContinue) {
+            console.log("anonymous inner function #17923");
             identStart = identifierStart;
             identContinue = identifierContinue;
             return this;
         };
 
         this.$get = ['$filter', function($filter) {
+            console.log("anonymous inner function #17930");
             var noUnsafeEval = csp().noUnsafeEval;
             var $parseOptions = {
                 csp: noUnsafeEval,
@@ -17706,6 +17939,7 @@ console.log('jvascript initialisation happened here..');
             return $parse;
 
             function $parse(exp, interceptorFn) {
+                console.log("anonymous inner function #17942");
             var parsedExpression, cacheKey;
 
             switch (typeof exp) {
@@ -17733,12 +17967,14 @@ console.log('jvascript initialisation happened here..');
             }
 
             function $$getAst(exp) {
+                console.log("anonymous inner function $$getAst#17970");
             var lexer = new Lexer($parseOptions);
             var parser = new Parser(lexer, $filter, $parseOptions);
             return parser.getAst(exp).ast;
             }
 
             function expressionInputDirtyCheck(newValue, oldValueOfValue, compareObjectIdentity) {
+                console.log("anonymous inner function #17977");
 
             if (newValue == null || oldValueOfValue == null) { // null/undefined
                 return newValue === oldValueOfValue;
@@ -17765,6 +18001,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function inputsWatchDelegate(scope, listener, objectEquality, parsedExpression, prettyPrintExpression) {
+                console.log("anonymous inner function #18004");
             var inputExpressions = parsedExpression.inputs;
             var lastResult;
 
@@ -17772,6 +18009,7 @@ console.log('jvascript initialisation happened here..');
                 var oldInputValueOf = expressionInputDirtyCheck; // init to something unique so that equals check fails
                 inputExpressions = inputExpressions[0];
                 return scope.$watch(function expressionInputWatch(scope) {
+                    console.log("anonymous inner function #18012");
                 var newInputValue = inputExpressions(scope);
                 if (!expressionInputDirtyCheck(newInputValue, oldInputValueOf, inputExpressions.isPure)) {
                     lastResult = parsedExpression(scope, undefined, undefined, [newInputValue]);
@@ -17789,6 +18027,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             return scope.$watch(function expressionInputsWatch(scope) {
+                console.log("anonymous inner function #18030");
                 var changed = false;
 
                 for (var i = 0, ii = inputExpressions.length; i < ii; i++) {
@@ -17808,6 +18047,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function oneTimeWatchDelegate(scope, listener, objectEquality, parsedExpression, prettyPrintExpression) {
+                console.log("anonymous inner function #18050");
             var isDone = parsedExpression.literal ? isAllDefined : isDefined;
             var unwatch, lastValue;
 
@@ -17830,12 +18070,14 @@ console.log('jvascript initialisation happened here..');
             return unwatch;
 
             function unwatchIfDone() {
+                console.log("anonymous inner function #18073");
                 if (isDone(lastValue)) {
                 unwatch();
                 }
             }
 
             function oneTimeWatch(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #18080");
                 lastValue = useInputs && inputs ? inputs[0] : exp(scope, locals, assign, inputs);
                 if (isDone(lastValue)) {
                 scope.$$postDigest(unwatchIfDone);
@@ -17845,15 +18087,19 @@ console.log('jvascript initialisation happened here..');
             }
 
             function isAllDefined(value) {
+                console.log("anonymous inner function #18090");
             var allDefined = true;
             forEach(value, function(val) {
+                console.log("anonymous inner function #18093");
                 if (!isDefined(val)) allDefined = false;
             });
             return allDefined;
             }
 
             function constantWatchDelegate(scope, listener, objectEquality, parsedExpression) {
+                console.log("anonymous inner function #18100");
             var unwatch = scope.$watch(function constantWatch(scope) {
+                console.log("anonymous inner function #18102");
                 unwatch();
                 return parsedExpression(scope);
             }, listener, objectEquality);
@@ -17861,6 +18107,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function addWatchDelegate(parsedExpression) {
+                console.log("anonymous inner function #18110");
             if (parsedExpression.constant) {
                 parsedExpression.$$watchDelegate = constantWatchDelegate;
             } else if (parsedExpression.oneTime) {
@@ -17873,7 +18120,9 @@ console.log('jvascript initialisation happened here..');
             }
 
             function chainInterceptors(first, second) {
+                console.log("anonymous inner function #18123");
             function chainedInterceptor(value) {
+                console.log("anonymous inner function #18125");
                 return second(first(value));
             }
             chainedInterceptor.$stateful = first.$stateful || second.$stateful;
@@ -17883,6 +18132,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function addInterceptor(parsedExpression, interceptorFn) {
+                console.log("anonymous inner function #18135");
             if (!interceptorFn) return parsedExpression;
 
             // Extract any existing interceptors out of the parsedExpression
@@ -17895,6 +18145,7 @@ console.log('jvascript initialisation happened here..');
             var useInputs = false;
 
             var fn = function interceptedExpression(scope, locals, assign, inputs) {
+                console.log("anonymous inner function #18148");
                 var value = useInputs && inputs ? inputs[0] : parsedExpression(scope, locals, assign, inputs);
                 return interceptorFn(value);
             };
@@ -17917,10 +18168,11 @@ console.log('jvascript initialisation happened here..');
 
                 if (!interceptorFn.$$pure) {
                 fn.inputs = fn.inputs.map(function(e) {
+                    console.log("anonymous inner function #18171");
                     // Remove the isPure flag of inputs when it is not absolute because they are now wrapped in a
                     // non-pure interceptor function.
                     if (e.isPure === PURITY_RELATIVE) {
-                        return function depurifier(s) { return e(s); };
+                        return function depurifier(s) { console.log("anonymous inner function #18175");return e(s); };
                     }
                     return e;
                     });
@@ -18157,10 +18409,12 @@ console.log('jvascript initialisation happened here..');
         * @description
         */
         function $QProvider() {
-            console.log('');
+            console.log('$QProvider #18412');
         var errorOnUnhandledRejections = true;
         this.$get = ['$rootScope', '$exceptionHandler', function($rootScope, $exceptionHandler) {
+            console.log("anonymous inner function #18415");
             return qFactory(function(callback) {
+                console.log("anonymous inner function #18417");
             $rootScope.$evalAsync(callback);
             }, $exceptionHandler, errorOnUnhandledRejections);
         }];
@@ -18179,6 +18433,7 @@ console.log('jvascript initialisation happened here..');
         *    chaining otherwise.
         */
         this.errorOnUnhandledRejections = function(value) {
+            console.log("anonymous inner function #18436");
             if (isDefined(value)) {
             errorOnUnhandledRejections = value;
             return this;
@@ -18190,15 +18445,18 @@ console.log('jvascript initialisation happened here..');
 
         /** @this */
         function $$QProvider() {
-            console.log('');
+            console.log('$$QProvider #18448');
         var errorOnUnhandledRejections = true;
         this.$get = ['$browser', '$exceptionHandler', function($browser, $exceptionHandler) {
+            console.log("anonymous inner function #18451");
             return qFactory(function(callback) {
+                console.log("anonymous inner function #18453");
             $browser.defer(callback);
             }, $exceptionHandler, errorOnUnhandledRejections);
         }];
 
         this.errorOnUnhandledRejections = function(value) {
+            console.log("anonymous inner function #18459");
             if (isDefined(value)) {
             errorOnUnhandledRejections = value;
             return this;
@@ -18219,7 +18477,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {object} Promise manager.
         */
         function qFactory(nextTick, exceptionHandler, errorOnUnhandledRejections) {
-            console.log('');
+            console.log('qFactory #18480');
         var $qMinErr = minErr('$q', TypeError);
         var queueSize = 0;
         var checkQueue = [];
@@ -18235,24 +18493,28 @@ console.log('jvascript initialisation happened here..');
         * @returns {Deferred} Returns a new instance of deferred.
         */
         function defer() {
+            console.log("defer #18496");
             return new Deferred();
         }
 
         function Deferred() {
+            console.log("Deferred #18501");
             var promise = this.promise = new Promise();
             //Non prototype methods necessary to support unbound execution :/
-            this.resolve = function(val) { resolvePromise(promise, val); };
-            this.reject = function(reason) { rejectPromise(promise, reason); };
-            this.notify = function(progress) { notifyPromise(promise, progress); };
+            this.resolve = function(val) { console.log("anonymous inner function #18504"); resolvePromise(promise, val); };
+            this.reject = function(reason) { console.log("anonymous inner function #18505"); rejectPromise(promise, reason); };
+            this.notify = function(progress) { console.log("anonymous inner function #18506"); notifyPromise(promise, progress); };
         }
 
 
         function Promise() {
+            console.log("anonymous inner function Promise #18511");
             this.$$state = { status: 0 };
         }
 
         extend(Promise.prototype, {
             then: function(onFulfilled, onRejected, progressBack) {
+                console.log("anonymous inner function then #18517");
             if (isUndefined(onFulfilled) && isUndefined(onRejected) && isUndefined(progressBack)) {
                 return this;
             }
@@ -18266,19 +18528,24 @@ console.log('jvascript initialisation happened here..');
             },
 
             'catch': function(callback) {
+                console.log("anonymous inner function #18531");
             return this.then(null, callback);
             },
 
             'finally': function(callback, progressBack) {
+                console.log("anonymous inner function #18536");
             return this.then(function(value) {
+                console.log("anonymous inner function #18538");
                 return handleCallback(value, resolve, callback);
             }, function(error) {
+                console.log("anonymous inner function #18541");
                 return handleCallback(error, reject, callback);
             }, progressBack);
             }
         });
 
         function processQueue(state) {
+            console.log("anonymous inner function processQueue #18548");
             var fn, promise, pending;
 
             pending = state.pending;
@@ -18314,6 +18581,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function processChecks() {
+            console.log("anonymous inner function processChecks #18584");
             // eslint-disable-next-line no-unmodified-loop-condition
             while (!queueSize && checkQueue.length) {
             var toCheck = checkQueue.shift();
@@ -18330,6 +18598,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function scheduleProcessQueue(state) {
+            console.log("anonymous inner function scheduleProcessQueue#18601");
             if (errorOnUnhandledRejections && !state.pending && state.status === 2 && !isStateExceptionHandled(state)) {
             if (queueSize === 0 && checkQueue.length === 0) {
                 nextTick(processChecks);
@@ -18339,10 +18608,11 @@ console.log('jvascript initialisation happened here..');
             if (state.processScheduled || !state.pending) return;
             state.processScheduled = true;
             ++queueSize;
-            nextTick(function() { processQueue(state); });
+            nextTick(function() { console.log("anonymous inner function #18611"); processQueue(state); });
         }
 
         function resolvePromise(promise, val) {
+            console.log("anonymous inner function #18615");
             if (promise.$$state.status) return;
             if (val === promise) {
             $$reject(promise, $qMinErr(
@@ -18356,6 +18626,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function $$resolve(promise, val) {
+            console.log("anonymous inner function $$resolve #18629");
             var then;
             var done = false;
             try {
@@ -18373,36 +18644,43 @@ console.log('jvascript initialisation happened here..');
             }
 
             function doResolve(val) {
+                console.log("anonymous inner function #18647");
             if (done) return;
             done = true;
             $$resolve(promise, val);
             }
             function doReject(val) {
+                console.log("anonymous inner function #18653");
             if (done) return;
             done = true;
             $$reject(promise, val);
             }
             function doNotify(progress) {
+                console.log("anonymous inner function #18658");
             notifyPromise(promise, progress);
             }
         }
 
         function rejectPromise(promise, reason) {
+            console.log("anonymous inner function #18665");
             if (promise.$$state.status) return;
             $$reject(promise, reason);
         }
 
         function $$reject(promise, reason) {
+            console.log("anonymous inner function #18671");
             promise.$$state.value = reason;
             promise.$$state.status = 2;
             scheduleProcessQueue(promise.$$state);
         }
 
         function notifyPromise(promise, progress) {
+            console.log("anonymous inner function #18678");
             var callbacks = promise.$$state.pending;
 
             if ((promise.$$state.status <= 0) && callbacks && callbacks.length) {
             nextTick(function() {
+                console.log("anonymous inner function #18683");
                 var callback, result;
                 for (var i = 0, ii = callbacks.length; i < ii; i++) {
                 result = callbacks[i][0];
@@ -18454,12 +18732,14 @@ console.log('jvascript initialisation happened here..');
         * @returns {Promise} Returns a promise that was already resolved as rejected with the `reason`.
         */
         function reject(reason) {
+            console.log("anonymous inner function #18735");
             var result = new Promise();
             rejectPromise(result, reason);
             return result;
         }
 
         function handleCallback(value, resolver, callback) {
+            console.log("anonymous inner function #18742");
             var callbackOutput = null;
             try {
             if (isFunction(callback)) callbackOutput = callback();
@@ -18468,6 +18748,7 @@ console.log('jvascript initialisation happened here..');
             }
             if (isPromiseLike(callbackOutput)) {
             return callbackOutput.then(function() {
+                console.log("anonymous inner function #18751");
                 return resolver(value);
             }, reject);
             } else {
@@ -18494,6 +18775,7 @@ console.log('jvascript initialisation happened here..');
 
 
         function when(value, callback, errback, progressBack) {
+            console.log("anonymous inner function #18778");
             var result = new Promise();
             resolvePromise(result, value);
             return result.then(callback, errback, progressBack);
@@ -18532,16 +18814,20 @@ console.log('jvascript initialisation happened here..');
         */
 
         function all(promises) {
+            console.log("anonymous inner function all #18817");
             var result = new Promise(),
                 counter = 0,
                 results = isArray(promises) ? [] : {};
 
             forEach(promises, function(promise, key) {
+                console.log("anonymous inner function #18823");
             counter++;
             when(promise).then(function(value) {
+                console.log("anonymous inner function then #18826");
                 results[key] = value;
                 if (!(--counter)) resolvePromise(result, results);
             }, function(reason) {
+                console.log("anonymous inner function #18830");
                 rejectPromise(result, reason);
             });
             });
@@ -18568,9 +18854,11 @@ console.log('jvascript initialisation happened here..');
         */
 
         function race(promises) {
+            console.log("anonymous inner function race #18857");
             var deferred = defer();
 
             forEach(promises, function(promise) {
+                console.log("anonymous inner function #18861");
             when(promise).then(deferred.resolve, deferred.reject);
             });
 
@@ -18578,6 +18866,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function $Q(resolver) {
+            console.log("anonymous inner function #18869");
             if (!isFunction(resolver)) {
             throw $qMinErr('norslvr', 'Expected resolverFn, got \'{0}\'', resolver);
             }
@@ -18585,10 +18874,12 @@ console.log('jvascript initialisation happened here..');
             var promise = new Promise();
 
             function resolveFn(value) {
+                console.log("anonymous inner function #18877");
             resolvePromise(promise, value);
             }
 
             function rejectFn(reason) {
+                console.log("anonymous inner function #18882");
             rejectPromise(promise, reason);
             }
 
@@ -18612,15 +18903,15 @@ console.log('jvascript initialisation happened here..');
         }
 
         function isStateExceptionHandled(state) {
-            console.log('');
+            console.log('isStateExceptionHandled #18906');
         return !!state.pur;
         }
         function markQStateExceptionHandled(state) {
-            console.log('');
+            console.log('markQStateExceptionHandled #18910');
         state.pur = true;
         }
         function markQExceptionHandled(q) {
-            console.log('');
+            console.log('markQExceptionHandled #18914');
         // Built-in `$q` promises will always have a `$$state` property. This check is to allow
         // overwriting `$q` with a different promise library (e.g. Bluebird + angular-bluebird-promises).
         // (Currently, this is the only method that might be called with a promise, even if it is not
@@ -18632,8 +18923,9 @@ console.log('jvascript initialisation happened here..');
 
         /** @this */
         function $$RAFProvider() { //rAF
-            console.log('');
+            console.log('$$RAFProvider #18926');
         this.$get = ['$window', '$timeout', function($window, $timeout) {
+            console.log("anonymous inner function #18928");
             var requestAnimationFrame = $window.requestAnimationFrame ||
                                         $window.webkitRequestAnimationFrame;
 
@@ -18644,14 +18936,18 @@ console.log('jvascript initialisation happened here..');
             var rafSupported = !!requestAnimationFrame;
             var raf = rafSupported
             ? function(fn) {
+                console.log("anonymous inner function #18939");
                 var id = requestAnimationFrame(fn);
                 return function() {
+                    console.log("anonymous inner function #18942");
                     cancelAnimationFrame(id);
                 };
                 }
             : function(fn) {
+                console.log("anonymous inner function #18947");
                 var timer = $timeout(fn, 16.66, false); // 1000 / 60 = 16.666
                 return function() {
+                    console.log("anonymous inner function #18950");
                     $timeout.cancel(timer);
                 };
                 };
@@ -18732,13 +19028,14 @@ console.log('jvascript initialisation happened here..');
         * {@link guide/scope developer guide on scopes}.
         */
         function $RootScopeProvider() {
-            console.log('');
+            console.log('$RootScopeProvider #19031');
         var TTL = 10;
         var $rootScopeMinErr = minErr('$rootScope');
         var lastDirtyWatch = null;
         var applyAsyncId = null;
 
         this.digestTtl = function(value) {
+            console.log("anonymous inner function #19038");
             if (arguments.length) {
             TTL = value;
             }
@@ -18746,7 +19043,9 @@ console.log('jvascript initialisation happened here..');
         };
 
         function createChildScopeClass(parent) {
+            console.log("anonymous inner function #19046");
             function ChildScope() {
+                console.log("anonymous inner function #19048");
             this.$$watchers = this.$$nextSibling =
                 this.$$childHead = this.$$childTail = null;
             this.$$listeners = {};
@@ -18762,12 +19061,15 @@ console.log('jvascript initialisation happened here..');
 
         this.$get = ['$exceptionHandler', '$parse', '$browser',
             function($exceptionHandler, $parse, $browser) {
+                console.log("anonymous inner function #19064");
 
             function destroyChildScope($event) {
+                console.log("anonymous inner function #19067");
                 $event.currentScope.$$destroyed = true;
             }
 
             function cleanUpScope($scope) {
+                console.log("anonymous inner function cleanUpScope #19072");
 
             // Support: IE 9 only
             if (msie === 9) {
@@ -18836,6 +19138,7 @@ console.log('jvascript initialisation happened here..');
             *
             */
             function Scope() {
+                console.log("Scope #19141");
             this.$id = nextUid();
             this.$$phase = this.$parent = this.$$watchers =
                             this.$$nextSibling = this.$$prevSibling =
@@ -18905,6 +19208,7 @@ console.log('jvascript initialisation happened here..');
             *
             */
             $new: function(isolate, parent) {
+                console.log("anonymous inner function #19211");
                 var child;
 
                 parent = parent || this;
@@ -19058,6 +19362,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {function()} Returns a deregistration function for this listener.
             */
             $watch: function(watchExp, listener, objectEquality, prettyPrintExpression) {
+                console.log("anonymous inner function #19365");
                 var get = $parse(watchExp);
                 var fn = isFunction(listener) ? listener : noop;
 
@@ -19087,6 +19392,7 @@ console.log('jvascript initialisation happened here..');
                 incrementWatchersCount(this, 1);
 
                 return function deregisterWatch() {
+                    console.log("anonymous inner function #19395");
                 var index = arrayRemove(array, watcher);
                 if (index >= 0) {
                     incrementWatchersCount(scope, -1);
@@ -19124,6 +19430,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {function()} Returns a de-registration function for all listeners.
             */
             $watchGroup: function(watchExpressions, listener) {
+                console.log("anonymous inner function #19433");
                 var oldValues = new Array(watchExpressions.length);
                 var newValues = new Array(watchExpressions.length);
                 var deregisterFns = [];
@@ -19135,9 +19442,11 @@ console.log('jvascript initialisation happened here..');
                 // No expressions means we call the listener ASAP
                 var shouldCall = true;
                 self.$evalAsync(function() {
+                    console.log("anonymous inner function #19445");
                     if (shouldCall) listener(newValues, newValues, self);
                 });
                 return function deregisterWatchGroup() {
+                    console.log("anonymous inner function #19449");
                     shouldCall = false;
                 };
                 }
@@ -19145,6 +19454,7 @@ console.log('jvascript initialisation happened here..');
                 if (watchExpressions.length === 1) {
                 // Special case size of one
                 return this.$watch(watchExpressions[0], function watchGroupAction(value, oldValue, scope) {
+                    console.log("anonymous inner function #19457");
                     newValues[0] = value;
                     oldValues[0] = oldValue;
                     listener(newValues, (value === oldValue) ? newValues : oldValues, scope);
@@ -19152,7 +19462,9 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 forEach(watchExpressions, function(expr, i) {
+                    console.log("anonymous inner function #19465");
                 var unwatchFn = self.$watch(expr, function watchGroupSubAction(value) {
+                    console.log("anonymous inner function #19467");
                     newValues[i] = value;
                     if (!changeReactionScheduled) {
                     changeReactionScheduled = true;
@@ -19163,6 +19475,7 @@ console.log('jvascript initialisation happened here..');
                 });
 
                 function watchGroupAction() {
+                    console.log("anonymous inner function #19478");
                 changeReactionScheduled = false;
 
                 try {
@@ -19180,6 +19493,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 return function deregisterWatchGroup() {
+                    console.log("anonymous inner function #19496");
                 while (deregisterFns.length) {
                     deregisterFns.shift()();
                 }
@@ -19243,6 +19557,7 @@ console.log('jvascript initialisation happened here..');
             *    de-registration function is executed, the internal watch operation is terminated.
             */
             $watchCollection: function(obj, listener) {
+                console.log("anonymous inner function #19560");
                 // Mark the interceptor as
                 // ... $$pure when literal since the instance will change when any input changes
                 $watchCollectionInterceptor.$$pure = $parse(obj).literal;
@@ -19267,6 +19582,7 @@ console.log('jvascript initialisation happened here..');
                 var oldLength = 0;
 
                 function $watchCollectionInterceptor(_value) {
+                    console.log("anonymous inner function #19585");
                 newValue = _value;
                 var newLength, key, bothNaN, newItem, oldItem;
 
@@ -19349,6 +19665,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 function $watchCollectionAction() {
+                    console.log("anonymous inner function #19668");
                 if (initRun) {
                     initRun = false;
                     listener(newValue, newValue, self);
@@ -19432,6 +19749,7 @@ console.log('jvascript initialisation happened here..');
             *
             */
             $digest: function() {
+                console.log("anonymous inner function #19752");
                 var watch, value, last, fn, get,
                     watchers,
                     dirty, ttl = TTL,
@@ -19600,6 +19918,7 @@ console.log('jvascript initialisation happened here..');
             *   initiated by a component that lives on a suspended scope.
             */
             $suspend: function() {
+                console.log("anonymous inner function #19921");
                 this.$$suspended = true;
             },
 
@@ -19629,6 +19948,7 @@ console.log('jvascript initialisation happened here..');
             * @returns true if the current scope has been suspended.
             */
             $isSuspended: function() {
+                console.log("anonymous inner function #19951");
                 return this.$$suspended;
             },
 
@@ -19643,6 +19963,7 @@ console.log('jvascript initialisation happened here..');
             * See {@link $rootScope.Scope#$suspend} for information about the dangers of using this approach.
             */
             $resume: function() {
+                console.log("anonymous inner function #19966");
                 this.$$suspended = false;
             },
 
@@ -19681,6 +20002,7 @@ console.log('jvascript initialisation happened here..');
             * clean up DOM bindings before an element is removed from the DOM.
             */
             $destroy: function() {
+                console.log("anonymous inner function #20005");
                 // We can't destroy a scope that has been already destroyed.
                 if (this.$$destroyed) return;
                 var parent = this.$parent;
@@ -19707,7 +20029,7 @@ console.log('jvascript initialisation happened here..');
 
                 // Disable listeners, watchers and apply/digest methods
                 this.$destroy = this.$digest = this.$apply = this.$evalAsync = this.$applyAsync = noop;
-                this.$on = this.$watch = this.$watchGroup = function() { return noop; };
+                this.$on = this.$watch = this.$watchGroup = function() { console.log("anonymous inner function #20032");return noop; };
                 this.$$listeners = {};
 
                 // Disconnect the next sibling to prevent `cleanUpScope` destroying those too
@@ -19744,6 +20066,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {*} The result of evaluating the expression.
             */
             $eval: function(expr, locals) {
+                console.log("anonymous inner function #20069");
                 return $parse(expr)(this, locals);
             },
 
@@ -19778,10 +20101,12 @@ console.log('jvascript initialisation happened here..');
             * @param {(object)=} locals Local variables object, useful for overriding values in scope.
             */
             $evalAsync: function(expr, locals) {
+                console.log("anonymous inner function #20104");
                 // if we are outside of an $digest loop and this is the first time we are scheduling async
                 // task also schedule async auto-flush
                 if (!$rootScope.$$phase && !asyncQueue.length) {
                 $browser.defer(function() {
+                    console.log("anonymous inner function #20109");
                     if (asyncQueue.length) {
                     $rootScope.$digest();
                     }
@@ -19792,6 +20117,7 @@ console.log('jvascript initialisation happened here..');
             },
 
             $$postDigest: function(fn) {
+                console.log("anonymous inner function #20120");
                 postDigestQueue.push(fn);
             },
 
@@ -19840,6 +20166,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {*} The result of evaluating the expression.
             */
             $apply: function(expr) {
+                console.log("anonymous inner function #20169");
                 try {
                 beginPhase('$apply');
                 try {
@@ -19878,6 +20205,7 @@ console.log('jvascript initialisation happened here..');
             *    - `function(scope)`: execute the function with current `scope` parameter.
             */
             $applyAsync: function(expr) {
+                console.log("anonymous inner function #20208");
                 var scope = this;
                 if (expr) {
                 applyAsyncQueue.push($applyAsyncExpression);
@@ -19886,6 +20214,7 @@ console.log('jvascript initialisation happened here..');
                 scheduleApplyAsync();
 
                 function $applyAsyncExpression() {
+                    console.log("anonymous inner function #20217");
                 scope.$eval(expr);
                 }
             },
@@ -19918,6 +20247,7 @@ console.log('jvascript initialisation happened here..');
             * @returns {function()} Returns a deregistration function for this listener.
             */
             $on: function(name, listener) {
+                console.log("anonymous inner function #20250");
                 var namedListeners = this.$$listeners[name];
                 if (!namedListeners) {
                 this.$$listeners[name] = namedListeners = [];
@@ -19934,6 +20264,7 @@ console.log('jvascript initialisation happened here..');
 
                 var self = this;
                 return function() {
+                    console.log("anonymous inner function #20267");
                 var indexOfListener = namedListeners.indexOf(listener);
                 if (indexOfListener !== -1) {
                     // Use delete in the hope of the browser deallocating the memory for the array entry,
@@ -19969,6 +20300,7 @@ console.log('jvascript initialisation happened here..');
             * @return {Object} Event object (see {@link ng.$rootScope.Scope#$on}).
             */
             $emit: function(name, args) {
+                console.log("anonymous inner function #20303");
                 var empty = [],
                     namedListeners,
                     scope = this,
@@ -19976,8 +20308,9 @@ console.log('jvascript initialisation happened here..');
                     event = {
                     name: name,
                     targetScope: scope,
-                    stopPropagation: function() {stopPropagation = true;},
+                    stopPropagation: function() {console.log("anonymous inner function #20311");stopPropagation = true;},
                     preventDefault: function() {
+                        console.log("anonymous inner function #20313");
                         event.defaultPrevented = true;
                     },
                     defaultPrevented: false
@@ -20040,6 +20373,7 @@ console.log('jvascript initialisation happened here..');
             * @return {Object} Event object, see {@link ng.$rootScope.Scope#$on}
             */
             $broadcast: function(name, args) {
+                console.log("anonymous inner function #20376");
                 var target = this,
                     current = target,
                     next = target,
@@ -20047,6 +20381,7 @@ console.log('jvascript initialisation happened here..');
                     name: name,
                     targetScope: target,
                     preventDefault: function() {
+                        console.log("anonymous inner function #20384");
                         event.defaultPrevented = true;
                     },
                     defaultPrevented: false
@@ -20108,6 +20443,7 @@ console.log('jvascript initialisation happened here..');
 
 
             function beginPhase(phase) {
+                console.log("anonymous inner function #20446");
             if ($rootScope.$$phase) {
                 throw $rootScopeMinErr('inprog', '{0} already in progress', $rootScope.$$phase);
             }
@@ -20116,16 +20452,19 @@ console.log('jvascript initialisation happened here..');
             }
 
             function clearPhase() {
+                console.log("anonymous inner function #20455");
             $rootScope.$$phase = null;
             }
 
             function incrementWatchersCount(current, count) {
+                console.log("anonymous inner function #20460");
             do {
                 current.$$watchersCount += count;
             } while ((current = current.$parent));
             }
 
             function decrementListenerCount(current, count, name) {
+                console.log("anonymous inner function #20467");
             do {
                 current.$$listenerCount[name] -= count;
 
@@ -20139,9 +20478,12 @@ console.log('jvascript initialisation happened here..');
             * function used as an initial value for watchers.
             * because it's unique we can easily tell it apart from other values
             */
-            function initWatchVal() {}
+            function initWatchVal() {
+                console.log("anonymous inner function #20482");
+            }
 
             function flushApplyAsync() {
+                console.log("anonymous inner function #20486");
             while (applyAsyncQueue.length) {
                 try {
                 applyAsyncQueue.shift()();
@@ -20153,8 +20495,10 @@ console.log('jvascript initialisation happened here..');
             }
 
             function scheduleApplyAsync() {
+                console.log("anonymous inner function #20498");
             if (applyAsyncId === null) {
                 applyAsyncId = $browser.defer(function() {
+                    console.log("anonymous inner function #20501");
                 $rootScope.$apply(flushApplyAsync);
                 }, null, '$applyAsync');
             }
@@ -20183,7 +20527,7 @@ console.log('jvascript initialisation happened here..');
         * Private service to sanitize uris for links and images. Used by $compile and $sanitize.
         */
         function $$SanitizeUriProvider() {
-            console.log('');
+            console.log('$$SanitizeUriProvider #20530');
 
         var aHrefSanitizationWhitelist = /^\s*(https?|s?ftp|mailto|tel|file):/,
             imgSrcSanitizationWhitelist = /^\s*((https?|ftp|file|blob):|data:image\/)/;
@@ -20209,6 +20553,7 @@ console.log('jvascript initialisation happened here..');
         *    chaining otherwise.
         */
         this.aHrefSanitizationWhitelist = function(regexp) {
+            console.log("anonymous inner function aHrefSanitizationWhitelist #20556");
             if (isDefined(regexp)) {
             aHrefSanitizationWhitelist = regexp;
             return this;
@@ -20239,6 +20584,7 @@ console.log('jvascript initialisation happened here..');
         *    chaining otherwise.
         */
         this.imgSrcSanitizationWhitelist = function(regexp) {
+            console.log("anonymous inner function #20587");
             if (isDefined(regexp)) {
             imgSrcSanitizationWhitelist = regexp;
             return this;
@@ -20247,7 +20593,9 @@ console.log('jvascript initialisation happened here..');
         };
 
         this.$get = function() {
+            console.log("anonymous inner function #20596");
             return function sanitizeUri(uri, isMediaUrl) {
+                console.log("anonymous inner function #20598");
             // if (!uri) return uri;
             var regex = isMediaUrl ? imgSrcSanitizationWhitelist : aHrefSanitizationWhitelist;
             var normalizedVal = urlResolve(uri && uri.trim()).href;
@@ -20303,13 +20651,13 @@ console.log('jvascript initialisation happened here..');
         var UNDERSCORE_LOWERCASE_REGEXP = /_([a-z])/g;
 
         function snakeToCamel(name) {
-            console.log('');
+            console.log('snakeToCamel #20654');
         return name
             .replace(UNDERSCORE_LOWERCASE_REGEXP, fnCamelCaseReplace);
         }
 
         function adjustMatcher(matcher) {
-            console.log('');
+            console.log('adjustMatcher #20660');
         if (matcher === 'self') {
             return matcher;
         } else if (isString(matcher)) {
@@ -20338,10 +20686,11 @@ console.log('jvascript initialisation happened here..');
 
 
         function adjustMatchers(matchers) {
-            console.log('');
+            console.log('adjustMatchers #20689');
         var adjustedMatchers = [];
         if (isDefined(matchers)) {
             forEach(matchers, function(matcher) {
+                console.log("anonymous inner function #20693");
             adjustedMatchers.push(adjustMatcher(matcher));
             });
         }
@@ -20440,7 +20789,7 @@ console.log('jvascript initialisation happened here..');
         */
 
         function $SceDelegateProvider() {
-            console.log('');
+            console.log('$SceDelegateProvider #20792');
         this.SCE_CONTEXTS = SCE_CONTEXTS;
 
         // Resource URLs can also be trusted by policy.
@@ -20472,6 +20821,7 @@ console.log('jvascript initialisation happened here..');
         * </div>
         */
         this.resourceUrlWhitelist = function(value) {
+            console.log("anonymous inner function #20824");
             if (arguments.length) {
             resourceUrlWhitelist = adjustMatchers(value);
             }
@@ -20504,6 +20854,7 @@ console.log('jvascript initialisation happened here..');
         */
 
         this.resourceUrlBlacklist = function(value) {
+            console.log("anonymous inner function #20857");
             if (arguments.length) {
             resourceUrlBlacklist = adjustMatchers(value);
             }
@@ -20511,8 +20862,10 @@ console.log('jvascript initialisation happened here..');
         };
 
         this.$get = ['$injector', '$$sanitizeUri', function($injector, $$sanitizeUri) {
+            console.log("anonymous inner function #20865");
 
             var htmlSanitizer = function htmlSanitizer(html) {
+                console.log("anonymous inner function #20868");
             throw $sceMinErr('unsafe', 'Attempting to use an unsafe value in a safe context.');
             };
 
@@ -20522,6 +20875,7 @@ console.log('jvascript initialisation happened here..');
 
 
             function matchUrl(matcher, parsedUrl) {
+                console.log("anonymous inner function #20878");
             if (matcher === 'self') {
                 return urlIsSameOrigin(parsedUrl) || urlIsSameOriginAsBaseUrl(parsedUrl);
             } else {
@@ -20531,6 +20885,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function isResourceUrlAllowedByPolicy(url) {
+                console.log("anonymous inner function #20887");
             var parsedUrl = urlResolve(url.toString());
             var i, n, allowed = false;
             // Ensure that at least one item from the whitelist allows this url.
@@ -20553,8 +20908,11 @@ console.log('jvascript initialisation happened here..');
             }
 
             function generateHolderType(Base) {
+                console.log("anonymous inner function #20909");
             var holderType = function TrustedValueHolderType(trustedValue) {
+                console.log("anonymous inner function #20911");
                 this.$$unwrapTrustedValue = function() {
+                    console.log("anonymous inner function #20913");
                 return trustedValue;
                 };
             };
@@ -20562,9 +20920,11 @@ console.log('jvascript initialisation happened here..');
                 holderType.prototype = new Base();
             }
             holderType.prototype.valueOf = function sceValueOf() {
+                console.log("anonymous inner function #20921");
                 return this.$$unwrapTrustedValue();
             };
             holderType.prototype.toString = function sceToString() {
+                console.log("anonymous inner function #20925");
                 return this.$$unwrapTrustedValue().toString();
             };
             return holderType;
@@ -20605,6 +20965,7 @@ console.log('jvascript initialisation happened here..');
             * @return {*} A trusted representation of value, that can be used in the given context.
             */
             function trustAs(type, trustedValue) {
+                console.log("anonymous inner function #20966");
             var Constructor = (byType.hasOwnProperty(type) ? byType[type] : null);
             if (!Constructor) {
                 throw $sceMinErr('icontext',
@@ -20643,6 +21004,7 @@ console.log('jvascript initialisation happened here..');
             *     `value` unchanged.
             */
             function valueOf(maybeTrusted) {
+                console.log("anonymous inner function #21005");
             if (maybeTrusted instanceof trustedValueHolderBase) {
                 return maybeTrusted.$$unwrapTrustedValue();
             } else {
@@ -20684,6 +21046,7 @@ console.log('jvascript initialisation happened here..');
             *     exception if this is impossible.
             */
             function getTrusted(type, maybeTrusted) {
+                console.log("anonymous inner function #21047");
             if (maybeTrusted === null || isUndefined(maybeTrusted) || maybeTrusted === '') {
                 return maybeTrusted;
             }
@@ -21037,7 +21400,7 @@ console.log('jvascript initialisation happened here..');
         */
 
         function $SceProvider() {
-            console.log('');
+            console.log('$SceProvider #21403');
         var enabled = true;
 
         /**
@@ -21052,6 +21415,7 @@ console.log('jvascript initialisation happened here..');
         * Enables/disables SCE and returns the current value.
         */
         this.enabled = function(value) {
+            console.log("anonymous inner function #21418");
             if (arguments.length) {
             enabled = !!value;
             }
@@ -21107,6 +21471,7 @@ console.log('jvascript initialisation happened here..');
 
         this.$get = ['$parse', '$sceDelegate', function(
                         $parse,   $sceDelegate) {
+                            console.log("anonymous inner function #21474");
             // Support: IE 9-11 only
             // Prereq: Ensure that we're not running in IE<11 quirks mode.  In that mode, IE < 11 allow
             // the "expression(javascript expression)" syntax which is insecure.
@@ -21131,6 +21496,7 @@ console.log('jvascript initialisation happened here..');
             * Returns a boolean indicating if SCE is enabled.
             */
             sce.isEnabled = function() {
+                console.log("anonymous inner function #21499");
             return enabled;
             };
             sce.trustAs = $sceDelegate.trustAs;
@@ -21138,7 +21504,7 @@ console.log('jvascript initialisation happened here..');
             sce.valueOf = $sceDelegate.valueOf;
 
             if (!enabled) {
-            sce.trustAs = sce.getTrusted = function(type, value) { return value; };
+            sce.trustAs = sce.getTrusted = function(type, value) { console.log("anonymous inner function #21507");return value; };
             sce.valueOf = identity;
             }
 
@@ -21162,11 +21528,13 @@ console.log('jvascript initialisation happened here..');
             *      in `context`.
             */
             sce.parseAs = function sceParseAs(type, expr) {
+                console.log("anonymous inner function #21531");
             var parsed = $parse(expr);
             if (parsed.literal && parsed.constant) {
                 return parsed;
             } else {
                 return $parse(expr, function(value) {
+                    console.log("anonymous inner function #21537");
                 return sce.getTrusted(type, value);
                 });
             }
@@ -21430,14 +21798,18 @@ console.log('jvascript initialisation happened here..');
                 trustAs = sce.trustAs;
 
             forEach(SCE_CONTEXTS, function(enumValue, name) {
+                console.log("anonymous inner function #21801");
             var lName = lowercase(name);
             sce[snakeToCamel('parse_as_' + lName)] = function(expr) {
+                console.log("anonymous inner function #21804");
                 return parse(enumValue, expr);
             };
             sce[snakeToCamel('get_trusted_' + lName)] = function(value) {
+                console.log("anonymous inner function #21808");
                 return getTrusted(enumValue, value);
             };
             sce[snakeToCamel('trust_as_' + lName)] = function(value) {
+                console.log("anonymous inner function #21812");
                 return trustAs(enumValue, value);
             };
             });
@@ -21464,8 +21836,9 @@ console.log('jvascript initialisation happened here..');
         * This is very simple implementation of testing browser's features.
         */
         function $SnifferProvider() {
-            console.log('');
+            console.log('$SnifferProvider #21839');
         this.$get = ['$window', '$document', function($window, $document) {
+            console.log("anonymous inner function #21841");
             var eventSupport = {},
                 // Chrome Packaged Apps are not allowed to access `history.pushState`.
                 // If not sandboxed, they can be detected by the presence of `chrome.app.runtime`
@@ -21507,6 +21880,7 @@ console.log('jvascript initialisation happened here..');
             // We are purposefully using `!(android < 4)` to cover the case when `android` is undefined
             history: !!(hasHistoryPushState && !(android < 4) && !boxee),
             hasEvent: function(event) {
+                console.log("anonymous inner function #21883");
                 // Support: IE 9-11 only
                 // IE9 implements 'input' event it's so fubared that we rather pretend that it doesn't have
                 // it. In particular the event is not fired when backspace or delete key are pressed or
@@ -21546,12 +21920,12 @@ console.log('jvascript initialisation happened here..');
         * @this
         */
         function $$TaskTrackerFactoryProvider() {
-            console.log('');
-        this.$get = valueFn(function(log) { return new TaskTracker(log); });
+            console.log('$$TaskTrackerFactoryProvider #21923');
+        this.$get = valueFn(function(log) { console.log("anonymous inner function #21924");return new TaskTracker(log); });
         }
 
         function TaskTracker(log) {
-            console.log('');
+            console.log('TaskTracker #21928');
         var self = this;
         var taskCounts = {};
         var taskCallbacks = [];
@@ -21588,6 +21962,7 @@ console.log('jvascript initialisation happened here..');
         self.notifyWhenNoPendingTasks = notifyWhenNoPendingTasks;
 
         function completeTask(fn, taskType) {
+            console.log("anonymous inner function #21965");
             taskType = taskType || DEFAULT_TASK_TYPE;
 
             try {
@@ -21615,6 +21990,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function decTaskCount(taskType) {
+            console.log("anonymous inner function #21993");
             taskType = taskType || DEFAULT_TASK_TYPE;
             if (taskCounts[taskType]) {
             taskCounts[taskType]--;
@@ -21623,11 +21999,13 @@ console.log('jvascript initialisation happened here..');
         }
 
         function getLastCallback() {
+            console.log("anonymous inner function #22002");
             var cbInfo = taskCallbacks.pop();
             return cbInfo && cbInfo.cb;
         }
 
         function getLastCallbackForType(taskType) {
+            console.log("anonymous inner function #22008");
             for (var i = taskCallbacks.length - 1; i >= 0; --i) {
             var cbInfo = taskCallbacks[i];
             if (cbInfo.type === taskType) {
@@ -21638,12 +22016,14 @@ console.log('jvascript initialisation happened here..');
         }
 
         function incTaskCount(taskType) {
+            console.log("anonymous inner function #22019");
             taskType = taskType || DEFAULT_TASK_TYPE;
             taskCounts[taskType] = (taskCounts[taskType] || 0) + 1;
             taskCounts[ALL_TASKS_TYPE] = (taskCounts[ALL_TASKS_TYPE] || 0) + 1;
         }
 
         function notifyWhenNoPendingTasks(callback, taskType) {
+            console.log("anonymous inner function #22026");
             taskType = taskType || ALL_TASKS_TYPE;
             if (!taskCounts[taskType]) {
             callback();
@@ -21667,7 +22047,7 @@ console.log('jvascript initialisation happened here..');
         * requesting a template.
         */
         function $TemplateRequestProvider() {
-            console.log('');
+            console.log('$TemplateRequestProvider #22050');
 
         var httpOptions;
 
@@ -21685,6 +22065,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {string|self} Returns the {@link $http} options when used as getter and self if used as setter.
         */
         this.httpOptions = function(val) {
+            console.log("anonymous inner function #22068");
             if (val) {
             httpOptions = val;
             return this;
@@ -21722,8 +22103,10 @@ console.log('jvascript initialisation happened here..');
         */
         this.$get = ['$exceptionHandler', '$templateCache', '$http', '$q', '$sce',
             function($exceptionHandler, $templateCache, $http, $q, $sce) {
+                console.log("anonymous inner function #22106");
 
             function handleRequestFn(tpl, ignoreRequestError) {
+                console.log("anonymous inner function #22109");
                 handleRequestFn.totalPendingRequests++;
 
                 // We consider the template cache holds only trusted templates, so
@@ -21739,6 +22122,7 @@ console.log('jvascript initialisation happened here..');
 
                 if (isArray(transformResponse)) {
                 transformResponse = transformResponse.filter(function(transformer) {
+                    console.log("anonymous inner function #22125");
                     return transformer !== defaultHttpResponseTransform;
                 });
                 } else if (transformResponse === defaultHttpResponseTransform) {
@@ -21750,13 +22134,16 @@ console.log('jvascript initialisation happened here..');
                     transformResponse: transformResponse
                 }, httpOptions))
                 .finally(function() {
+                    console.log("anonymous inner function #22137");
                     handleRequestFn.totalPendingRequests--;
                 })
                 .then(function(response) {
+                    console.log("anonymous inner function #22141");
                     return $templateCache.put(tpl, response.data);
                 }, handleError);
 
                 function handleError(resp) {
+                    console.log("anonymous inner function #22146");
                 if (!ignoreRequestError) {
                     resp = $templateRequestMinErr('tpload',
                         'Failed to load template: {0} (HTTP status: {1} {2})',
@@ -21778,9 +22165,10 @@ console.log('jvascript initialisation happened here..');
 
         /** @this */
         function $$TestabilityProvider() {
-            console.log('');
+            console.log('$$TestabilityProvider #22168');
         this.$get = ['$rootScope', '$browser', '$location',
             function($rootScope,   $browser,   $location) {
+                console.log("anonymous inner function #22171");
 
             /**
             * @name $testability
@@ -21804,12 +22192,15 @@ console.log('jvascript initialisation happened here..');
             *     for the expression. Filters and whitespace are ignored.
             */
             testability.findBindings = function(element, expression, opt_exactMatch) {
+                console.log("anonymous inner function #22195");
             var bindings = element.getElementsByClassName('ng-binding');
             var matches = [];
             forEach(bindings, function(binding) {
+                console.log("anonymous inner function #22199");
                 var dataBinding = angular.element(binding).data('$binding');
                 if (dataBinding) {
                 forEach(dataBinding, function(bindingName) {
+                    console.log("anonymous inner function #22203");
                     if (opt_exactMatch) {
                     var matcher = new RegExp('(^|\\s)' + escapeForRegexp(expression) + '(\\s|\\||$)');
                     if (matcher.test(bindingName)) {
@@ -21839,6 +22230,7 @@ console.log('jvascript initialisation happened here..');
             *     for the expression.
             */
             testability.findModels = function(element, expression, opt_exactMatch) {
+                console.log("anonymous inner function #22233");
             var prefixes = ['ng-', 'data-ng-', 'ng\\:'];
             for (var p = 0; p < prefixes.length; ++p) {
                 var attributeEquals = opt_exactMatch ? '=' : '*=';
@@ -21858,6 +22250,7 @@ console.log('jvascript initialisation happened here..');
             *     the path, search, and hash. (e.g. /path?a=b#hash)
             */
             testability.getLocation = function() {
+                console.log("anonymous inner function #22253");
             return $location.url();
             };
 
@@ -21871,6 +22264,7 @@ console.log('jvascript initialisation happened here..');
             *     e.g. /path?a=b#hash) to go to.
             */
             testability.setLocation = function(url) {
+                console.log("anonymous inner function #22267");
             if (url !== $location.url()) {
                 $location.url(url);
                 $rootScope.$digest();
@@ -21894,6 +22288,7 @@ console.log('jvascript initialisation happened here..');
             * @param {function} callback
             */
             testability.whenStable = function(callback) {
+                console.log("anonymous inner function #22291");
             $browser.notifyWhenNoOutstandingRequests(callback);
             };
 
@@ -21905,9 +22300,10 @@ console.log('jvascript initialisation happened here..');
 
         /** @this */
         function $TimeoutProvider() {
-            console.log('');
+            console.log('$TimeoutProvider #22303');
         this.$get = ['$rootScope', '$browser', '$q', '$$q', '$exceptionHandler',
             function($rootScope,   $browser,   $q,   $$q,   $exceptionHandler) {
+                console.log("anonymous inner function #22306");
 
             var deferreds = {};
 
@@ -21942,6 +22338,7 @@ console.log('jvascript initialisation happened here..');
             *
             */
             function timeout(fn, delay, invokeApply) {
+                console.log("anonymous inner function #22341");
             if (!isFunction(fn)) {
                 invokeApply = delay;
                 delay = fn;
@@ -21955,6 +22352,7 @@ console.log('jvascript initialisation happened here..');
                 timeoutId;
 
             timeoutId = $browser.defer(function() {
+                console.log("anonymous inner function #22355");
                 try {
                 deferred.resolve(fn.apply(null, args));
                 } catch (e) {
@@ -21987,6 +22385,7 @@ console.log('jvascript initialisation happened here..');
             *   canceled.
             */
             timeout.cancel = function(promise) {
+                console.log("anonymous inner function #22388");
             if (!promise) return false;
 
             if (!promise.hasOwnProperty('$$timeoutId')) {
@@ -22076,7 +22475,7 @@ console.log('jvascript initialisation happened here..');
         *
         */
         function urlResolve(url) {
-            console.log('');
+            console.log('urlResolve #22478');
         if (!isString(url)) return url;
 
         var href = url;
@@ -22120,7 +22519,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {boolean} Whether the request is for the same origin as the application document.
         */
         function urlIsSameOrigin(requestUrl) {
-            console.log('');
+            console.log('urlIsSameOrigin #22522');
         return urlsAreSameOrigin(requestUrl, originUrl);
         }
 
@@ -22135,7 +22534,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {boolean} Whether the URL is same-origin as the document base URL.
         */
         function urlIsSameOriginAsBaseUrl(requestUrl) {
-            console.log('');
+            console.log('urlIsSameOriginAsBaseUrl #22537');
         return urlsAreSameOrigin(requestUrl, getBaseUrl());
         }
 
@@ -22149,7 +22548,7 @@ console.log('jvascript initialisation happened here..');
         *     whether it is of an allowed origin.
         */
         function urlIsAllowedOriginFactory(whitelistedOriginUrls) {
-            console.log('');
+            console.log('urlIsAllowedOriginFactory #22551');
         var parsedAllowedOriginUrls = [originUrl].concat(whitelistedOriginUrls.map(urlResolve));
 
         /**
@@ -22163,6 +22562,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {boolean} - Whether the specified URL is of an allowed origin.
         */
         return function urlIsAllowedOrigin(requestUrl) {
+            console.log("urlIsAllowedOrigin #22565");
             var parsedUrl = urlResolve(requestUrl);
             return parsedAllowedOriginUrls.some(urlsAreSameOrigin.bind(null, parsedUrl));
         };
@@ -22179,7 +22579,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {boolean} - True if both URLs have the same origin, and false otherwise.
         */
         function urlsAreSameOrigin(url1, url2) {
-            console.log('');
+            console.log('urlsAreSameOrigin #22582');
         url1 = urlResolve(url1);
         url2 = urlResolve(url2);
 
@@ -22192,7 +22592,7 @@ console.log('jvascript initialisation happened here..');
         * @returns {string}
         */
         function getBaseUrl() {
-            console.log('');
+            console.log('getBaseUrl #22595');
         if (window.document.baseURI) {
             return window.document.baseURI;
         }
@@ -22252,7 +22652,7 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         function $WindowProvider() {
-            console.log('');
+            console.log('$WindowProvider #22655');
         this.$get = valueFn(window);
         }
 
@@ -22266,12 +22666,13 @@ console.log('jvascript initialisation happened here..');
         * @return {Object} a key/value map of the current cookies
         */
         function $$CookieReader($document) {
-            console.log('');
+            console.log('$$CookieReader #22669');
         var rawDocument = $document[0] || {};
         var lastCookies = {};
         var lastCookieString = '';
 
         function safeGetCookie(rawDocument) {
+            console.log("anonymous inner function #22675");
             try {
             return rawDocument.cookie || '';
             } catch (e) {
@@ -22280,6 +22681,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function safeDecodeURIComponent(str) {
+            console.log("anonymous inner function #22684");
             try {
             return decodeURIComponent(str);
             } catch (e) {
@@ -22288,6 +22690,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         return function() {
+            console.log("anonymous inner function #22693");
             var cookieArray, cookie, i, index, name;
             var currentCookieString = safeGetCookie(rawDocument);
 
@@ -22318,7 +22721,7 @@ console.log('jvascript initialisation happened here..');
 
         /** @this */
         function $$CookieReaderProvider() {
-            console.log('');
+            console.log('$$CookieReaderProvider #22724');
         this.$get = $$CookieReader;
         }
 
@@ -22430,7 +22833,7 @@ console.log('jvascript initialisation happened here..');
         $FilterProvider.$inject = ['$provide'];
         /** @this */
         function $FilterProvider($provide) {
-            console.log('');
+            console.log('$FilterProvider #22836');
         var suffix = 'Filter';
 
         /**
@@ -22450,9 +22853,11 @@ console.log('jvascript initialisation happened here..');
         *    of the registered filter instances.
         */
         function register(name, factory) {
+            console.log("anonymous inner function #22856");
             if (isObject(name)) {
             var filters = {};
             forEach(name, function(filter, key) {
+                console.log("anonymous inner function #22860");
                 filters[key] = register(key, filter);
             });
             return filters;
@@ -22463,7 +22868,9 @@ console.log('jvascript initialisation happened here..');
         this.register = register;
 
         this.$get = ['$injector', function($injector) {
+            console.log("anonymous inner function #22871");
             return function(name) {
+                console.log("anonymous inner function #22873");
             return $injector.get(name + suffix);
             };
         }];
@@ -22631,8 +23038,9 @@ console.log('jvascript initialisation happened here..');
         */
 
         function filterFilter() {
-            console.log('');
+            console.log('filterFilter #23041');
         return function(array, expression, comparator, anyPropertyKey) {
+            console.log("anonymous inner function #23043");
             if (!isArrayLike(array)) {
             if (array == null) {
                 return array;
@@ -22669,7 +23077,7 @@ console.log('jvascript initialisation happened here..');
 
         // Helper functions for `filterFilter`
         function createPredicateFn(expression, comparator, anyPropertyKey, matchAgainstAnyProp) {
-            console.log('');
+            console.log('createPredicateFn #23080');
         var shouldMatchPrimitives = isObject(expression) && (anyPropertyKey in expression);
         var predicateFn;
 
@@ -22677,6 +23085,7 @@ console.log('jvascript initialisation happened here..');
             comparator = equals;
         } else if (!isFunction(comparator)) {
             comparator = function(actual, expected) {
+                console.log("anonymous inner function #23088");
             if (isUndefined(actual)) {
                 // No substring matching against `undefined`
                 return false;
@@ -22697,6 +23106,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         predicateFn = function(item) {
+            console.log("anonymous inner function #23109");
             if (shouldMatchPrimitives && !isObject(item)) {
             return deepCompare(item, expression[anyPropertyKey], comparator, anyPropertyKey, false);
             }
@@ -22707,7 +23117,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function deepCompare(actual, expected, comparator, anyPropertyKey, matchAgainstAnyProp, dontMatchWholeObject) {
-            console.log('');
+            console.log('deepCompare #23120');
         var actualType = getTypeForFilter(actual);
         var expectedType = getTypeForFilter(expected);
 
@@ -22717,6 +23127,7 @@ console.log('jvascript initialisation happened here..');
             // In case `actual` is an array, consider it a match
             // if ANY of it's items matches `expected`
             return actual.some(function(item) {
+                console.log("anonymous inner function #23130");
             return deepCompare(item, expected, comparator, anyPropertyKey, matchAgainstAnyProp);
             });
         }
@@ -22760,7 +23171,7 @@ console.log('jvascript initialisation happened here..');
 
         // Used for easily differentiating between `null` and actual `object`
         function getTypeForFilter(val) {
-            console.log('');
+            console.log('getTypeForFilter #23174');
         return (val === null) ? 'null' : typeof val;
         }
 
@@ -22822,9 +23233,10 @@ console.log('jvascript initialisation happened here..');
         */
         currencyFilter.$inject = ['$locale'];
         function currencyFilter($locale) {
-            console.log('');
+            console.log('currencyFilter #23236');
         var formats = $locale.NUMBER_FORMATS;
         return function(amount, currencySymbol, fractionSize) {
+            console.log("anonymous inner function #23239");
             if (isUndefined(currencySymbol)) {
             currencySymbol = formats.CURRENCY_SYM;
             }
@@ -22900,9 +23312,10 @@ console.log('jvascript initialisation happened here..');
         */
         numberFilter.$inject = ['$locale'];
         function numberFilter($locale) {
-            console.log('');
+            console.log('numberFilter #23315');
         var formats = $locale.NUMBER_FORMATS;
         return function(number, fractionSize) {
+            console.log("anonymous inner function #23318");
 
             // if null or undefined pass it through
             return (number == null)
@@ -22926,7 +23339,7 @@ console.log('jvascript initialisation happened here..');
         *
         */
         function parse(numStr) {
-            console.log('');
+            console.log('parse #23342');
         var exponent = 0, digits, numberOfIntegerDigits;
         var i, j, zeros;
 
@@ -22982,7 +23395,7 @@ console.log('jvascript initialisation happened here..');
         * This function changed the parsedNumber in-place
         */
         function roundNumber(parsedNumber, fractionSize, minFrac, maxFrac) {
-            console.log('');
+            console.log('roundNumber #23398');
             var digits = parsedNumber.d;
             var fractionLen = digits.length - parsedNumber.i;
 
@@ -23029,6 +23442,7 @@ console.log('jvascript initialisation happened here..');
 
             // Do any carrying, e.g. a digit was rounded up to 10
             var carry = digits.reduceRight(function(carry, d, i, digits) {
+                console.log("anonymous inner function #23445");
             d = d + carry;
             digits[i] = d % 10;
             return Math.floor(d / 10);
@@ -23058,7 +23472,7 @@ console.log('jvascript initialisation happened here..');
         * @return {string}              The number formatted as a string
         */
         function formatNumber(number, pattern, groupSep, decimalSep, fractionSize) {
-            console.log('');
+            console.log('formatNumber #23475');
 
         if (!(isString(number) || isNumber(number)) || isNaN(number)) return '';
 
@@ -23079,7 +23493,7 @@ console.log('jvascript initialisation happened here..');
             var integerLen = parsedNumber.i;
             var exponent = parsedNumber.e;
             var decimals = [];
-            isZero = digits.reduce(function(isZero, d) { return isZero && !d; }, true);
+            isZero = digits.reduce(function(isZero, d) { console.log("anonymous inner function #23496");return isZero && !d; }, true);
 
             // pad zeros for small numbers
             while (integerLen < 0) {
@@ -23125,7 +23539,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function padNumber(num, digits, trim, negWrap) {
-            console.log('');
+            console.log('padNumber #23542');
         var neg = '';
         if (num < 0 || (negWrap && num <= 0)) {
             if (negWrap) {
@@ -23145,9 +23559,10 @@ console.log('jvascript initialisation happened here..');
 
 
         function dateGetter(name, size, offset, trim, negWrap) {
-            console.log('');
+            console.log('dateGetter #23562');
         offset = offset || 0;
         return function(date) {
+            console.log("anonymous inner function #23565");
             var value = date['get' + name]();
             if (offset > 0 || value > -offset) {
             value += offset;
@@ -23158,8 +23573,9 @@ console.log('jvascript initialisation happened here..');
         }
 
         function dateStrGetter(name, shortForm, standAlone) {
-            console.log('');
+            console.log('dateStrGetter #23576');
         return function(date, formats) {
+            console.log("anonymous inner function #23578");
             var value = date['get' + name]();
             var propPrefix = (standAlone ? 'STANDALONE' : '') + (shortForm ? 'SHORT' : '');
             var get = uppercase(propPrefix + name);
@@ -23169,7 +23585,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function timeZoneGetter(date, formats, offset) {
-            console.log('');
+            console.log('timeZoneGetter #23588');
         var zone = -1 * offset;
         var paddedZone = (zone >= 0) ? '+' : '';
 
@@ -23180,7 +23596,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function getFirstThursdayOfYear(year) {
-            console.log('');
+            console.log('getFirstThursdayOfYear #23599');
             // 0 = index of January
             var dayOfWeekOnFirst = (new Date(year, 0, 1)).getDay();
             // 4 = index of Thursday (+1 to account for 1st = 5)
@@ -23189,15 +23605,16 @@ console.log('jvascript initialisation happened here..');
         }
 
         function getThursdayThisWeek(datetime) {
-            console.log('');
+            console.log('getThursdayThisWeek #23608');
             return new Date(datetime.getFullYear(), datetime.getMonth(),
             // 4 = index of Thursday
             datetime.getDate() + (4 - datetime.getDay()));
         }
 
         function weekGetter(size) {
-            console.log('');
+            console.log('weekGetter #23615');
         return function(date) {
+            console.log("anonymous inner function #23617");
             var firstThurs = getFirstThursdayOfYear(date.getFullYear()),
                 thisThurs = getThursdayThisWeek(date);
 
@@ -23209,17 +23626,17 @@ console.log('jvascript initialisation happened here..');
         }
 
         function ampmGetter(date, formats) {
-            console.log('');
+            console.log('ampmGetter #23629');
         return date.getHours() < 12 ? formats.AMPMS[0] : formats.AMPMS[1];
         }
 
         function eraGetter(date, formats) {
-            console.log('');
+            console.log('eraGetter #23634');
         return date.getFullYear() <= 0 ? formats.ERAS[0] : formats.ERAS[1];
         }
 
         function longEraGetter(date, formats) {
-            console.log('');
+            console.log('longEraGetter #23639');
         return date.getFullYear() <= 0 ? formats.ERANAMES[0] : formats.ERANAMES[1];
         }
 
@@ -23358,12 +23775,13 @@ console.log('jvascript initialisation happened here..');
         */
         dateFilter.$inject = ['$locale'];
         function dateFilter($locale) {
-            console.log('');
+            console.log('dateFilter #23778');
 
 
         var R_ISO8601_STR = /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
                             // 1        2       3         4          5          6          7          8  9     10      11
         function jsonStringToDate(string) {
+            console.log("anonymous inner function #23784");
             var match;
             if ((match = string.match(R_ISO8601_STR))) {
             var date = new Date(0),
@@ -23389,6 +23807,7 @@ console.log('jvascript initialisation happened here..');
 
 
         return function(date, format, timezone) {
+            console.log("anonymous inner function #23810");
             var text = '',
                 parts = [],
                 fn, match;
@@ -23424,6 +23843,7 @@ console.log('jvascript initialisation happened here..');
             date = convertTimezoneToLocal(date, timezone, true);
             }
             forEach(parts, function(value) {
+                console.log("anonymous inner function #23846");
             fn = DATE_FORMATS[value];
             text += fn ? fn(date, $locale.DATETIME_FORMATS, dateTimezoneOffset)
                         : value === '\'\'' ? '\'' : value.replace(/(^'|'$)/g, '').replace(/''/g, '\'');
@@ -23466,8 +23886,9 @@ console.log('jvascript initialisation happened here..');
         *
         */
         function jsonFilter() {
-            console.log('');
+            console.log('jsonFilter #23889');
         return function(object, spacing) {
+            console.log("anonymous inner function #23891");
             if (isUndefined(spacing)) {
                 spacing = 2;
             }
@@ -23616,8 +24037,9 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         function limitToFilter() {
-            console.log('');
+            console.log('limitToFilter #24040');
         return function(input, limit, begin) {
+            console.log("anonymous inner function #24042");
             if (Math.abs(Number(limit)) === Infinity) {
             limit = Number(limit);
             } else {
@@ -23644,7 +24066,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function sliceFn(input, begin, end) {
-            console.log('');
+            console.log('sliceFn #24069');
         if (isString(input)) return input.slice(begin, end);
 
         return slice.call(input, begin, end);
@@ -24211,8 +24633,9 @@ console.log('jvascript initialisation happened here..');
         */
         orderByFilter.$inject = ['$parse'];
         function orderByFilter($parse) {
-            console.log('');
+            console.log('orderByFilter #24636');
         return function(array, sortPredicate, reverseOrder, compareFn) {
+            console.log("anonymous inner function #24638");
 
             if (array == null) return array;
             if (!isArrayLike(array)) {
@@ -24234,11 +24657,12 @@ console.log('jvascript initialisation happened here..');
             // See https://en.wikipedia.org/wiki/Schwartzian_transform
             var compareValues = Array.prototype.map.call(array, getComparisonObject);
             compareValues.sort(doComparison);
-            array = compareValues.map(function(item) { return item.value; });
+            array = compareValues.map(function(item) { console.log("anonymous inner function #24660"); return item.value; });
 
             return array;
 
             function getComparisonObject(value, index) {
+                console.log("anonymous inner function getComparisonObject #24665");
             // NOTE: We are adding an extra `tieBreaker` value based on the element's index.
             // This will be used to keep the sort stable when none of the input predicates can
             // distinguish between two elements.
@@ -24246,12 +24670,14 @@ console.log('jvascript initialisation happened here..');
                 value: value,
                 tieBreaker: {value: index, type: 'number', index: index},
                 predicateValues: predicates.map(function(predicate) {
+                    console.log("anonymous inner function predicateValues: predicates.map #24673");
                 return getPredicateValue(predicate.get(value), index);
                 })
             };
             }
 
             function doComparison(v1, v2) {
+                console.log("anonymous inner function #24680");
             for (var i = 0, ii = predicates.length; i < ii; i++) {
                 var result = compare(v1.predicateValues[i], v2.predicateValues[i]);
                 if (result) {
@@ -24264,7 +24690,9 @@ console.log('jvascript initialisation happened here..');
         };
 
         function processPredicates(sortPredicates) {
+            console.log("anonymous inner function #24693");
             return sortPredicates.map(function(predicate) {
+                console.log("anonymous inner function #24695");
             var descending = 1, get = identity;
 
             if (isFunction(predicate)) {
@@ -24278,7 +24706,7 @@ console.log('jvascript initialisation happened here..');
                 get = $parse(predicate);
                 if (get.constant) {
                     var key = get();
-                    get = function(value) { return value[key]; };
+                    get = function(value) { console.log("anonymous inner function #24709"); return value[key]; };
                 }
                 }
             }
@@ -24287,6 +24715,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function isPrimitive(value) {
+            console.log("anonymous inner function #24718");
             switch (typeof value) {
             case 'number': /* falls through */
             case 'boolean': /* falls through */
@@ -24298,6 +24727,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function objectValue(value) {
+            console.log("anonymous inner function #24730");
             // If `valueOf` is a valid function use that
             if (isFunction(value.valueOf)) {
             value = value.valueOf();
@@ -24313,6 +24743,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function getPredicateValue(value, index) {
+            console.log("anonymous inner function #24746");
             var type = typeof value;
             if (value === null) {
             type = 'null';
@@ -24323,6 +24754,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function defaultCompare(v1, v2) {
+            console.log("anonymous inner function #24757");
             var result = 0;
             var type1 = v1.type;
             var type2 = v2.type;
@@ -24358,7 +24790,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function ngDirective(directive) {
-            console.log('');
+            console.log('ngDirective #24793');
         if (isFunction(directive)) {
             directive = {
             link: directive
@@ -24382,8 +24814,10 @@ console.log('jvascript initialisation happened here..');
         var htmlAnchorDirective = valueFn({
         restrict: 'E',
         compile: function(element, attr) {
+            console.log("anonymous inner function #24817");
             if (!attr.href && !attr.xlinkHref) {
             return function(scope, element) {
+                console.log("anonymous inner function #24820");
                 // If the linked element is not an anchor tag anymore, do nothing
                 if (element[0].nodeName.toLowerCase() !== 'a') return;
 
@@ -24391,6 +24825,7 @@ console.log('jvascript initialisation happened here..');
                 var href = toString.call(element.prop('href')) === '[object SVGAnimatedString]' ?
                         'xlink:href' : 'href';
                 element.on('click', function(event) {
+                    console.log("anonymous inner function #24828");
                 // if we have no href url, then don't navigate anywhere.
                 if (!element.attr(href)) {
                     event.preventDefault();
@@ -24751,12 +25186,15 @@ console.log('jvascript initialisation happened here..');
 
         // boolean attrs are evaluated
         forEach(BOOLEAN_ATTR, function(propName, attrName) {
+            console.log("anonymous inner function #25189");
         // binding to multiple is not supported
         if (propName === 'multiple') return;
 
         function defaultLinkFn(scope, element, attr) {
+            console.log("anonymous inner function #25194");
             console.log('');
             scope.$watch(attr[normalized], function ngBooleanAttrWatchAction(value) {
+                console.log("anonymous inner function #25197");
             attr.$set(attrName, !!value);
             });
         }
@@ -24766,6 +25204,7 @@ console.log('jvascript initialisation happened here..');
 
         if (propName === 'checked') {
             linkFn = function(scope, element, attr) {
+                console.log("anonymous inner function #25207");
             // ensuring ngChecked doesn't interfere with ngModel when both are set on the same input
             if (attr.ngModel !== attr[normalized]) {
                 defaultLinkFn(scope, element, attr);
@@ -24774,6 +25213,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         ngAttributeAliasDirectives[normalized] = function() {
+            console.log("anonymous inner function #25216");
             return {
             restrict: 'A',
             priority: 100,
@@ -24784,11 +25224,13 @@ console.log('jvascript initialisation happened here..');
 
         // aliased input attrs are evaluated
         forEach(ALIASED_ATTR, function(htmlAttr, ngAttr) {
+            console.log("anonymous inner function #25227");
         ngAttributeAliasDirectives[ngAttr] = function() {
-            console.log('');
+            console.log("anonymous inner function #25229");
             return {
             priority: 100,
             link: function(scope, element, attr) {
+                console.log("anonymous inner function #25233");
                 //special case ngPattern when a literal regular expression value
                 //is used as the expression (this way we don't have to watch anything).
                 if (ngAttr === 'ngPattern' && attr.ngPattern.charAt(0) === '/') {
@@ -24800,6 +25242,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 scope.$watch(attr[ngAttr], function ngAttrAliasWatchAction(value) {
+                    console.log("anonymous inner function #25245");
                 attr.$set(ngAttr, value);
                 });
             }
@@ -24809,12 +25252,14 @@ console.log('jvascript initialisation happened here..');
 
         // ng-src, ng-srcset, ng-href are interpolated
         forEach(['src', 'srcset', 'href'], function(attrName) {
-            console.log('');
+            console.log("anonymous inner function #25255");
         var normalized = directiveNormalize('ng-' + attrName);
         ngAttributeAliasDirectives[normalized] = ['$sce', function($sce) {
+            console.log("anonymous inner function #25258");
             return {
             priority: 99, // it needs to run after the attributes are interpolated
             link: function(scope, element, attr) {
+                console.log("anonymous inner function #25262");
                 var propName = attrName,
                     name = attrName;
 
@@ -24830,6 +25275,7 @@ console.log('jvascript initialisation happened here..');
                 attr.$set(normalized, $sce.getTrustedMediaUrl(attr[normalized]));
 
                 attr.$observe(normalized, function(value) {
+                    console.log("anonymous inner function #25278");
                 if (!value) {
                     if (attrName === 'href') {
                     attr.$set(name, null);
@@ -24868,7 +25314,7 @@ console.log('jvascript initialisation happened here..');
         SUBMITTED_CLASS = 'ng-submitted';
 
         function nullFormRenameControl(control, name) {
-            console.log('');
+            console.log('nullFormRenameControl #25317');
         control.$name = name;
         }
 
@@ -24923,7 +25369,7 @@ console.log('jvascript initialisation happened here..');
         //asks for $scope to fool the BC controller module
         FormController.$inject = ['$element', '$attrs', '$scope', '$animate', '$interpolate'];
         function FormController($element, $attrs, $scope, $animate, $interpolate) {
-            console.log('');
+            console.log('FormController #25372');
         this.$$controls = [];
 
         // init state
@@ -24957,7 +25403,9 @@ console.log('jvascript initialisation happened here..');
         * a form that uses `ng-model-options` to pend updates.
         */
         $rollbackViewValue: function() {
+            console.log("anonymous inner function #25406");
             forEach(this.$$controls, function(control) {
+                console.log("anonymous inner function #25408");
             control.$rollbackViewValue();
             });
         },
@@ -24974,7 +25422,9 @@ console.log('jvascript initialisation happened here..');
         * usually handles calling this in response to input events.
         */
         $commitViewValue: function() {
+            console.log("anonymous inner function #25425");
             forEach(this.$$controls, function(control) {
+                console.log("anonymous inner function #25427");
             control.$commitViewValue();
             });
         },
@@ -25001,6 +25451,7 @@ console.log('jvascript initialisation happened here..');
         * calling `$setDirty()` and `$validate()` afterwards will propagate the state to the parent form.
         */
         $addControl: function(control) {
+            console.log("anonymous inner function #25454");
             // Breaking change - before, inputs whose name was "hasOwnProperty" were quietly ignored
             // and not added to the scope.  Now we throw an error.
             assertNotHasOwnProperty(control.$name, 'input');
@@ -25034,11 +25485,13 @@ console.log('jvascript initialisation happened here..');
         * you need access to the controls.
         */
         $getControls: function() {
+            console.log("anonymous inner function #25488");
             return shallowCopy(this.$$controls);
         },
 
         // Private API: rename a form control
         $$renameControl: function(control, newName) {
+            console.log("anonymous inner function #25494");
             var oldName = control.$name;
 
             if (this[oldName] === control) {
@@ -25065,18 +25518,22 @@ console.log('jvascript initialisation happened here..');
         * may not mean that the form is still `$dirty`.
         */
         $removeControl: function(control) {
+            console.log("anonymous inner function #25521");
             if (control.$name && this[control.$name] === control) {
             delete this[control.$name];
             }
             forEach(this.$pending, function(value, name) {
+                console.log("anonymous inner function #25526");
             // eslint-disable-next-line no-invalid-this
             this.$setValidity(name, null, control);
             }, this);
             forEach(this.$error, function(value, name) {
+                console.log("anonymous inner function #25531");
             // eslint-disable-next-line no-invalid-this
             this.$setValidity(name, null, control);
             }, this);
             forEach(this.$$success, function(value, name) {
+                console.log("anonymous inner function #25536");
             // eslint-disable-next-line no-invalid-this
             this.$setValidity(name, null, control);
             }, this);
@@ -25096,6 +25553,7 @@ console.log('jvascript initialisation happened here..');
         * state (ng-dirty class). This method will also propagate to parent forms.
         */
         $setDirty: function() {
+            console.log("anonymous inner function #25556");
             this.$$animate.removeClass(this.$$element, PRISTINE_CLASS);
             this.$$animate.addClass(this.$$element, DIRTY_CLASS);
             this.$dirty = true;
@@ -25120,6 +25578,7 @@ console.log('jvascript initialisation happened here..');
         * saving or resetting it.
         */
         $setPristine: function() {
+            console.log("anonymous inner function #25581");
             this.$$animate.setClass(this.$$element, PRISTINE_CLASS, DIRTY_CLASS + ' ' + SUBMITTED_CLASS);
             this.$dirty = false;
             this.$pristine = true;
@@ -25143,7 +25602,9 @@ console.log('jvascript initialisation happened here..');
         * back to its pristine state.
         */
         $setUntouched: function() {
+            console.log("anonymous inner function #25605");
             forEach(this.$$controls, function(control) {
+                console.log("anonymous inner function #25607");
             control.$setUntouched();
             });
         },
@@ -25157,6 +25618,7 @@ console.log('jvascript initialisation happened here..');
         * parent forms of the form.
         */
         $setSubmitted: function() {
+            console.log("anonymous inner function #25621");
             var rootForm = this;
             while (rootForm.$$parentForm && (rootForm.$$parentForm !== nullFormCtrl)) {
             rootForm = rootForm.$$parentForm;
@@ -25165,9 +25627,11 @@ console.log('jvascript initialisation happened here..');
         },
 
         $$setSubmitted: function() {
+            console.log("anonymous inner function #25630");
             this.$$animate.addClass(this.$$element, SUBMITTED_CLASS);
             this.$submitted = true;
             forEach(this.$$controls, function(control) {
+                console.log("anonymous inner function #25634");
             if (control.$$setSubmitted) {
                 control.$$setSubmitted();
             }
@@ -25202,6 +25666,7 @@ console.log('jvascript initialisation happened here..');
         addSetValidityMethod({
         clazz: FormController,
         set: function(object, property, controller) {
+            console.log("anonymous inner function #25669");
             var list = object[property];
             if (!list) {
             object[property] = [controller];
@@ -25213,6 +25678,7 @@ console.log('jvascript initialisation happened here..');
             }
         },
         unset: function(object, property, controller) {
+            console.log("anonymous inner function #25681");
             var list = object[property];
             if (!list) {
             return;
@@ -25390,7 +25856,7 @@ console.log('jvascript initialisation happened here..');
         *                       related scope, under this name.
         */
         var formDirectiveFactory = function(isNgForm) {
-            console.log('');
+            console.log('formDirectiveFactory #25859');
         return ['$timeout', '$parse', function($timeout, $parse) {
             var formDirective = {
             name: 'form',
@@ -25398,6 +25864,7 @@ console.log('jvascript initialisation happened here..');
             require: ['form', '^^?form'], //first is the form's own ctrl, second is an optional parent form
             controller: FormController,
             compile: function ngFormCompile(formElement, attr) {
+                console.log("anonymous inner function #25867");
                 // Setup initial state of the control
                 formElement.addClass(PRISTINE_CLASS).addClass(VALID_CLASS);
 
@@ -25405,6 +25872,7 @@ console.log('jvascript initialisation happened here..');
 
                 return {
                 pre: function ngFormPreLink(scope, formElement, attr, ctrls) {
+                    console.log("anonymous inner function #25875");
                     var controller = ctrls[0];
 
                     // if `action` attr is not present on the form, prevent the default action (submission)
@@ -25416,7 +25884,9 @@ console.log('jvascript initialisation happened here..');
                     // page reload if the form was destroyed by submission of the form via a click handler
                     // on a button in the form. Looks like an IE9 specific bug.
                     var handleFormSubmission = function(event) {
+                        console.log("anonymous inner function #25887");
                         scope.$apply(function() {
+                            console.log("anonymous inner function #25889");
                         controller.$commitViewValue();
                         controller.$setSubmitted();
                         });
@@ -25429,7 +25899,9 @@ console.log('jvascript initialisation happened here..');
                     // unregister the preventDefault listener so that we don't not leak memory but in a
                     // way that will achieve the prevention of the default action.
                     formElement.on('$destroy', function() {
+                        console.log("anonymous inner function #25902");
                         $timeout(function() {
+                            console.log("anonymous inner function #25904");
                         formElement[0].removeEventListener('submit', handleFormSubmission);
                         }, 0, false);
                     });
@@ -25443,6 +25915,7 @@ console.log('jvascript initialisation happened here..');
                     if (nameAttr) {
                     setter(scope, controller);
                     attr.$observe(nameAttr, function(newValue) {
+                        console.log("anonymous inner function #25918");
                         if (controller.$name === newValue) return;
                         setter(scope, undefined);
                         controller.$$parentForm.$$renameControl(controller, newValue);
@@ -25451,6 +25924,7 @@ console.log('jvascript initialisation happened here..');
                     });
                     }
                     formElement.on('$destroy', function() {
+                        console.log("anonymous inner function #25927");
                     controller.$$parentForm.$removeControl(controller);
                     setter(scope, undefined);
                     extend(controller, nullFormCtrl); //stop propagating child destruction handlers upwards
@@ -25463,6 +25937,7 @@ console.log('jvascript initialisation happened here..');
             return formDirective;
 
             function getSetter(expression) {
+                console.log("anonymous inner function #25940");
             if (expression === '') {
                 //create an assignable expression, so forms with an empty name can be renamed later
                 return $parse('this[""]').assign;
@@ -25479,17 +25954,18 @@ console.log('jvascript initialisation happened here..');
 
         // helper methods
         function setupValidity(instance) {
-            console.log('');
+            console.log('setupValidity #25957');
         instance.$$classCache = {};
         instance.$$classCache[INVALID_CLASS] = !(instance.$$classCache[VALID_CLASS] = instance.$$element.hasClass(VALID_CLASS));
         }
         function addSetValidityMethod(context) {
-            console.log('');
+            console.log('addSetValidityMethod #25962');
         var clazz = context.clazz,
             set = context.set,
             unset = context.unset;
 
         clazz.prototype.$setValidity = function(validationErrorKey, state, controller) {
+            console.log("anonymous inner function #25968");
             if (isUndefined(state)) {
             createAndSet(this, '$pending', validationErrorKey, controller);
             } else {
@@ -25538,6 +26014,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         function createAndSet(ctrl, name, value, controller) {
+            console.log("anonymous inner function #26017");
             if (!ctrl[name]) {
             ctrl[name] = {};
             }
@@ -25545,6 +26022,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function unsetAndCleanup(ctrl, name, value, controller) {
+            console.log("anonymous inner function #26025");
             if (ctrl[name]) {
             unset(ctrl[name], value, controller);
             }
@@ -25554,6 +26032,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function cachedToggleClass(ctrl, className, switchValue) {
+            console.log("anonymous inner function #26035");
             if (switchValue && !ctrl.$$classCache[className]) {
             ctrl.$$animate.addClass(ctrl.$$element, className);
             ctrl.$$classCache[className] = true;
@@ -25564,6 +26043,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function toggleValidationCss(ctrl, validationErrorKey, isValid) {
+            console.log("anonymous inner function #26046");
             validationErrorKey = validationErrorKey ? '-' + snake_case(validationErrorKey, '-') : '';
 
             cachedToggleClass(ctrl, VALID_CLASS + validationErrorKey, isValid === true);
@@ -25572,7 +26052,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function isObjectEmpty(obj) {
-            console.log('');
+            console.log('isObjectEmpty #26055');
         if (obj) {
             for (var prop in obj) {
             if (obj.hasOwnProperty(prop)) {
@@ -25618,6 +26098,7 @@ console.log('jvascript initialisation happened here..');
         var PARTIAL_VALIDATION_EVENTS = 'keydown wheel mousedown';
         var PARTIAL_VALIDATION_TYPES = createMap();
         forEach('date,datetime-local,month,time,week'.split(','), function(type) {
+            console.log("anonymous inner function #26101");
         PARTIAL_VALIDATION_TYPES[type] = true;
         });
 
@@ -26861,20 +27342,21 @@ console.log('jvascript initialisation happened here..');
         };
 
         function stringBasedInputType(ctrl) {
-            console.log('');
+            console.log('stringBasedInputType #27345');
         ctrl.$formatters.push(function(value) {
+            console.log("anonymous inner function #27347");
             return ctrl.$isEmpty(value) ? value : value.toString();
         });
         }
 
         function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-            console.log('');
+            console.log('textInputType #27353');
         baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
         stringBasedInputType(ctrl);
         }
 
         function baseInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-            console.log('');
+            console.log('baseInputType #27359');
         var type = lowercase(element[0].type);
 
         // In composition mode, users are still inputting intermediate text buffer,
@@ -26884,11 +27366,13 @@ console.log('jvascript initialisation happened here..');
             var composing = false;
 
             element.on('compositionstart', function() {
+                console.log("anonymous inner function #27369");
             composing = true;
             });
 
             // Support: IE9+
             element.on('compositionupdate', function(ev) {
+                console.log("anonymous inner function #27375");
             // End composition when ev.data is empty string on 'compositionupdate' event.
             // When the input de-focusses (e.g. by clicking away), IE triggers 'compositionupdate'
             // instead of 'compositionend'.
@@ -26898,6 +27382,7 @@ console.log('jvascript initialisation happened here..');
             });
 
             element.on('compositionend', function() {
+                console.log("anonymous inner function #27385");
             composing = false;
             listener();
             });
@@ -26906,6 +27391,7 @@ console.log('jvascript initialisation happened here..');
         var timeout;
 
         var listener = function(ev) {
+            console.log("anonymous inner function #27394");
             if (timeout) {
             $browser.defer.cancel(timeout);
             timeout = null;
@@ -26935,8 +27421,10 @@ console.log('jvascript initialisation happened here..');
             element.on('input', listener);
         } else {
             var deferListener = function(ev, input, origValue) {
+                console.log("anonymous inner function #27424");
             if (!timeout) {
                 timeout = $browser.defer(function() {
+                    console.log("anonymous inner function #27427");
                 timeout = null;
                 if (!input || input.value !== origValue) {
                     listener(ev);
@@ -26946,6 +27434,7 @@ console.log('jvascript initialisation happened here..');
             };
 
             element.on('keydown', /** @this */ function(event) {
+                console.log("anonymous inner function #27437");
             var key = event.keyCode;
 
             // ignore
@@ -26971,11 +27460,13 @@ console.log('jvascript initialisation happened here..');
         // check for validity changes on various DOM events.
         if (PARTIAL_VALIDATION_TYPES[type] && ctrl.$$hasNativeValidators && type === attr.type) {
             element.on(PARTIAL_VALIDATION_EVENTS, /** @this */ function(ev) {
+                console.log("anonymous inner function #27463");
             if (!timeout) {
                 var validity = this[VALIDITY_STATE_PROPERTY];
                 var origBadInput = validity.badInput;
                 var origTypeMismatch = validity.typeMismatch;
                 timeout = $browser.defer(function() {
+                    console.log("anonymous inner function #27469");
                 timeout = null;
                 if (validity.badInput !== origBadInput || validity.typeMismatch !== origTypeMismatch) {
                     listener(ev);
@@ -26986,6 +27477,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         ctrl.$render = function() {
+            console.log("anonymous inner function #27480");
             // Workaround for Firefox validation #12102.
             var value = ctrl.$isEmpty(ctrl.$viewValue) ? '' : ctrl.$viewValue;
             if (element.val() !== value) {
@@ -26995,7 +27487,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function weekParser(isoWeek, existingDate) {
-            console.log('');
+            console.log('weekParser #27490');
         if (isDate(isoWeek)) {
             return isoWeek;
         }
@@ -27028,8 +27520,9 @@ console.log('jvascript initialisation happened here..');
         }
 
         function createDateParser(regexp, mapping) {
-            console.log('');
+            console.log('createDateParser #27523');
         return function(iso, previousDate) {
+            console.log("anonymous inner function #27525");
             var parts, map;
 
             if (isDate(iso)) {
@@ -27066,6 +27559,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 forEach(parts, function(part, index) {
+                    console.log("anonymous inner function #27562");
                 if (index < mapping.length) {
                     map[mapping[index]] = +part;
                 }
@@ -27087,8 +27581,9 @@ console.log('jvascript initialisation happened here..');
         }
 
         function createDateInputType(type, regexp, parseDate, format) {
-            console.log('');
+            console.log('createDateInputType #27584');
         return function dynamicDateInputType(scope, element, attr, ctrl, $sniffer, $browser, $filter, $parse) {
+            console.log("anonymous inner function #27586");
             badInputChecker(scope, element, attr, ctrl, type);
             baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
 
@@ -27097,6 +27592,7 @@ console.log('jvascript initialisation happened here..');
             var previousTimezone;
 
             ctrl.$parsers.push(function(value) {
+                console.log("anonymous inner function #27595");
             if (ctrl.$isEmpty(value)) return null;
 
             if (regexp.test(value)) {
@@ -27110,6 +27606,7 @@ console.log('jvascript initialisation happened here..');
             });
 
             ctrl.$formatters.push(function(value) {
+                console.log("anonymous inner function #27609");
             if (value && !isDate(value)) {
                 throw ngModelMinErr('datefmt', 'Expected `{0}` to be a date', value);
             }
@@ -27135,9 +27632,11 @@ console.log('jvascript initialisation happened here..');
             var parsedMinVal = parseObservedDateValue(minVal);
 
             ctrl.$validators.min = function(value) {
+                console.log("anonymous inner function #27635");
                 return !isValidDate(value) || isUndefined(parsedMinVal) || parseDate(value) >= parsedMinVal;
             };
             attr.$observe('min', function(val) {
+                console.log("anonymous inner function #27639");
                 if (val !== minVal) {
                 parsedMinVal = parseObservedDateValue(val);
                 minVal = val;
@@ -27151,9 +27650,11 @@ console.log('jvascript initialisation happened here..');
             var parsedMaxVal = parseObservedDateValue(maxVal);
 
             ctrl.$validators.max = function(value) {
+                console.log("anonymous inner function #27653");
                 return !isValidDate(value) || isUndefined(parsedMaxVal) || parseDate(value) <= parsedMaxVal;
             };
             attr.$observe('max', function(val) {
+                console.log("anonymous inner function #27657");
                 if (val !== maxVal) {
                 parsedMaxVal = parseObservedDateValue(val);
                 maxVal = val;
@@ -27163,15 +27664,18 @@ console.log('jvascript initialisation happened here..');
             }
 
             function isValidDate(value) {
+                console.log("anonymous inner function #27667");
             // Invalid Date: getTime() returns NaN
             return value && !(value.getTime && value.getTime() !== value.getTime());
             }
 
             function parseObservedDateValue(val) {
+                console.log("anonymous inner function #27673");
             return isDefined(val) && !isDate(val) ? parseDateAndConvertTimeZoneToLocal(val) || undefined : val;
             }
 
             function parseDateAndConvertTimeZoneToLocal(value, previousDate) {
+                console.log("anonymous inner function #27678");
             var timezone = ctrl.$options.getOption('timezone');
 
             if (previousTimezone && previousTimezone !== timezone) {
@@ -27189,6 +27693,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function formatter(value, timezone) {
+                console.log("anonymous inner function #27696");
             var targetFormat = format;
 
             if (isTimeType && isString(ctrl.$options.getOption('timeSecondsFormat'))) {
@@ -27209,11 +27714,12 @@ console.log('jvascript initialisation happened here..');
         }
 
         function badInputChecker(scope, element, attr, ctrl, parserName) {
-            console.log('');
+            console.log('badInputChecker #27717');
         var node = element[0];
         var nativeValidation = ctrl.$$hasNativeValidators = isObject(node.validity);
         if (nativeValidation) {
             ctrl.$parsers.push(function(value) {
+                console.log("anonymous inner function #27722");
             var validity = element.prop(VALIDITY_STATE_PROPERTY) || {};
             if (validity.badInput || validity.typeMismatch) {
                 ctrl.$$parserName = parserName;
@@ -27226,8 +27732,9 @@ console.log('jvascript initialisation happened here..');
         }
 
         function numberFormatterParser(ctrl) {
-            console.log('');
+            console.log('numberFormatterParser #27735');
         ctrl.$parsers.push(function(value) {
+            console.log("anonymous inner function #27737");
             if (ctrl.$isEmpty(value))      return null;
             if (NUMBER_REGEXP.test(value)) return parseFloat(value);
 
@@ -27236,6 +27743,7 @@ console.log('jvascript initialisation happened here..');
         });
 
         ctrl.$formatters.push(function(value) {
+            console.log("anonymous inner function #27746");
             if (!ctrl.$isEmpty(value)) {
             if (!isNumber(value)) {
                 throw ngModelMinErr('numfmt', 'Expected `{0}` to be a number', value);
@@ -27247,7 +27755,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function parseNumberAttrVal(val) {
-            console.log('');
+            console.log('parseNumberAttrVal #27758');
         if (isDefined(val) && !isNumber(val)) {
             val = parseFloat(val);
         }
@@ -27255,7 +27763,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function isNumberInteger(num) {
-            console.log('');
+            console.log('isNumberInteger #27766');
         // See http://stackoverflow.com/questions/14636536/how-to-check-if-a-variable-is-an-integer-in-javascript#14794066
         // (minus the assumption that `num` is a number)
 
@@ -27264,7 +27772,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function countDecimals(num) {
-            console.log('');
+            console.log('countDecimals 27775');
         var numString = num.toString();
         var decimalSymbolIndex = numString.indexOf('.');
 
@@ -27285,7 +27793,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function isValidForStep(viewValue, stepBase, step) {
-            console.log('');
+            console.log('isValidForStep #27796');
         // At this point `stepBase` and `step` are expected to be non-NaN values
         // and `viewValue` is expected to be a valid stringified number.
         var value = Number(viewValue);
@@ -27317,7 +27825,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function numberInputType(scope, element, attr, ctrl, $sniffer, $browser, $filter, $parse) {
-            console.log('');
+            console.log('numberInputType #27828');
         badInputChecker(scope, element, attr, ctrl, 'number');
         numberFormatterParser(ctrl);
         baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
@@ -27329,10 +27837,12 @@ console.log('jvascript initialisation happened here..');
             parsedMinVal = parseNumberAttrVal(minVal);
 
             ctrl.$validators.min = function(modelValue, viewValue) {
+                console.log("anonymous inner function #27840");
             return ctrl.$isEmpty(viewValue) || isUndefined(parsedMinVal) || viewValue >= parsedMinVal;
             };
 
             attr.$observe('min', function(val) {
+                console.log("anonymous inner function #27845");
             if (val !== minVal) {
                 parsedMinVal = parseNumberAttrVal(val);
                 minVal = val;
@@ -27347,10 +27857,12 @@ console.log('jvascript initialisation happened here..');
             var parsedMaxVal = parseNumberAttrVal(maxVal);
 
             ctrl.$validators.max = function(modelValue, viewValue) {
+                console.log("anonymous inner function #27860");
             return ctrl.$isEmpty(viewValue) || isUndefined(parsedMaxVal) || viewValue <= parsedMaxVal;
             };
 
             attr.$observe('max', function(val) {
+                console.log("anonymous inner function #27865");
             if (val !== maxVal) {
                 parsedMaxVal = parseNumberAttrVal(val);
                 maxVal = val;
@@ -27365,11 +27877,13 @@ console.log('jvascript initialisation happened here..');
             var parsedStepVal = parseNumberAttrVal(stepVal);
 
             ctrl.$validators.step = function(modelValue, viewValue) {
+                console.log("anonymous inner function #27880");
             return ctrl.$isEmpty(viewValue) || isUndefined(parsedStepVal) ||
                 isValidForStep(viewValue, parsedMinVal || 0, parsedStepVal);
             };
 
             attr.$observe('step', function(val) {
+                console.log("anonymous inner function #27886");
             // TODO(matsko): implement validateLater to reduce number of validations
             if (val !== stepVal) {
                 parsedStepVal = parseNumberAttrVal(val);
@@ -27383,7 +27897,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function rangeInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-            console.log('');
+            console.log('rangeInputType #27900');
         badInputChecker(scope, element, attr, ctrl, 'range');
         numberFormatterParser(ctrl);
         baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
@@ -27403,6 +27917,7 @@ console.log('jvascript initialisation happened here..');
             //Browsers that implement range will set these values automatically, but reading the adjusted values after
             //$render would cause the min / max validators to be applied with the wrong value
             function rangeRender() {
+                console.log("anonymous inner function #27920");
             originalRender();
             ctrl.$setViewValue(element.val());
             } :
@@ -27413,9 +27928,10 @@ console.log('jvascript initialisation happened here..');
 
             ctrl.$validators.min = supportsRange ?
             // Since all browsers set the input to a valid value, we don't need to check validity
-            function noopMinValidator() { return true; } :
+            function noopMinValidator() { console.log("anonymous inner function #27931"); return true; } :
             // non-support browsers validate the min val
             function minValidator(modelValue, viewValue) {
+                console.log("anonymous inner function #27934");
                 return ctrl.$isEmpty(viewValue) || isUndefined(minVal) || viewValue >= minVal;
             };
 
@@ -27427,9 +27943,10 @@ console.log('jvascript initialisation happened here..');
 
             ctrl.$validators.max = supportsRange ?
             // Since all browsers set the input to a valid value, we don't need to check validity
-            function noopMaxValidator() { return true; } :
+            function noopMaxValidator() { console.log("anonymous inner function #27946"); return true; } :
             // non-support browsers validate the max val
             function maxValidator(modelValue, viewValue) {
+                console.log("anonymous inner function #27949");
                 return ctrl.$isEmpty(viewValue) || isUndefined(maxVal) || viewValue <= maxVal;
             };
 
@@ -27441,6 +27958,7 @@ console.log('jvascript initialisation happened here..');
 
             ctrl.$validators.step = supportsRange ?
             function nativeStepValidator() {
+                console.log("anonymous inner function #27961");
                 // Currently, only FF implements the spec on step change correctly (i.e. adjusting the
                 // input element value to a valid value). It's possible that other browsers set the stepMismatch
                 // validity error instead, so we can at least report an error in that case.
@@ -27448,6 +27966,7 @@ console.log('jvascript initialisation happened here..');
             } :
             // ngStep doesn't set the setp attr, so the browser doesn't adjust the input value as setting step would
             function stepValidator(modelValue, viewValue) {
+                console.log("anonymous inner function #27969");
                 return ctrl.$isEmpty(viewValue) || isUndefined(stepVal) ||
                     isValidForStep(viewValue, minVal || 0, stepVal);
             };
@@ -27456,12 +27975,14 @@ console.log('jvascript initialisation happened here..');
         }
 
         function setInitialValueAndObserver(htmlAttrName, changeFn) {
+            console.log("anonymous inner function #27978");
             // interpolated attributes set the attribute value only after a digest, but we need the
             // attribute value when the input is first rendered, so that the browser can adjust the
             // input value based on the min/max value
             element.attr(htmlAttrName, attr[htmlAttrName]);
             var oldVal = attr[htmlAttrName];
             attr.$observe(htmlAttrName, function wrappedObserver(val) {
+                console.log("anonymous inner function #27985");
             if (val !== oldVal) {
                 oldVal = val;
                 changeFn(val);
@@ -27470,6 +27991,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function minChange(val) {
+            console.log("anonymous inner function #27994");
             minVal = parseNumberAttrVal(val);
             // ignore changes before model is initialized
             if (isNumberNaN(ctrl.$modelValue)) {
@@ -27491,6 +28013,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function maxChange(val) {
+            console.log("anonymous inner function #28016");
             maxVal = parseNumberAttrVal(val);
             // ignore changes before model is initialized
             if (isNumberNaN(ctrl.$modelValue)) {
@@ -27513,6 +28036,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function stepChange(val) {
+            console.log("anonymous inner function #28039");
             stepVal = parseNumberAttrVal(val);
             // ignore changes before model is initialized
             if (isNumberNaN(ctrl.$modelValue)) {
@@ -27530,33 +28054,35 @@ console.log('jvascript initialisation happened here..');
         }
 
         function urlInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-            console.log('');
+            console.log('urlInputType #28057');
         // Note: no badInputChecker here by purpose as `url` is only a validation
         // in browsers, i.e. we can always read out input.value even if it is not valid!
         baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
         stringBasedInputType(ctrl);
 
         ctrl.$validators.url = function(modelValue, viewValue) {
+            console.log("anonymous inner function #28064");
             var value = modelValue || viewValue;
             return ctrl.$isEmpty(value) || URL_REGEXP.test(value);
         };
         }
 
         function emailInputType(scope, element, attr, ctrl, $sniffer, $browser) {
-            console.log('');
+            console.log('emailInputType #28071');
         // Note: no badInputChecker here by purpose as `url` is only a validation
         // in browsers, i.e. we can always read out input.value even if it is not valid!
         baseInputType(scope, element, attr, ctrl, $sniffer, $browser);
         stringBasedInputType(ctrl);
 
         ctrl.$validators.email = function(modelValue, viewValue) {
+            console.log("anonymous inner function #28078");
             var value = modelValue || viewValue;
             return ctrl.$isEmpty(value) || EMAIL_REGEXP.test(value);
         };
         }
 
         function radioInputType(scope, element, attr, ctrl) {
-            console.log('');
+            console.log('radioInputType #28085');
         var doTrim = !attr.ngTrim || trim(attr.ngTrim) !== 'false';
         // make the name unique, if not defined
         if (isUndefined(attr.name)) {
@@ -27564,6 +28090,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         var listener = function(ev) {
+            console.log("anonymous inner function #28093");
             var value;
             if (element[0].checked) {
             value = attr.value;
@@ -27577,6 +28104,7 @@ console.log('jvascript initialisation happened here..');
         element.on('change', listener);
 
         ctrl.$render = function() {
+            console.log("anonymous inner function #28107");
             var value = attr.value;
             if (doTrim) {
             value = trim(value);
@@ -27588,7 +28116,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function parseConstantExpr($parse, context, name, expression, fallback) {
-            console.log('');
+            console.log('parseConstantExpr #28119');
         var parseFn;
         if (isDefined(expression)) {
             parseFn = $parse(expression);
@@ -27602,17 +28130,19 @@ console.log('jvascript initialisation happened here..');
         }
 
         function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filter, $parse) {
-            console.log('');
+            console.log('checkboxInputType #28133');
         var trueValue = parseConstantExpr($parse, scope, 'ngTrueValue', attr.ngTrueValue, true);
         var falseValue = parseConstantExpr($parse, scope, 'ngFalseValue', attr.ngFalseValue, false);
 
         var listener = function(ev) {
+            console.log("anonymous inner function #28238");
             ctrl.$setViewValue(element[0].checked, ev && ev.type);
         };
 
         element.on('change', listener);
 
         ctrl.$render = function() {
+            console.log("anonymous inner function #28145");
             element[0].checked = ctrl.$viewValue;
         };
 
@@ -27620,14 +28150,17 @@ console.log('jvascript initialisation happened here..');
         // This is because of the parser below, which compares the `$modelValue` with `trueValue` to convert
         // it to a boolean.
         ctrl.$isEmpty = function(value) {
+            console.log("anonymous inner function #28153");
             return value === false;
         };
 
         ctrl.$formatters.push(function(value) {
+            console.log("anonymous inner function #28158");
             return equals(value, trueValue);
         });
 
         ctrl.$parsers.push(function(value) {
+            console.log("anonymous inner function #28163");
             return value ? trueValue : falseValue;
         });
         }
@@ -27822,12 +28355,13 @@ console.log('jvascript initialisation happened here..');
         */
         var inputDirective = ['$browser', '$sniffer', '$filter', '$parse',
             function($browser, $sniffer, $filter, $parse) {
-                console.log('');
+                console.log("anonymous inner function #28358");
         return {
             restrict: 'E',
             require: ['?ngModel'],
             link: {
             pre: function(scope, element, attr, ctrls) {
+                console.log("anonymous inner function #28364");
                 if (ctrls[0]) {
                 (inputType[lowercase(attr.type)] || inputType.text)(scope, element, attr, ctrls[0], $sniffer,
                                                                     $browser, $filter, $parse);
@@ -27839,14 +28373,16 @@ console.log('jvascript initialisation happened here..');
 
 
         var hiddenInputBrowserCacheDirective = function() {
-            console.log('');
+            console.log('hiddenInputBrowserCacheDirective = function #28376');
         var valueProperty = {
             configurable: true,
             enumerable: false,
             get: function() {
+                console.log("anonymous inner function #28381");
             return this.getAttribute('value') || '';
             },
             set: function(val) {
+                console.log("anonymous inner function #28385");
             this.setAttribute('value', val);
             }
         };
@@ -27855,12 +28391,14 @@ console.log('jvascript initialisation happened here..');
             restrict: 'E',
             priority: 200,
             compile: function(_, attr) {
+                console.log("anonymous inner function #28394");
             if (lowercase(attr.type) !== 'hidden') {
                 return;
             }
 
             return {
                 pre: function(scope, element, attr, ctrls) {
+                    console.log("anonymous inner function #28401");
                 var node = element[0];
 
                 // Support: Edge
@@ -27941,7 +28479,7 @@ console.log('jvascript initialisation happened here..');
             </example>
         */
         var ngValueDirective = function() {
-            console.log('');
+            console.log('ngValueDirective #28482');
         /**
         *  inputs use the value attribute as their default value if the value property is not set.
         *  Once the value property has been set (by adding input), it will not react to changes to
@@ -27949,6 +28487,7 @@ console.log('jvascript initialisation happened here..');
         *  makes it possible to use ngValue as a sort of one-way bind.
         */
         function updateElementValue(element, attr, value) {
+            console.log('updateElementValue #28490');
             // Support: IE9 only
             // In IE9 values are converted to string (e.g. `input.value = null` results in `input.value === 'null'`).
             var propValue = isDefined(value) ? value : (msie === 9) ? '' : null;
@@ -27960,14 +28499,18 @@ console.log('jvascript initialisation happened here..');
             restrict: 'A',
             priority: 100,
             compile: function(tpl, tplAttr) {
+                console.log("anonymous inner function #28502");
             if (CONSTANT_VALUE_REGEXP.test(tplAttr.ngValue)) {
                 return function ngValueConstantLink(scope, elm, attr) {
+                    console.log("anonymous inner function #28505");
                 var value = scope.$eval(attr.ngValue);
                 updateElementValue(elm, attr, value);
                 };
             } else {
                 return function ngValueLink(scope, elm, attr) {
+                    console.log("anonymous inner function #28511");
                 scope.$watch(attr.ngValue, function valueWatchAction(value) {
+                    console.log("anonymous inner function #28513");
                     updateElementValue(elm, attr, value);
                 });
                 };
@@ -28028,15 +28571,18 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         var ngBindDirective = ['$compile', function($compile) {
-            console.log('');
+            console.log("anonymous inner function #28574");
         return {
             restrict: 'AC',
             compile: function ngBindCompile(templateElement) {
+                console.log("anonymous inner function #28578");
             $compile.$$addBindingClass(templateElement);
             return function ngBindLink(scope, element, attr) {
+                console.log("anonymous inner function #28581");
                 $compile.$$addBindingInfo(element, attr.ngBind);
                 element = element[0];
                 scope.$watch(attr.ngBind, function ngBindWatchAction(value) {
+                    console.log("anonymous inner function #28585");
                 element.textContent = stringify(value);
                 });
             };
@@ -28097,15 +28643,18 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         var ngBindTemplateDirective = ['$interpolate', '$compile', function($interpolate, $compile) {
-            console.log('');
+            console.log("anonymous inner function #28646");
         return {
             compile: function ngBindTemplateCompile(templateElement) {
+                console.log("anonymous inner function #28649");
             $compile.$$addBindingClass(templateElement);
             return function ngBindTemplateLink(scope, element, attr) {
+                console.log("anonymous inner function #28652");
                 var interpolateFn = $interpolate(element.attr(attr.$attr.ngBindTemplate));
                 $compile.$$addBindingInfo(element, interpolateFn.expressions);
                 element = element[0];
                 attr.$observe('ngBindTemplate', function(value) {
+                    console.log("anonymous inner function #28657");
                 element.textContent = isUndefined(value) ? '' : value;
                 });
             };
@@ -28162,21 +28711,25 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         var ngBindHtmlDirective = ['$sce', '$parse', '$compile', function($sce, $parse, $compile) {
-            console.log('');
+            console.log("anonymous inner function #28714");
         return {
             restrict: 'A',
             compile: function ngBindHtmlCompile(tElement, tAttrs) {
+                console.log("anonymous inner function #28718");
             var ngBindHtmlGetter = $parse(tAttrs.ngBindHtml);
             var ngBindHtmlWatch = $parse(tAttrs.ngBindHtml, function sceValueOf(val) {
+                console.log("anonymous inner function #28721");
                 // Unwrap the value to compare the actual inner safe value, not the wrapper object.
                 return $sce.valueOf(val);
             });
             $compile.$$addBindingClass(tElement);
 
             return function ngBindHtmlLink(scope, element, attr) {
+                console.log("anonymous inner function #28728");
                 $compile.$$addBindingInfo(element, attr.ngBindHtml);
 
                 scope.$watch(ngBindHtmlWatch, function ngBindHtmlWatchAction() {
+                    console.log("anonymous inner function #28732");
                 // The watched value is the unwrapped value. To avoid re-escaping, use the direct getter.
                 var value = ngBindHtmlGetter(scope);
                 element.html($sce.getTrustedHtml(value) || '');
@@ -28258,7 +28811,9 @@ console.log('jvascript initialisation happened here..');
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, element, attr, ctrl) {
+            console.log("anonymous inner function #28814");
             ctrl.$viewChangeListeners.push(function() {
+                console.log("anonymous inner function #28816");
             scope.$eval(attr.ngChange);
             });
         }
@@ -28271,14 +28826,16 @@ console.log('jvascript initialisation happened here..');
         */
 
         function classDirective(name, selector) {
-            console.log('');
+            console.log('classDirective #28829');
         name = 'ngClass' + name;
         var indexWatchExpression;
 
         return ['$parse', function($parse) {
+            console.log("anonymous inner function #28834");
             return {
             restrict: 'AC',
             link: function(scope, element, attr) {
+                console.log("anonymous inner function #28838");
                 var classCounts = element.data('$classCounts');
                 var oldModulo = true;
                 var oldClassString;
@@ -28293,6 +28850,7 @@ console.log('jvascript initialisation happened here..');
                 if (name !== 'ngClass') {
                 if (!indexWatchExpression) {
                     indexWatchExpression = $parse('$index', function moduloTwo($index) {
+                        console.log("anonymous inner function #28853");
                     // eslint-disable-next-line no-bitwise
                     return $index & 1;
                     });
@@ -28304,16 +28862,19 @@ console.log('jvascript initialisation happened here..');
                 scope.$watch($parse(attr[name], toClassString), ngClassWatchAction);
 
                 function addClasses(classString) {
+                    console.log("anonymous inner function #28865");
                 classString = digestClassCounts(split(classString), 1);
                 attr.$addClass(classString);
                 }
 
                 function removeClasses(classString) {
+                    console.log("anonymous inner function #28871");
                 classString = digestClassCounts(split(classString), -1);
                 attr.$removeClass(classString);
                 }
 
                 function updateClasses(oldClassString, newClassString) {
+                    console.log("anonymous inner function #28877");
                 var oldClassArray = split(oldClassString);
                 var newClassArray = split(newClassString);
 
@@ -28328,9 +28889,11 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 function digestClassCounts(classArray, count) {
+                    console.log("anonymous inner function #28892");
                 var classesToUpdate = [];
 
                 forEach(classArray, function(className) {
+                    console.log("anonymous inner function #28896");
                     if (count > 0 || classCounts[className]) {
                     classCounts[className] = (classCounts[className] || 0) + count;
                     if (classCounts[className] === +(count > 0)) {
@@ -28343,6 +28906,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 function ngClassIndexWatchAction(newModulo) {
+                    console.log("anonymous inner function #28909");
                 // This watch-action should run before the `ngClassWatchAction()`, thus it
                 // adds/removes `oldClassString`. If the `ngClass` expression has changed as well, the
                 // `ngClassWatchAction()` will update the classes.
@@ -28356,6 +28920,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 function ngClassWatchAction(newClassString) {
+                    console.log("anonymous inner function #28923");
                 if (oldModulo === selector) {
                     updateClasses(oldClassString, newClassString);
                 }
@@ -28368,6 +28933,7 @@ console.log('jvascript initialisation happened here..');
 
         // Helpers
         function arrayDifference(tokens1, tokens2) {
+            console.log("anonymous inner function #28936");
             if (!tokens1 || !tokens1.length) return [];
             if (!tokens2 || !tokens2.length) return tokens1;
 
@@ -28386,10 +28952,12 @@ console.log('jvascript initialisation happened here..');
         }
 
         function split(classString) {
+            console.log("anonymous inner function #28955");
             return classString && classString.split(' ');
         }
 
         function toClassString(classValue) {
+            console.log("anonymous inner function #28960");
             if (!classValue) return classValue;
 
             var classString = classValue;
@@ -28398,7 +28966,7 @@ console.log('jvascript initialisation happened here..');
             classString = classValue.map(toClassString).join(' ');
             } else if (isObject(classValue)) {
             classString = Object.keys(classValue).
-                filter(function(key) { return classValue[key]; }).
+                filter(function(key) { console.log("anonymous inner function #28969");return classValue[key]; }).
                 join(' ');
             } else if (!isString(classValue)) {
             classString = classValue + '';
@@ -28869,6 +29437,7 @@ console.log('jvascript initialisation happened here..');
         */
         var ngCloakDirective = ngDirective({
         compile: function(element, attr) {
+            console.log("anonymous inner function #29440");
             attr.$set('ngCloak', undefined);
             element.removeClass('ng-cloak');
         }
@@ -29099,7 +29668,7 @@ console.log('jvascript initialisation happened here..');
 
         */
         var ngControllerDirective = [function() {
-            console.log('');
+            console.log("anonymous inner function #29671");
         return {
             restrict: 'A',
             scope: true,
@@ -29368,24 +29937,29 @@ console.log('jvascript initialisation happened here..');
         function(eventName) {
             var directiveName = directiveNormalize('ng-' + eventName);
             ngEventDirectives[directiveName] = ['$parse', '$rootScope', '$exceptionHandler', function($parse, $rootScope, $exceptionHandler) {
+                console.log("anonymous inner function #29940");
             return createEventDirective($parse, $rootScope, $exceptionHandler, directiveName, eventName, forceAsyncEvents[eventName]);
             }];
         }
         );
 
         function createEventDirective($parse, $rootScope, $exceptionHandler, directiveName, eventName, forceAsync) {
-            console.log('');
+            console.log('createEventDirective #29947');
         return {
             restrict: 'A',
             compile: function($element, attr) {
+                console.log("anonymous inner function #29951");
             // NOTE:
             // We expose the powerful `$event` object on the scope that provides access to the Window,
             // etc. This is OK, because expressions are not sandboxed any more (and the expression
             // sandbox was never meant to be a security feature anyway).
             var fn = $parse(attr[directiveName]);
             return function ngEventHandler(scope, element) {
+                console.log("anonymous inner function #29958");
                 element.on(eventName, function(event) {
+                    console.log("anonymous inner function #29960");
                 var callback = function() {
+                    console.log("anonymous inner function #29962");
                     fn(scope, {$event: event});
                 };
 
@@ -29909,7 +30483,7 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         var ngIfDirective = ['$animate', '$compile', function($animate, $compile) {
-            console.log('');
+            console.log("anonymous inner function #30486");
         return {
             multiElement: true,
             transclude: 'element',
@@ -29918,12 +30492,14 @@ console.log('jvascript initialisation happened here..');
             restrict: 'A',
             $$tlb: true,
             link: function($scope, $element, $attr, ctrl, $transclude) {
+                console.log("anonymous inner function #30495");
                 var block, childScope, previousElements;
                 $scope.$watch($attr.ngIf, function ngIfWatchAction(value) {
-
+                    console.log("anonymous inner function #30498");
                 if (value) {
                     if (!childScope) {
                     $transclude(function(clone, newScope) {
+                        console.log("anonymous inner function #30502");
                         childScope = newScope;
                         clone[clone.length++] = $compile.$$createComment('end ngIf', $attr.ngIf);
                         // Note: We only need the first/last node of the cloned nodes.
@@ -29947,6 +30523,7 @@ console.log('jvascript initialisation happened here..');
                     if (block) {
                     previousElements = getBlockNodes(block.clone);
                     $animate.leave(previousElements).done(function(response) {
+                        console.log("anonymous inner function #30526");
                         if (response !== false) previousElements = null;
                     });
                     block = null;
@@ -30143,7 +30720,7 @@ console.log('jvascript initialisation happened here..');
         */
         var ngIncludeDirective = ['$templateRequest', '$anchorScroll', '$animate',
                         function($templateRequest,   $anchorScroll,   $animate) {
-                            console.log('');
+                            console.log("anonymous inner function #30723");
         return {
             restrict: 'ECA',
             priority: 400,
@@ -30151,17 +30728,20 @@ console.log('jvascript initialisation happened here..');
             transclude: 'element',
             controller: angular.noop,
             compile: function(element, attr) {
+                console.log("anonymous inner function #30731");
             var srcExp = attr.ngInclude || attr.src,
                 onloadExp = attr.onload || '',
                 autoScrollExp = attr.autoscroll;
 
             return function(scope, $element, $attr, ctrl, $transclude) {
+                console.log("anonymous inner function #30737");
                 var changeCounter = 0,
                     currentScope,
                     previousElement,
                     currentElement;
 
                 var cleanupLastIncludeContent = function() {
+                    console.log("anonymous inner function #30744");
                 if (previousElement) {
                     previousElement.remove();
                     previousElement = null;
@@ -30172,6 +30752,7 @@ console.log('jvascript initialisation happened here..');
                 }
                 if (currentElement) {
                     $animate.leave(currentElement).done(function(response) {
+                        console.log("anonymous inner function #30755");
                     if (response !== false) previousElement = null;
                     });
                     previousElement = currentElement;
@@ -30180,7 +30761,9 @@ console.log('jvascript initialisation happened here..');
                 };
 
                 scope.$watch(srcExp, function ngIncludeWatchAction(src) {
+                    console.log("anonymous inner function #30764");
                 var afterAnimation = function(response) {
+                    console.log("anonymous inner function #30766");
                     if (response !== false && isDefined(autoScrollExp) &&
                     (!autoScrollExp || scope.$eval(autoScrollExp))) {
                         $anchorScroll();
@@ -30192,6 +30775,7 @@ console.log('jvascript initialisation happened here..');
                     //set the 2nd param to true to ignore the template request error so that the inner
                     //contents and scope can be cleaned up.
                     $templateRequest(src, true).then(function(response) {
+                        console.log("anonymous inner function #30778");
                     if (scope.$$destroyed) return;
 
                     if (thisChangeId !== changeCounter) return;
@@ -30205,6 +30789,7 @@ console.log('jvascript initialisation happened here..');
                     // function is called before linking the content, which would apply child
                     // directives to non existing elements.
                     var clone = $transclude(newScope, function(clone) {
+                        console.log("anonymous inner function #30792");
                         cleanupLastIncludeContent();
                         $animate.enter(clone, null, $element).done(afterAnimation);
                     });
@@ -30215,6 +30800,7 @@ console.log('jvascript initialisation happened here..');
                     currentScope.$emit('$includeContentLoaded', src);
                     scope.$eval(onloadExp);
                     }, function() {
+                        console.log("anonymous inner function #30803");
                     if (scope.$$destroyed) return;
 
                     if (thisChangeId === changeCounter) {
@@ -30240,12 +30826,13 @@ console.log('jvascript initialisation happened here..');
         // is called.
         var ngIncludeFillContentDirective = ['$compile',
         function($compile) {
-            console.log('');
+            console.log("anonymous inner function #30829");
             return {
             restrict: 'ECA',
             priority: -400,
             require: 'ngInclude',
             link: function(scope, $element, $attr, ctrl) {
+                console.log("anonymous inner function #30835");
                 if (toString.call($element[0]).match(/SVG/)) {
                 // WebKit: https://bugs.webkit.org/show_bug.cgi?id=135698 --- SVG elements do not
                 // support innerHTML, so detect this here and try to generate the contents
@@ -30253,6 +30840,7 @@ console.log('jvascript initialisation happened here..');
                 $element.empty();
                 $compile(jqLiteBuildFragment(ctrl.template, window.document).childNodes)(scope,
                     function namespaceAdaptedClone(clone) {
+                        console.log("anonymous inner function #30843");
                     $element.append(clone);
                 }, {futureParentElement: $element});
                 return;
@@ -30330,9 +30918,10 @@ console.log('jvascript initialisation happened here..');
         var ngInitDirective = ngDirective({
         priority: 450,
         compile: function() {
-            console.log('');
+            console.log("anonymous inner function #30921");
             return {
             pre: function(scope, element, attrs) {
+                console.log("anonymous inner function #30924");
                 scope.$eval(attrs.ngInit);
             }
             };
@@ -30429,17 +31018,19 @@ console.log('jvascript initialisation happened here..');
         *
         */
         var ngListDirective = function() {
-            console.log('');
+            console.log("anonymous inner function #31021");
         return {
             restrict: 'A',
             priority: 100,
             require: 'ngModel',
             link: function(scope, element, attr, ctrl) {
+                console.log("anonymous inner function #31027");
             var ngList = attr.ngList || ', ';
             var trimValues = attr.ngTrim !== 'false';
             var separator = trimValues ? trim(ngList) : ngList;
 
             var parse = function(viewValue) {
+                console.log("anonymous inner function #31033");
                 // If the viewValue is invalid (say required but empty) it will be `undefined`
                 if (isUndefined(viewValue)) return;
 
@@ -30447,6 +31038,7 @@ console.log('jvascript initialisation happened here..');
 
                 if (viewValue) {
                 forEach(viewValue.split(separator), function(value) {
+                    console.log("anonymous inner function #31041");
                     if (value) list.push(trimValues ? trim(value) : value);
                 });
                 }
@@ -30456,6 +31048,7 @@ console.log('jvascript initialisation happened here..');
 
             ctrl.$parsers.push(parse);
             ctrl.$formatters.push(function(value) {
+                console.log("anonymous inner function #31051");
                 if (isArray(value)) {
                 return value.join(ngList);
                 }
@@ -30465,6 +31058,7 @@ console.log('jvascript initialisation happened here..');
 
             // Override the standard $isEmpty because an empty array means the input is empty.
             ctrl.$isEmpty = function(value) {
+                console.log("anonymous inner function #31061");
                 return !value || !value.length;
             };
             }
@@ -30723,7 +31317,7 @@ console.log('jvascript initialisation happened here..');
         */
         NgModelController.$inject = ['$scope', '$exceptionHandler', '$attrs', '$element', '$parse', '$animate', '$timeout', '$q', '$interpolate'];
         function NgModelController($scope, $exceptionHandler, $attr, $element, $parse, $animate, $timeout, $q, $interpolate) {
-            console.log('');
+            console.log('NgModelController #31320');
         this.$viewValue = Number.NaN;
         this.$modelValue = Number.NaN;
         this.$$rawModelValue = undefined; // stores the parsed modelValue / model set from scope regardless of validity.
@@ -30774,12 +31368,13 @@ console.log('jvascript initialisation happened here..');
 
         NgModelController.prototype = {
         $$initGetterSetters: function() {
-            console.log('');
+            console.log("anonymous inner function #31371");
             if (this.$options.getOption('getterSetter')) {
             var invokeModelGetter = this.$$parse(this.$$attr.ngModel + '()'),
                 invokeModelSetter = this.$$parse(this.$$attr.ngModel + '($$$p)');
 
             this.$$ngModelGet = function($scope) {
+                console.log("anonymous inner function #31377");
                 var modelValue = this.$$parsedNgModel($scope);
                 if (isFunction(modelValue)) {
                 modelValue = invokeModelGetter($scope);
@@ -30787,6 +31382,7 @@ console.log('jvascript initialisation happened here..');
                 return modelValue;
             };
             this.$$ngModelSet = function($scope, newValue) {
+                console.log("anonymous inner function #31385");
                 if (isFunction(this.$$parsedNgModel($scope))) {
                 invokeModelSetter($scope, {$$$p: newValue});
                 } else {
@@ -30841,11 +31437,13 @@ console.log('jvascript initialisation happened here..');
         * @returns {boolean} True if `value` is "empty".
         */
         $isEmpty: function(value) {
+            console.log("anonymous inner function #31440");
             // eslint-disable-next-line no-self-compare
             return isUndefined(value) || value === '' || value === null || value !== value;
         },
 
         $$updateEmptyClasses: function(value) {
+            console.log("anonymous inner function #31446");
             if (this.$isEmpty(value)) {
             this.$$animate.removeClass(this.$$element, NOT_EMPTY_CLASS);
             this.$$animate.addClass(this.$$element, EMPTY_CLASS);
@@ -30867,6 +31465,7 @@ console.log('jvascript initialisation happened here..');
         * has not been changed from when first compiled.
         */
         $setPristine: function() {
+            console.log("anonymous inner function #31468");
             this.$dirty = false;
             this.$pristine = true;
             this.$$animate.removeClass(this.$$element, DIRTY_CLASS);
@@ -30885,6 +31484,7 @@ console.log('jvascript initialisation happened here..');
         * from when first compiled.
         */
         $setDirty: function() {
+            console.log("anonymous inner function #31487");
             this.$dirty = true;
             this.$pristine = false;
             this.$$animate.removeClass(this.$$element, PRISTINE_CLASS);
@@ -30905,6 +31505,7 @@ console.log('jvascript initialisation happened here..');
         * already been touched by the user.
         */
         $setUntouched: function() {
+            console.log("anonymous inner function #31508");
             this.$touched = false;
             this.$untouched = true;
             this.$$animate.setClass(this.$$element, UNTOUCHED_CLASS, TOUCHED_CLASS);
@@ -30922,6 +31523,7 @@ console.log('jvascript initialisation happened here..');
         * first focused the control element and then shifted focus away from the control (blur event).
         */
         $setTouched: function() {
+            console.log("anonymous inner function #31526");
             this.$touched = true;
             this.$untouched = false;
             this.$$animate.setClass(this.$$element, TOUCHED_CLASS, UNTOUCHED_CLASS);
@@ -31017,6 +31619,7 @@ console.log('jvascript initialisation happened here..');
         * </example>
         */
         $rollbackViewValue: function() {
+            console.log("anonymous inner function #31622");
             this.$$timeout.cancel(this.$$pendingDebounce);
             this.$viewValue = this.$$lastCommittedViewValue;
             this.$render();
@@ -31035,6 +31638,7 @@ console.log('jvascript initialisation happened here..');
         * `$modelValue`, i.e. either the last parsed value or the last value set from the scope.
         */
         $validate: function() {
+            console.log("anonymous inner function #31641");
 
             // ignore $validate before model is initialized
             if (isNumberNaN(this.$modelValue)) {
@@ -31055,6 +31659,7 @@ console.log('jvascript initialisation happened here..');
 
             var that = this;
             this.$$runValidators(modelValue, viewValue, function(allValid) {
+                console.log("anonymous inner function #31662");
             // If there was no change in validity, don't update the model
             // This prevents changing an invalid modelValue to undefined
             if (!allowInvalid && prevValid !== allValid) {
@@ -31072,6 +31677,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         $$runValidators: function(modelValue, viewValue, doneCallback) {
+            console.log("anonymous inner function #31680");
             this.$$currentValidationRunId++;
             var localValidationRunId = this.$$currentValidationRunId;
             var that = this;
@@ -31088,6 +31694,7 @@ console.log('jvascript initialisation happened here..');
             processAsyncValidators();
 
             function processParseErrors() {
+                console.log("anonymous inner function #31697");
             var errorKey = that.$$parserName;
 
             if (isUndefined(that.$$parserValid)) {
@@ -31095,9 +31702,11 @@ console.log('jvascript initialisation happened here..');
             } else {
                 if (!that.$$parserValid) {
                 forEach(that.$validators, function(v, name) {
+                    console.log("anonymous inner function #31705");
                     setValidity(name, null);
                 });
                 forEach(that.$asyncValidators, function(v, name) {
+                    console.log("anonymous inner function #31709");
                     setValidity(name, null);
                 });
                 }
@@ -31110,14 +31719,17 @@ console.log('jvascript initialisation happened here..');
             }
 
             function processSyncValidators() {
+                console.log("anonymous inner function #31722");
             var syncValidatorsValid = true;
             forEach(that.$validators, function(validator, name) {
+                console.log("anonymous inner function #31725");
                 var result = Boolean(validator(modelValue, viewValue));
                 syncValidatorsValid = syncValidatorsValid && result;
                 setValidity(name, result);
             });
             if (!syncValidatorsValid) {
                 forEach(that.$asyncValidators, function(v, name) {
+                    console.log("anonymous inner function #31732");
                 setValidity(name, null);
                 });
                 return false;
@@ -31126,9 +31738,11 @@ console.log('jvascript initialisation happened here..');
             }
 
             function processAsyncValidators() {
+                console.log("anonymous inner function #31741");
             var validatorPromises = [];
             var allValid = true;
             forEach(that.$asyncValidators, function(validator, name) {
+                console.log("anonymous inner function #31745");
                 var promise = validator(modelValue, viewValue);
                 if (!isPromiseLike(promise)) {
                 throw ngModelMinErr('nopromise',
@@ -31136,8 +31750,10 @@ console.log('jvascript initialisation happened here..');
                 }
                 setValidity(name, undefined);
                 validatorPromises.push(promise.then(function() {
+                    console.log("anonymous inner function #31753");
                 setValidity(name, true);
                 }, function() {
+                    console.log("anonymous inner function #31756");
                 allValid = false;
                 setValidity(name, false);
                 }));
@@ -31146,18 +31762,21 @@ console.log('jvascript initialisation happened here..');
                 validationDone(true);
             } else {
                 that.$$q.all(validatorPromises).then(function() {
+                    console.log("anonymous inner function #31765");
                 validationDone(allValid);
                 }, noop);
             }
             }
 
             function setValidity(name, isValid) {
+                console.log("anonymous inner function #31772");
             if (localValidationRunId === that.$$currentValidationRunId) {
                 that.$setValidity(name, isValid);
             }
             }
 
             function validationDone(allValid) {
+                console.log("anonymous inner function #31779");
             if (localValidationRunId === that.$$currentValidationRunId) {
 
                 doneCallback(allValid);
@@ -31177,6 +31796,7 @@ console.log('jvascript initialisation happened here..');
         * usually handles calling this in response to input events.
         */
         $commitViewValue: function() {
+            console.log("anonymous inner function #31799");
             var viewValue = this.$viewValue;
 
             this.$$timeout.cancel(this.$$pendingDebounce);
@@ -31198,6 +31818,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         $$parseAndValidate: function() {
+            console.log("anonymous inner function #31821");
             var viewValue = this.$$lastCommittedViewValue;
             var modelValue = viewValue;
             var that = this;
@@ -31233,6 +31854,7 @@ console.log('jvascript initialisation happened here..');
             // Pass the $$lastCommittedViewValue here, because the cached viewValue might be out of date.
             // This can happen if e.g. $setViewValue is called from inside a parser
             this.$$runValidators(modelValue, this.$$lastCommittedViewValue, function(allValid) {
+                console.log("anonymous inner function #31857");
             if (!allowInvalid) {
                 // Note: Don't check this.$valid here, as we could have
                 // external validators (e.g. calculated on the server),
@@ -31244,6 +31866,7 @@ console.log('jvascript initialisation happened here..');
             });
 
             function writeToModelIfNeeded() {
+                console.log("anonymous inner function #31869");
             if (that.$modelValue !== prevModelValue) {
                 that.$$writeModelToScope();
             }
@@ -31251,8 +31874,10 @@ console.log('jvascript initialisation happened here..');
         },
 
         $$writeModelToScope: function() {
+            console.log("anonymous inner function #31877");
             this.$$ngModelSet(this.$$scope, this.$modelValue);
             forEach(this.$viewChangeListeners, function(listener) {
+                console.log("anonymous inner function #31880");
             try {
                 listener();
             } catch (e) {
@@ -31314,6 +31939,7 @@ console.log('jvascript initialisation happened here..');
         * @param {string} trigger Event that triggered the update.
         */
         $setViewValue: function(value, trigger) {
+            console.log("anonymous inner function #31942");
             this.$viewValue = value;
             if (this.$options.getOption('updateOnDefault')) {
             this.$$debounceViewValueCommit(trigger);
@@ -31321,6 +31947,7 @@ console.log('jvascript initialisation happened here..');
         },
 
         $$debounceViewValueCommit: function(trigger) {
+            console.log("anonymous inner function #31950");
             var debounceDelay = this.$options.getOption('debounce');
 
             if (isNumber(debounceDelay[trigger])) {
@@ -31337,12 +31964,14 @@ console.log('jvascript initialisation happened here..');
             var that = this;
             if (debounceDelay > 0) { // this fails if debounceDelay is an object
             this.$$pendingDebounce = this.$$timeout(function() {
+                console.log("anonymous inner function #31967");
                 that.$commitViewValue();
             }, debounceDelay);
             } else if (this.$$rootScope.$$phase) {
             this.$commitViewValue();
             } else {
             this.$$scope.$apply(function() {
+                console.log("anonymous inner function #31974");
                 that.$commitViewValue();
             });
             }
@@ -31378,6 +32007,7 @@ console.log('jvascript initialisation happened here..');
         *
         */
         $overrideModelOptions: function(options) {
+            console.log("anonymous inner function #32010");
             this.$options = this.$options.createChild(options);
             this.$$setUpdateOnEvents();
         },
@@ -31494,6 +32124,7 @@ console.log('jvascript initialisation happened here..');
         *
         */
         $processModelValue: function() {
+            console.log("anonymous inner function #32127");
             var viewValue = this.$$format();
 
             if (this.$viewValue !== viewValue) {
@@ -31509,6 +32140,7 @@ console.log('jvascript initialisation happened here..');
         * This method is called internally to run the $formatters on the $modelValue
         */
         $$format: function() {
+            console.log("anonymous inner function #32143");
             var formatters = this.$formatters,
                 idx = formatters.length;
 
@@ -31524,12 +32156,14 @@ console.log('jvascript initialisation happened here..');
         * This method is called internally when the bound scope value changes.
         */
         $$setModelValue: function(modelValue) {
+            console.log("anonymous inner function #32159");
             this.$modelValue = this.$$rawModelValue = modelValue;
             this.$$parserValid = undefined;
             this.$processModelValue();
         },
 
         $$setUpdateOnEvents: function() {
+            console.log("anonymous inner function #32166");
             if (this.$$updateEvents) {
             this.$$element.off(this.$$updateEvents, this.$$updateEventHandler);
             }
@@ -31541,12 +32175,13 @@ console.log('jvascript initialisation happened here..');
         },
 
         $$updateEventHandler: function(ev) {
+            console.log("anonymous inner function #32178");
             this.$$debounceViewValueCommit(ev && ev.type);
         }
         };
 
         function setupModelWatcher(ctrl) {
-            console.log('');
+            console.log('setupModelWatcher #32184');
         // model -> value
         // Note: we cannot use a normal scope.$watch as we want to detect the following:
         // 1. scope value is 'a'
@@ -31556,6 +32191,7 @@ console.log('jvascript initialisation happened here..');
         //       ng-change executes in apply phase
         // 4. view should be changed back to 'a'
         ctrl.$$scope.$watch(function ngModelWatch(scope) {
+            console.log("anonymous inner function #32194");
             var modelValue = ctrl.$$ngModelGet(scope);
 
             // if scope model value and ngModel value are out of sync
@@ -31598,9 +32234,11 @@ console.log('jvascript initialisation happened here..');
         addSetValidityMethod({
         clazz: NgModelController,
         set: function(object, property) {
+            console.log("anonymous inner function #32237");
             object[property] = true;
         },
         unset: function(object, property) {
+            console.log("anonymous inner function #32241");
             delete object[property];
         }
         });
@@ -31795,7 +32433,7 @@ console.log('jvascript initialisation happened here..');
         * </example>
         */
         var ngModelDirective = ['$rootScope', function($rootScope) {
-            console.log('');
+            console.log("anonymous inner function #32436");
         return {
             restrict: 'A',
             require: ['ngModel', '^?form', '^?ngModelOptions'],
@@ -31805,11 +32443,13 @@ console.log('jvascript initialisation happened here..');
             // before anyone else uses it.
             priority: 1,
             compile: function ngModelCompile(element) {
+                console.log("anonymous inner function #32446");
             // Setup initial state of the control
             element.addClass(PRISTINE_CLASS).addClass(UNTOUCHED_CLASS).addClass(VALID_CLASS);
 
             return {
                 pre: function ngModelPreLink(scope, element, attr, ctrls) {
+                    console.log("anonymous inner function #32452");
                 var modelCtrl = ctrls[0],
                     formCtrl = ctrls[1] || modelCtrl.$$parentForm,
                     optionsCtrl = ctrls[2];
@@ -31824,24 +32464,29 @@ console.log('jvascript initialisation happened here..');
                 formCtrl.$addControl(modelCtrl);
 
                 attr.$observe('name', function(newValue) {
+                    console.log("anonymous inner function #32467");
                     if (modelCtrl.$name !== newValue) {
                     modelCtrl.$$parentForm.$$renameControl(modelCtrl, newValue);
                     }
                 });
 
                 scope.$on('$destroy', function() {
+                    console.log("anonymous inner function #32474");
                     modelCtrl.$$parentForm.$removeControl(modelCtrl);
                 });
                 },
                 post: function ngModelPostLink(scope, element, attr, ctrls) {
+                    console.log("anonymous inner function #32479");
                 var modelCtrl = ctrls[0];
                 modelCtrl.$$setUpdateOnEvents();
 
                 function setTouched() {
+                    console.log("anonymous inner function #32484");
                     modelCtrl.$setTouched();
                 }
 
                 element.on('blur', function() {
+                    console.log("anonymous inner function #32489");
                     if (modelCtrl.$touched) return;
 
                     if ($rootScope.$$phase) {
@@ -31867,7 +32512,7 @@ console.log('jvascript initialisation happened here..');
         * A container for the options set by the {@link ngModelOptions} directive
         */
         function ModelOptions(options) {
-            console.log('');
+            console.log('ModelOptions #32515');
         this.$$options = options;
         }
 
@@ -31882,6 +32527,7 @@ console.log('jvascript initialisation happened here..');
         * Returns the value of the given option
         */
         getOption: function(name) {
+            console.log("anonymous inner function #32530");
             return this.$$options[name];
         },
 
@@ -31892,6 +32538,7 @@ console.log('jvascript initialisation happened here..');
         * @return {ModelOptions} a new `ModelOptions` object initialized with the given options.
         */
         createChild: function(options) {
+            console.log("anonymous inner function #32541");
             var inheritAll = false;
 
             // make a shallow copy
@@ -31899,6 +32546,7 @@ console.log('jvascript initialisation happened here..');
 
             // Inherit options from the parent if specified by the value `"$inherit"`
             forEach(options, /** @this */ function(option, key) {
+                console.log("anonymous inner function #32549");
             if (option === '$inherit') {
                 if (key === '*') {
                 inheritAll = true;
@@ -31915,6 +32563,7 @@ console.log('jvascript initialisation happened here..');
                 // it from the event list and set the `updateOnDefault` flag.
                 options.updateOnDefault = false;
                 options[key] = trim(option.replace(DEFAULT_REGEXP, function() {
+                    console.log("anonymous inner function #32566");
                     options.updateOnDefault = true;
                     return ' ';
                 }));
@@ -32402,14 +33051,16 @@ console.log('jvascript initialisation happened here..');
         *
         */
         var ngModelOptionsDirective = function() {
-            console.log('');
+            console.log("anonymous inner function #33054");
         NgModelOptionsController.$inject = ['$attrs', '$scope'];
         function NgModelOptionsController($attrs, $scope) {
+            console.log("anonymous inner function #33057");
             this.$$attrs = $attrs;
             this.$$scope = $scope;
         }
         NgModelOptionsController.prototype = {
             $onInit: function() {
+                console.log("anonymous inner function #33063");
             var parentOptions = this.parentCtrl ? this.parentCtrl.$options : defaultModelOptions;
             var modelOptionsDefinition = this.$$scope.$eval(this.$$attrs.ngModelOptions);
 
@@ -32430,8 +33081,9 @@ console.log('jvascript initialisation happened here..');
 
         // shallow copy over values from `src` that are not already specified on `dst`
         function defaults(dst, src) {
-            console.log('');
+            console.log('defaults #33084');
         forEach(src, function(value, key) {
+            console.log("anonymous inner function #33086");
             if (!isDefined(dst[key])) {
             dst[key] = value;
             }
@@ -32720,10 +33372,10 @@ console.log('jvascript initialisation happened here..');
 
 
         var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, $document, $parse) {
-            console.log('');
+            console.log("anonymous inner function #33375");
 
         function parseOptionsExpression(optionsExp, selectElement, scope) {
-            console.log('');
+            console.log('parseOptionsExpression #33378');
 
             var match = optionsExp.match(NG_OPTIONS_REGEXP);
             if (!(match)) {
@@ -32755,9 +33407,10 @@ console.log('jvascript initialisation happened here..');
             // if we have a trackFn then use that (passing scope and locals)
             // otherwise just hash the given viewValue
             var getTrackByValueFn = trackBy ?
-                                    function(value, locals) { return trackByFn(scope, locals); } :
-                                    function getHashOfValue(value) { return hashKey(value); };
+                                    function(value, locals) { console.log("anonymous inner function #33410");return trackByFn(scope, locals); } :
+                                    function getHashOfValue(value) { console.log("anonymous inner function #33411");return hashKey(value); };
             var getTrackByValue = function(value, key) {
+                console.log("anonymous inner function #33413");
             return getTrackByValueFn(value, getLocals(value, key));
             };
 
@@ -32768,16 +33421,19 @@ console.log('jvascript initialisation happened here..');
 
             var locals = {};
             var getLocals = keyName ? function(value, key) {
+                console.log("anonymous inner function #33424");
             locals[keyName] = key;
             locals[valueName] = value;
             return locals;
             } : function(value) {
+                console.log("anonymous inner function #33429");
             locals[valueName] = value;
             return locals;
             };
 
 
             function Option(selectValue, viewValue, label, group, disabled) {
+                console.log("anonymous inner function #33436");
             this.selectValue = selectValue;
             this.viewValue = viewValue;
             this.label = label;
@@ -32786,6 +33442,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function getOptionValuesKeys(optionValues) {
+                console.log("anonymous inner function #33445");
             var optionValuesKeys;
 
             if (!keyName && isArrayLike(optionValues)) {
@@ -32806,6 +33463,7 @@ console.log('jvascript initialisation happened here..');
             trackBy: trackBy,
             getTrackByValue: getTrackByValue,
             getWatchables: $parse(valuesFn, function(optionValues) {
+                console.log("anonymous inner function #33466");
                 // Create a collection of things that we would like to watch (watchedArray)
                 // so that they can all be watched using a single $watchCollection
                 // that only runs the handler once if anything changes
@@ -32838,6 +33496,7 @@ console.log('jvascript initialisation happened here..');
             }),
 
             getOptions: function() {
+                console.log("anonymous inner function #33499");
 
                 var optionItems = [];
                 var selectValueMap = {};
@@ -32867,9 +33526,11 @@ console.log('jvascript initialisation happened here..');
                 items: optionItems,
                 selectValueMap: selectValueMap,
                 getOptionFromViewValue: function(value) {
+                    console.log("anonymous inner function #33529");
                     return selectValueMap[getTrackByValue(value)];
                 },
                 getViewValueFromOption: function(option) {
+                    console.log("anonymous inner function #33533");
                     // If the viewValue could be an object that may be mutated by the application,
                     // we need to make a copy and not return the reference to the value on the option.
                     return trackBy ? copy(option.viewValue) : option.viewValue;
@@ -32887,6 +33548,7 @@ console.log('jvascript initialisation happened here..');
             optGroupTemplate = window.document.createElement('optgroup');
 
             function ngOptionsPostLink(scope, selectElement, attr, ctrls) {
+                console.log("anonymous inner function #33551");
 
             var selectCtrl = ctrls[0];
             var ngModelCtrl = ctrls[1];
@@ -32919,6 +33581,7 @@ console.log('jvascript initialisation happened here..');
 
             // Overwrite the implementation. ngOptions doesn't use hashes
             selectCtrl.generateUnknownOptionValue = function(val) {
+                console.log("anonymous inner function #33584");
                 return '?';
             };
 
@@ -32926,6 +33589,7 @@ console.log('jvascript initialisation happened here..');
             if (!multiple) {
 
                 selectCtrl.writeValue = function writeNgOptionsValue(value) {
+                    console.log("anonymous inner function #33592");
                 // The options might not be defined yet when ngModel tries to render
                 if (!options) return;
 
@@ -32956,6 +33620,7 @@ console.log('jvascript initialisation happened here..');
                 };
 
                 selectCtrl.readValue = function readNgOptionsValue() {
+                    console.log("anonymous inner function #33623");
 
                 var selectedOption = options.selectValueMap[selectElement.val()];
 
@@ -32972,14 +33637,15 @@ console.log('jvascript initialisation happened here..');
                 // FIXME: When a user selects an option, this watch will fire needlessly
                 if (ngOptions.trackBy) {
                 scope.$watch(
-                    function() { return ngOptions.getTrackByValue(ngModelCtrl.$viewValue); },
-                    function() { ngModelCtrl.$render(); }
+                    function() { console.log("anonymous inner function #33640");return ngOptions.getTrackByValue(ngModelCtrl.$viewValue); },
+                    function() { console.log("anonymous inner function #33641");ngModelCtrl.$render(); }
                 );
                 }
 
             } else {
 
                 selectCtrl.writeValue = function writeNgOptionsMultiple(values) {
+                    console.log("anonymous inner function #33648");
                 // The options might not be defined yet when ngModel tries to render
                 if (!options) return;
 
@@ -32988,6 +33654,7 @@ console.log('jvascript initialisation happened here..');
                 var selectedOptions = values && values.map(getAndUpdateSelectedOption) || [];
 
                 options.items.forEach(function(option) {
+                    console.log("anonymous inner function #33657");
                     if (option.element.selected && !includes(selectedOptions, option)) {
                     option.element.selected = false;
                     }
@@ -32996,10 +33663,12 @@ console.log('jvascript initialisation happened here..');
 
 
                 selectCtrl.readValue = function readNgOptionsMultiple() {
+                    console.log("anonymous inner function #33666");
                 var selectedValues = selectElement.val() || [],
                     selections = [];
 
                 forEach(selectedValues, function(value) {
+                    console.log("anonymous inner function #33670");
                     var option = options.selectValueMap[value];
                     if (option && !option.disabled) selections.push(options.getViewValueFromOption(option));
                 });
@@ -33012,12 +33681,15 @@ console.log('jvascript initialisation happened here..');
                 if (ngOptions.trackBy) {
 
                 scope.$watchCollection(function() {
+                    console.log("anonymous inner function #33684");
                     if (isArray(ngModelCtrl.$viewValue)) {
                     return ngModelCtrl.$viewValue.map(function(value) {
+                        console.log("anonymous inner function #33687");
                         return ngOptions.getTrackByValue(value);
                     });
                     }
                 }, function() {
+                    console.log("anonymous inner function #33692");
                     ngModelCtrl.$render();
                 });
 
@@ -33040,6 +33712,7 @@ console.log('jvascript initialisation happened here..');
                 // options that are added by ngIf etc. (rendering of the node is async because of
                 // lazy transclusion)
                 selectCtrl.registerOption = function(optionScope, optionEl) {
+                    console.log("anonymous inner function #33715");
                     if (optionEl.val() === '') {
                     selectCtrl.hasEmptyOption = true;
                     selectCtrl.emptyOption = optionEl;
@@ -33048,6 +33721,7 @@ console.log('jvascript initialisation happened here..');
                     ngModelCtrl.$render();
 
                     optionEl.on('$destroy', function() {
+                        console.log("anonymous inner function #33724");
                         var needsRerender = selectCtrl.$isEmptyOptionSelected();
 
                         selectCtrl.hasEmptyOption = false;
@@ -33072,12 +33746,14 @@ console.log('jvascript initialisation happened here..');
             // ------------------------------------------------------------------ //
 
             function addOptionElement(option, parent) {
+                console.log("anonymous inner function #33749");
                 var optionElement = optionTemplate.cloneNode(false);
                 parent.appendChild(optionElement);
                 updateOptionElement(option, optionElement);
             }
 
             function getAndUpdateSelectedOption(viewValue) {
+                console.log("anonymous inner function #33756");
                 var option = options.getOptionFromViewValue(viewValue);
                 var element = option && option.element;
 
@@ -33087,6 +33763,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function updateOptionElement(option, element) {
+                console.log("anonymous inner function #33766");
                 option.element = element;
                 element.disabled = option.disabled;
                 // Support: IE 11 only, Edge 12-13 only
@@ -33103,6 +33780,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function updateOptions() {
+                console.log("anonymous inner function #33783");
                 var previousValue = options && selectCtrl.readValue();
 
                 // We must remove all current options, but cannot simply set innerHTML = null
@@ -33127,6 +33805,7 @@ console.log('jvascript initialisation happened here..');
                 var groupElementMap = {};
 
                 options.items.forEach(function addOption(option) {
+                    console.log("anonymous inner function #33808");
                 var groupElement;
 
                 if (isDefined(option.group)) {
@@ -33179,6 +33858,7 @@ console.log('jvascript initialisation happened here..');
             require: ['select', 'ngModel'],
             link: {
             pre: function ngOptionsPreLink(scope, selectElement, attr, ctrls) {
+                console.log("anonymous inner function #33861");
                 // Deactivate the SelectController.register method to prevent
                 // option directives from accidentally registering themselves
                 // (and unwanted $destroy handlers etc.)
@@ -33365,11 +34045,13 @@ console.log('jvascript initialisation happened here..');
             </example>
         */
         var ngPluralizeDirective = ['$locale', '$interpolate', '$log', function($locale, $interpolate, $log) {
+            console.log("anonymous inner function #34048");
         var BRACE = /{}/g,
             IS_WHEN = /^when(Minus)?(.+)$/;
 
         return {
             link: function(scope, element, attr) {
+                console.log("anonymous inner function #34054");
             var numberExp = attr.count,
                 whenExp = attr.$attr.when && element.attr(attr.$attr.when), // we have {{}} in attrs
                 offset = attr.offset || 0,
@@ -33382,6 +34064,7 @@ console.log('jvascript initialisation happened here..');
                 lastCount;
 
             forEach(attr, function(expression, attributeName) {
+                console.log("anonymous inner function #34067");
                 var tmpMatch = IS_WHEN.exec(attributeName);
                 if (tmpMatch) {
                 var whenKey = (tmpMatch[1] ? '-' : '') + lowercase(tmpMatch[2]);
@@ -33389,11 +34072,13 @@ console.log('jvascript initialisation happened here..');
                 }
             });
             forEach(whens, function(expression, key) {
+                console.log("anonymous inner function #34075");
                 whensExpFns[key] = $interpolate(expression.replace(BRACE, braceReplacement));
 
             });
 
             scope.$watch(numberExp, function ngPluralizeWatchAction(newVal) {
+                console.log("anonymous inner function #34081");
                 var count = parseFloat(newVal);
                 var countIsNaN = isNumberNaN(count);
 
@@ -33422,6 +34107,7 @@ console.log('jvascript initialisation happened here..');
             });
 
             function updateElementText(newText) {
+                console.log("anonymous inner function #34110");
                 element.text(newText || '');
             }
             }
@@ -33671,21 +34357,24 @@ console.log('jvascript initialisation happened here..');
         var ngRefMinErr = minErr('ngRef');
 
         var ngRefDirective = ['$parse', function($parse) {
-            console.log('');
+            console.log("anonymous inner function #34360");
         return {
             priority: -1, // Needed for compatibility with element transclusion on the same element
             restrict: 'A',
             compile: function(tElement, tAttrs) {
+                console.log("anonymous inner function #34365");
             // Get the expected controller name, converts <data-some-thing> into "someThing"
             var controllerName = directiveNormalize(nodeName_(tElement));
 
             // Get the expression for value binding
             var getter = $parse(tAttrs.ngRef);
             var setter = getter.assign || function() {
+                console.log("anonymous inner function #34372");
                 throw ngRefMinErr('nonassign', 'Expression in ngRef="{0}" is non-assignable!', tAttrs.ngRef);
             };
 
             return function(scope, element, attrs) {
+                console.log("anonymous inner function #34377");
                 var refValue;
 
                 if (attrs.hasOwnProperty('ngRefRead')) {
@@ -33713,6 +34402,7 @@ console.log('jvascript initialisation happened here..');
 
                 // when the element is removed, remove it (nullify it)
                 element.on('$destroy', function() {
+                    console.log("anonymous inner function #34405");
                 // only remove it if value has not changed,
                 // because animations (and other procedures) may duplicate elements
                 if (getter(scope) === refValue) {
@@ -34155,11 +34845,12 @@ console.log('jvascript initialisation happened here..');
             </example>
         */
         var ngRepeatDirective = ['$parse', '$animate', '$compile', function($parse, $animate, $compile) {
-            console.log('');
+            console.log("anonymous inner function #34848");
         var NG_REMOVED = '$$NG_REMOVED';
         var ngRepeatMinErr = minErr('ngRepeat');
 
         var updateScope = function(scope, index, valueIdentifier, value, keyIdentifier, key, arrayLength) {
+            console.log("anonymous inner function #34853");
             // TODO(perf): generate setters to shave off ~40ms or 1-1.5%
             scope[valueIdentifier] = value;
             if (keyIdentifier) scope[keyIdentifier] = key;
@@ -34172,18 +34863,22 @@ console.log('jvascript initialisation happened here..');
         };
 
         var getBlockStart = function(block) {
+            console.log("anonymous inner function #34866");
             return block.clone[0];
         };
 
         var getBlockEnd = function(block) {
+            console.log("anonymous inner function #34871");
             return block.clone[block.clone.length - 1];
         };
 
         var trackByIdArrayFn = function($scope, key, value) {
+            console.log("anonymous inner function #34876");
             return hashKey(value);
         };
 
         var trackByIdObjFn = function($scope, key) {
+            console.log("anonymous inner function #34881");
             return key;
         };
 
@@ -34195,6 +34890,7 @@ console.log('jvascript initialisation happened here..');
             terminal: true,
             $$tlb: true,
             compile: function ngRepeatCompile($element, $attr) {
+                console.log("anonymous inner function #34893");
             var expression = $attr.ngRepeat;
             var ngRepeatEndComment = $compile.$$createComment('end ngRepeat', expression);
 
@@ -34232,6 +34928,7 @@ console.log('jvascript initialisation happened here..');
                 var trackByExpGetter = $parse(trackByExp);
 
                 trackByIdExpFn = function($scope, key, value, index) {
+                    console.log("anonymous inner function #34831");
                 // assign key, value, and $index to the locals so that they can be used in hash functions
                 if (keyIdentifier) hashFnLocals[keyIdentifier] = key;
                 hashFnLocals[valueIdentifier] = value;
@@ -34241,6 +34938,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             return function ngRepeatLink($scope, $element, $attr, ctrl, $transclude) {
+                console.log("anonymous inner function #34841");
 
                 // Store a list of elements from previous run. This is a hash where key is the item from the
                 // iterator, and the value is objects with following properties.
@@ -34254,6 +34952,7 @@ console.log('jvascript initialisation happened here..');
 
                 //watch props
                 $scope.$watchCollection(rhs, function ngRepeatAction(collection) {
+                    console.log("anonymous inner function #34955");
                 var index, length,
                     previousNode = $element[0],     // node that cloned nodes should be inserted after
                                                     // initialized to the comment node anchor
@@ -34305,6 +35004,7 @@ console.log('jvascript initialisation happened here..');
                     } else if (nextBlockMap[trackById]) {
                     // if collision detected. restore lastBlockMap and throw an error
                     forEach(nextBlockOrder, function(block) {
+                        console.log("anonymous inner function #35007");
                         if (block && block.scope) lastBlockMap[block.id] = block;
                     });
                     throw ngRepeatMinErr('dupes',
@@ -34364,6 +35064,7 @@ console.log('jvascript initialisation happened here..');
                     } else {
                     // new item which we don't know about
                     $transclude(function ngRepeatTransclude(clone, scope) {
+                        console.log("anonymous inner function #35067");
                         block.scope = scope;
                         // http://jsperf.com/clone-vs-createcomment
                         var endNode = ngRepeatEndComment.cloneNode(false);
@@ -34590,12 +35291,14 @@ console.log('jvascript initialisation happened here..');
         * - Define an animation on the affected elements.
         */
         var ngShowDirective = ['$animate', function($animate) {
-            console.log('');
+            console.log("anonymous inner function #35294");
         return {
             restrict: 'A',
             multiElement: true,
             link: function(scope, element, attr) {
+                console.log("anonymous inner function #35299");
             scope.$watch(attr.ngShow, function ngShowWatchAction(value) {
+                console.log("anonymous inner function #35301");
                 // we're adding a temporary, animation-specific class for ng-hide since this way
                 // we can control when the element is actually displayed on screen without having
                 // to have a global/greedy CSS selector that breaks when other animations are run.
@@ -34810,12 +35513,14 @@ console.log('jvascript initialisation happened here..');
         * - Define an animation on the affected elements.
         */
         var ngHideDirective = ['$animate', function($animate) {
-            console.log('');
+            console.log("anonymous inner function #35516");
         return {
             restrict: 'A',
             multiElement: true,
             link: function(scope, element, attr) {
+                console.log("anonymous inner function #35521");
             scope.$watch(attr.ngHide, function ngHideWatchAction(value) {
+                console.log("anonymous inner function #35523");
                 // The comment inside of the ngShowDirective explains why we add and
                 // remove a temporary class for the show/hide animation
                 $animate[value ? 'addClass' : 'removeClass'](element,NG_HIDE_CLASS, {
@@ -34878,13 +35583,15 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         var ngStyleDirective = ngDirective(function(scope, element, attr) {
-            console.log('');
+            console.log("anonymous inner function #35586");
         scope.$watchCollection(attr.ngStyle, function ngStyleWatchAction(newStyles, oldStyles) {
+            console.log("anonymous inner function #35588");
             if (oldStyles && (newStyles !== oldStyles)) {
             if (!newStyles) {
                 newStyles = {};
             }
             forEach(oldStyles, function(val, style) {
+                console.log("anonymous inner function #35594");
                 if (newStyles[style] == null) {
                 newStyles[style] = '';
                 }
@@ -35032,15 +35739,17 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         var ngSwitchDirective = ['$animate', '$compile', function($animate, $compile) {
-            console.log('');
+            console.log("anonymous inner function #35742");
         return {
             require: 'ngSwitch',
 
             // asks for $scope to fool the BC controller module
             controller: ['$scope', function NgSwitchController() {
+                console.log("anonymous inner function #35748");
             this.cases = {};
             }],
             link: function(scope, element, attr, ngSwitchController) {
+                console.log("anonymous inner function #35752");
             var watchExpr = attr.ngSwitch || attr.on,
                 selectedTranscludes = [],
                 selectedElements = [],
@@ -35048,12 +35757,15 @@ console.log('jvascript initialisation happened here..');
                 selectedScopes = [];
 
             var spliceFactory = function(array, index) {
+                console.log("anonymous inner function #35760");
                 return function(response) {
+                    console.log("anonymous inner function #35762");
                     if (response !== false) array.splice(index, 1);
                 };
             };
 
             scope.$watch(watchExpr, function ngSwitchWatchAction(value) {
+                console.log("anonymous inner function #35768");
                 var i, ii;
 
                 // Start with the last, in case the array is modified during the loop
@@ -35073,7 +35785,9 @@ console.log('jvascript initialisation happened here..');
 
                 if ((selectedTranscludes = ngSwitchController.cases['!' + value] || ngSwitchController.cases['?'])) {
                 forEach(selectedTranscludes, function(selectedTransclude) {
+                    console.log("anonymous inner function #35788");
                     selectedTransclude.transclude(function(caseElement, selectedScope) {
+                        console.log("anonymous inner function #35790");
                     selectedScopes.push(selectedScope);
                     var anchor = selectedTransclude.element;
                     caseElement[caseElement.length++] = $compile.$$createComment('end ngSwitchWhen');
@@ -35095,13 +35809,15 @@ console.log('jvascript initialisation happened here..');
         require: '^ngSwitch',
         multiElement: true,
         link: function(scope, element, attrs, ctrl, $transclude) {
+            console.log("anonymous inner function #35812");
 
             var cases = attrs.ngSwitchWhen.split(attrs.ngSwitchWhenSeparator).sort().filter(
             // Filter duplicate cases
-            function(element, index, array) { return array[index - 1] !== element; }
+            function(element, index, array) { console.log("anonymous inner function #35816");return array[index - 1] !== element; }
             );
 
             forEach(cases, function(whenCase) {
+                console.log("anonymous inner function #35820");
             ctrl.cases['!' + whenCase] = (ctrl.cases['!' + whenCase] || []);
             ctrl.cases['!' + whenCase].push({ transclude: $transclude, element: element });
             });
@@ -35114,6 +35830,7 @@ console.log('jvascript initialisation happened here..');
         require: '^ngSwitch',
         multiElement: true,
         link: function(scope, element, attr, ctrl, $transclude) {
+            console.log("anonymous inner function #35833");
             ctrl.cases['?'] = (ctrl.cases['?'] || []);
             ctrl.cases['?'].push({ transclude: $transclude, element: element });
         }
@@ -35279,16 +35996,18 @@ console.log('jvascript initialisation happened here..');
         */
         var ngTranscludeMinErr = minErr('ngTransclude');
         var ngTranscludeDirective = ['$compile', function($compile) {
-            console.log('');
+            console.log("anonymous inner function #35999");
         return {
             restrict: 'EAC',
             compile: function ngTranscludeCompile(tElement) {
+                console.log("anonymous inner function #36003");
 
             // Remove and cache any original content to act as a fallback
             var fallbackLinkFn = $compile(tElement.contents());
             tElement.empty();
 
             return function ngTranscludePostLink($scope, $element, $attrs, controller, $transclude) {
+                console.log("anonymous inner function #36010");
 
                 if (!$transclude) {
                 throw ngTranscludeMinErr('orphan',
@@ -35314,6 +36033,7 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 function ngTranscludeCloneAttachFn(clone, transcludedScope) {
+                    console.log("anonymous inner function #36036");
                 if (clone.length && notWhitespace(clone)) {
                     $element.append(clone);
                 } else {
@@ -35325,14 +36045,17 @@ console.log('jvascript initialisation happened here..');
                 }
 
                 function useFallbackContent() {
+                    console.log("anonymous inner function #36048");
                 // Since this is the fallback content rather than the transcluded content,
                 // we link against the scope of this directive rather than the transcluded scope
                 fallbackLinkFn($scope, function(clone) {
+                    console.log("anonymous inner function #36052");
                     $element.append(clone);
                 });
                 }
 
                 function notWhitespace(nodes) {
+                    console.log("anonymous inner function #36058");
                 for (var i = 0, ii = nodes.length; i < ii; i++) {
                     var node = nodes[i];
                     if (node.nodeType !== NODE_TYPE_TEXT || node.nodeValue.trim()) {
@@ -35379,11 +36102,12 @@ console.log('jvascript initialisation happened here..');
         </example>
         */
         var scriptDirective = ['$templateCache', function($templateCache) {
-            console.log('');
+            console.log("anonymous inner function #36105");
         return {
             restrict: 'E',
             terminal: true,
             compile: function(element, attr) {
+                console.log("anonymous inner function #36110");
             if (attr.type === 'text/ng-template') {
                 var templateUrl = attr.id,
                     text = element[0].text;
@@ -35399,7 +36123,7 @@ console.log('jvascript initialisation happened here..');
         var noopNgModelController = { $setViewValue: noop, $render: noop };
 
         function setOptionSelectedStatus(optionEl, value) {
-            console.log('');
+            console.log('setOptionSelectedStatus #36126');
         optionEl.prop('selected', value);
         /**
         * When unselecting an option, setting the property to null / false should be enough
@@ -35548,7 +36272,7 @@ console.log('jvascript initialisation happened here..');
         */
         var SelectController =
                 ['$element', '$scope', /** @this */ function($element, $scope) {
-                    console.log('');
+                    console.log("anonymous inner function #36275");
 
         var self = this,
             optionsMap = new NgMap();
@@ -35579,6 +36303,7 @@ console.log('jvascript initialisation happened here..');
         self.emptyOption = undefined;
 
         self.renderUnknownOption = function(val) {
+            console.log("anonymous inner function #36306");
             var unknownVal = self.generateUnknownOptionValue(val);
             self.unknownOption.val(unknownVal);
             $element.prepend(self.unknownOption);
@@ -35587,6 +36312,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         self.updateUnknownOption = function(val) {
+            console.log("anonymous inner function #36315");
             var unknownVal = self.generateUnknownOptionValue(val);
             self.unknownOption.val(unknownVal);
             setOptionSelectedStatus(self.unknownOption, true);
@@ -35594,14 +36320,17 @@ console.log('jvascript initialisation happened here..');
         };
 
         self.generateUnknownOptionValue = function(val) {
+            console.log("anonymous inner function #36323");
             return '? ' + hashKey(val) + ' ?';
         };
 
         self.removeUnknownOption = function() {
+            console.log("anonymous inner function #36328");
             if (self.unknownOption.parent()) self.unknownOption.remove();
         };
 
         self.selectEmptyOption = function() {
+            console.log("anonymous inner function #36333");
             if (self.emptyOption) {
             $element.val('');
             setOptionSelectedStatus(self.emptyOption, true);
@@ -35609,12 +36338,14 @@ console.log('jvascript initialisation happened here..');
         };
 
         self.unselectEmptyOption = function() {
+            console.log("anonymous inner function #36341");
             if (self.hasEmptyOption) {
             setOptionSelectedStatus(self.emptyOption, false);
             }
         };
 
         $scope.$on('$destroy', function() {
+            console.log("anonymous inner function #36348");
             // disable unknown option so that we don't do work when the whole select is being destroyed
             self.renderUnknownOption = noop;
         });
@@ -35622,6 +36353,7 @@ console.log('jvascript initialisation happened here..');
         // Read the value of the select control, the implementation of this changes depending
         // upon whether the select can have multiple values and whether ngOptions is at work.
         self.readValue = function readSingleValue() {
+            console.log("anonymous inner function #36356");
             var val = $element.val();
             // ngValue added option values are stored in the selectValueMap, normal interpolations are not
             var realVal = val in self.selectValueMap ? self.selectValueMap[val] : val;
@@ -35637,6 +36369,7 @@ console.log('jvascript initialisation happened here..');
         // Write the value to the select control, the implementation of this changes depending
         // upon whether the select can have multiple values and whether ngOptions is at work.
         self.writeValue = function writeSingleValue(value) {
+            console.log("anonymous inner function #36372");
             // Make sure to remove the selected attribute from the previously selected option
             // Otherwise, screen readers might get confused
             var currentlySelectedOption = $element[0].options[$element[0].selectedIndex];
@@ -35659,6 +36392,7 @@ console.log('jvascript initialisation happened here..');
 
         // Tell the select control that an option, with the given value, has been added
         self.addOption = function(value, element) {
+            console.log("anonymous inner function #36395");
             // Skip comment nodes, as they only pollute the `optionsMap`
             if (element[0].nodeType === NODE_TYPE_COMMENT) return;
 
@@ -35676,6 +36410,7 @@ console.log('jvascript initialisation happened here..');
 
         // Tell the select control that an option, with the given value, has been removed
         self.removeOption = function(value) {
+            console.log("anonymous inner function #36413");
             var count = optionsMap.get(value);
             if (count) {
             if (count === 1) {
@@ -35692,6 +36427,7 @@ console.log('jvascript initialisation happened here..');
 
         // Check whether the select control has an option matching the given value
         self.hasOption = function(value) {
+            console.log("anonymous inner function #36430");
             return !!optionsMap.get(value);
         };
 
@@ -35706,6 +36442,7 @@ console.log('jvascript initialisation happened here..');
         *
         */
         self.$hasEmptyOption = function() {
+            console.log("anonymous inner function #36445");
             return self.hasEmptyOption;
         };
 
@@ -35720,6 +36457,7 @@ console.log('jvascript initialisation happened here..');
         *
         */
         self.$isUnknownOptionSelected = function() {
+            console.log("anonymous inner function #36460");
             // Presence of the unknown option means it is selected
             return $element[0].options[0] === self.unknownOption[0];
         };
@@ -35735,10 +36473,12 @@ console.log('jvascript initialisation happened here..');
         *
         */
         self.$isEmptyOptionSelected = function() {
+            console.log("anonymous inner function #36476");
             return self.hasEmptyOption && $element[0].options[$element[0].selectedIndex] === self.emptyOption[0];
         };
 
         self.selectUnknownOrEmptyOption = function(value) {
+            console.log("anonymous inner function #36481");
             if (value == null && self.emptyOption) {
             self.removeUnknownOption();
             self.selectEmptyOption();
@@ -35751,9 +36491,11 @@ console.log('jvascript initialisation happened here..');
 
         var renderScheduled = false;
         function scheduleRender() {
+            console.log("anonymous inner function #36494");
             if (renderScheduled) return;
             renderScheduled = true;
             $scope.$$postDigest(function() {
+                console.log("anonymous inner function #36498");
             renderScheduled = false;
             self.ngModelCtrl.$render();
             });
@@ -35761,11 +36503,13 @@ console.log('jvascript initialisation happened here..');
 
         var updateScheduled = false;
         function scheduleViewValueUpdate(renderAfter) {
+            console.log("anonymous inner function #36506");
             if (updateScheduled) return;
 
             updateScheduled = true;
 
             $scope.$$postDigest(function() {
+                console.log("anonymous inner function #36512");
             if ($scope.$$destroyed) return;
 
             updateScheduled = false;
@@ -35776,11 +36520,13 @@ console.log('jvascript initialisation happened here..');
 
 
         self.registerOption = function(optionScope, optionElement, optionAttrs, interpolateValueFn, interpolateTextFn) {
+            console.log("anonymous inner function #36523");
 
             if (optionAttrs.$attr.ngValue) {
             // The value attribute is set by ngValue
             var oldVal, hashedVal;
             optionAttrs.$observe('value', function valueAttributeObserveAction(newVal) {
+                console.log("anonymous inner function #36529");
 
                 var removal;
                 var previouslySelected = optionElement.prop('selected');
@@ -35808,6 +36554,7 @@ console.log('jvascript initialisation happened here..');
             } else if (interpolateValueFn) {
             // The value attribute is interpolated
             optionAttrs.$observe('value', function valueAttributeObserveAction(newVal) {
+                console.log("anonymous inner function #36557");
                 // This method is overwritten in ngOptions and has side-effects!
                 self.readValue();
 
@@ -35828,6 +36575,7 @@ console.log('jvascript initialisation happened here..');
             } else if (interpolateTextFn) {
             // The text content is interpolated
             optionScope.$watch(interpolateTextFn, function interpolateWatchAction(newVal, oldVal) {
+                console.log("anonymous inner function #36578");
                 optionAttrs.$set('value', newVal);
                 var previouslySelected = optionElement.prop('selected');
                 if (oldVal !== newVal) {
@@ -35846,6 +36594,7 @@ console.log('jvascript initialisation happened here..');
 
 
             optionAttrs.$observe('disabled', function(newVal) {
+                console.log("anonymous inner function #36597");
 
             // Since model updates will also select disabled options (like ngOptions),
             // we only have to handle options becoming disabled, not enabled
@@ -35861,6 +36610,7 @@ console.log('jvascript initialisation happened here..');
             });
 
             optionElement.on('$destroy', function() {
+                console.log("anonymous inner function #36613");
             var currentValue = self.readValue();
             var removeValue = optionAttrs.value;
 
@@ -36136,7 +36886,7 @@ console.log('jvascript initialisation happened here..');
         *
         */
         var selectDirective = function() {
-            console.log('');
+            console.log("anonymous inner function #36889");
 
         return {
             restrict: 'E',
@@ -36150,6 +36900,7 @@ console.log('jvascript initialisation happened here..');
         };
 
         function selectPreLink(scope, element, attr, ctrls) {
+            console.log("anonymous inner function #36903");
 
             var selectCtrl = ctrls[0];
             var ngModelCtrl = ctrls[1];
@@ -36168,8 +36919,10 @@ console.log('jvascript initialisation happened here..');
             // to the `readValue` method, which can be changed if the select can have multiple
             // selected values or if the options are being generated by `ngOptions`
             element.on('change', function() {
+                console.log("anonymous inner function #36922");
                 selectCtrl.removeUnknownOption();
                 scope.$apply(function() {
+                    console.log("anonymous inner function #36925");
                 ngModelCtrl.$setViewValue(selectCtrl.readValue());
                 });
             });
@@ -36183,8 +36936,10 @@ console.log('jvascript initialisation happened here..');
 
                 // Read value now needs to check each option to see if it is selected
                 selectCtrl.readValue = function readMultipleValue() {
+                    console.log("anonymous inner function #36939");
                 var array = [];
                 forEach(element.find('option'), function(option) {
+                    console.log("anonymous inner function #36942");
                     if (option.selected && !option.disabled) {
                     var val = option.value;
                     array.push(val in selectCtrl.selectValueMap ? selectCtrl.selectValueMap[val] : val);
@@ -36195,7 +36950,9 @@ console.log('jvascript initialisation happened here..');
 
                 // Write value now needs to set the selected property of each matching option
                 selectCtrl.writeValue = function writeMultipleValue(value) {
+                    console.log("anonymous inner function #36953");
                 forEach(element.find('option'), function(option) {
+                    console.log("anonymous inner function #36955");
                     var shouldBeSelected = !!value && (includes(value, option.value) ||
                                                     includes(value, selectCtrl.selectValueMap[option.value]));
                     var currentlySelected = option.selected;
@@ -36218,6 +36975,7 @@ console.log('jvascript initialisation happened here..');
                 // we need to work of an array, so we need to see if anything was inserted/removed
                 var lastView, lastViewRef = NaN;
                 scope.$watch(function selectMultipleWatch() {
+                    console.log("anonymous inner function #36978");
                 if (lastViewRef === ngModelCtrl.$viewValue && !equals(lastView, ngModelCtrl.$viewValue)) {
                     lastView = shallowCopy(ngModelCtrl.$viewValue);
                     ngModelCtrl.$render();
@@ -36228,6 +36986,7 @@ console.log('jvascript initialisation happened here..');
                 // If we are a multiple select then value is now a collection
                 // so the meaning of $isEmpty changes
                 ngModelCtrl.$isEmpty = function(value) {
+                    console.log("anonymous inner function #36989");
                 return !value || value.length === 0;
                 };
 
@@ -36235,6 +36994,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             function selectPostLink(scope, element, attrs, ctrls) {
+                console.log("anonymous inner function #36997");
             // if ngModel is not defined, we don't need to do anything
             var ngModelCtrl = ctrls[1];
             if (!ngModelCtrl) return;
@@ -36247,6 +37007,7 @@ console.log('jvascript initialisation happened here..');
             // This must be done in the postLink fn to prevent $render to be called before
             // all nodes have been linked correctly.
             ngModelCtrl.$render = function() {
+                console.log("anonymous inner function #37010");
                 selectCtrl.writeValue(ngModelCtrl.$viewValue);
             };
             }
@@ -36257,11 +37018,12 @@ console.log('jvascript initialisation happened here..');
         // of dynamically created (and destroyed) option elements to their containing select
         // directive via its controller.
         var optionDirective = ['$interpolate', function($interpolate) {
-            console.log('');
+            console.log("anonymous inner function #37021");
         return {
             restrict: 'E',
             priority: 100,
             compile: function(element, attr) {
+                console.log("anonymous inner function #37026");
             var interpolateValueFn, interpolateTextFn;
 
             if (isDefined(attr.ngValue)) {
@@ -36279,6 +37041,7 @@ console.log('jvascript initialisation happened here..');
             }
 
             return function(scope, element, attr) {
+                console.log("anonymous inner function #37044");
                 // This is an optimization over using ^^ since we don't want to have to search
                 // all the way to the root of the DOM for every single option element
                 var selectCtrlName = '$selectController',
@@ -36358,11 +37121,12 @@ console.log('jvascript initialisation happened here..');
         * </example>
         */
         var requiredDirective = ['$parse', function($parse) {
-            console.log('');
+            console.log("anonymous inner function #37124");
         return {
             restrict: 'A',
             require: '?ngModel',
             link: function(scope, elm, attr, ctrl) {
+                console.log("anonymous inner function #37129");
             if (!ctrl) return;
             // For boolean attributes like required, presence means true
             var value = attr.hasOwnProperty('required') || $parse(attr.ngRequired)(scope);
@@ -36374,10 +37138,12 @@ console.log('jvascript initialisation happened here..');
             }
 
             ctrl.$validators.required = function(modelValue, viewValue) {
+                console.log("anonymous inner function #37141");
                 return !value || !ctrl.$isEmpty(viewValue);
             };
 
             attr.$observe('required', function(newVal) {
+                console.log("anonymous inner function #37146");
 
                 if (value !== newVal) {
                 value = newVal;
@@ -36470,11 +37236,12 @@ console.log('jvascript initialisation happened here..');
         * </example>
         */
         var patternDirective = ['$parse', function($parse) {
-            console.log('');
+            console.log("anonymous inner function #37239");
         return {
             restrict: 'A',
             require: '?ngModel',
             compile: function(tElm, tAttr) {
+                console.log("anonymous inner function #37244");
             var patternExp;
             var parseFn;
 
@@ -36485,13 +37252,14 @@ console.log('jvascript initialisation happened here..');
                 // We get value of the attribute here, so we can compare the old and the new value
                 // in the observer to avoid unnecessary validations
                 if (tAttr.ngPattern.charAt(0) === '/' && REGEX_STRING_REGEXP.test(tAttr.ngPattern)) {
-                parseFn = function() { return tAttr.ngPattern; };
+                parseFn = function() { console.log("anonymous inner function #37255");return tAttr.ngPattern; };
                 } else {
                 parseFn = $parse(tAttr.ngPattern);
                 }
             }
 
             return function(scope, elm, attr, ctrl) {
+                console.log("anonymous inner function #37262");
                 if (!ctrl) return;
 
                 var attrVal = attr.pattern;
@@ -36505,6 +37273,7 @@ console.log('jvascript initialisation happened here..');
                 var regexp = parsePatternAttr(attrVal, patternExp, elm);
 
                 attr.$observe('pattern', function(newVal) {
+                    console.log("anonymous inner function #37276");
                 var oldRegexp = regexp;
 
                 regexp = parsePatternAttr(newVal, patternExp, elm);
@@ -36515,6 +37284,7 @@ console.log('jvascript initialisation happened here..');
                 });
 
                 ctrl.$validators.pattern = function(modelValue, viewValue) {
+                    console.log("anonymous inner function #32787");
                 // HTML5 pattern constraint validates the input value, so we validate the viewValue
                 return ctrl.$isEmpty(viewValue) || isUndefined(regexp) || regexp.test(viewValue);
                 };
@@ -36596,17 +37366,19 @@ console.log('jvascript initialisation happened here..');
         * </example>
         */
         var maxlengthDirective = ['$parse', function($parse) {
-            console.log('');
+            console.log("anonymous inner function #37369");
         return {
             restrict: 'A',
             require: '?ngModel',
             link: function(scope, elm, attr, ctrl) {
+                console.log("anonymous inner function #37374");
             if (!ctrl) return;
 
             var maxlength = attr.maxlength || $parse(attr.ngMaxlength)(scope);
             var maxlengthParsed = parseLength(maxlength);
 
             attr.$observe('maxlength', function(value) {
+                console.log("anonymous inner function #37381");
                 if (maxlength !== value) {
                 maxlengthParsed = parseLength(value);
                 maxlength = value;
@@ -36614,6 +37386,7 @@ console.log('jvascript initialisation happened here..');
                 }
             });
             ctrl.$validators.maxlength = function(modelValue, viewValue) {
+                console.log("anonymous inner function #37389");
                 return (maxlengthParsed < 0) || ctrl.$isEmpty(viewValue) || (viewValue.length <= maxlengthParsed);
             };
             }
@@ -36690,17 +37463,19 @@ console.log('jvascript initialisation happened here..');
         * </example>
         */
         var minlengthDirective = ['$parse', function($parse) {
-            console.log('');
+            console.log("anonymous inner function #37466");
         return {
             restrict: 'A',
             require: '?ngModel',
             link: function(scope, elm, attr, ctrl) {
+                console.log("anonymous inner function #37471");
             if (!ctrl) return;
 
             var minlength = attr.minlength || $parse(attr.ngMinlength)(scope);
             var minlengthParsed = parseLength(minlength) || -1;
 
             attr.$observe('minlength', function(value) {
+                console.log("anonymous inner function #37478");
                 if (minlength !== value) {
                 minlengthParsed = parseLength(value) || -1;
                 minlength = value;
@@ -36709,6 +37484,7 @@ console.log('jvascript initialisation happened here..');
 
             });
             ctrl.$validators.minlength = function(modelValue, viewValue) {
+                console.log("anonymous inner function #37487");
                 return ctrl.$isEmpty(viewValue) || viewValue.length >= minlengthParsed;
             };
             }
@@ -36717,7 +37493,7 @@ console.log('jvascript initialisation happened here..');
 
 
         function parsePatternAttr(regex, patternExp, elm) {
-            console.log('');
+            console.log('parsePatternAttr #37496');
         if (!regex) return undefined;
 
         if (isString(regex)) {
@@ -36734,7 +37510,7 @@ console.log('jvascript initialisation happened here..');
         }
 
         function parseLength(val) {
-            console.log('');
+            console.log('parseLength #37513');
         var intVal = toInt(val);
         return isNumberNaN(intVal) ? -1 : intVal;
         }
@@ -36754,15 +37530,17 @@ console.log('jvascript initialisation happened here..');
         publishExternalAPI(angular);
 
         angular.module("ngLocale", [], ["$provide", function($provide) {
-            console.log('');
+            console.log("anonymous inner function #37533");
         var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
         function getDecimals(n) {
+            console.log("anonymous inner function #37536");
         n = n + '';
         var i = n.indexOf('.');
         return (i == -1) ? 0 : n.length - i - 1;
         }
 
         function getVF(n, opt_precision) {
+            console.log("anonymous inner function #37543");
         var v = opt_precision;
 
         if (undefined === v) {
@@ -36893,12 +37671,12 @@ console.log('jvascript initialisation happened here..');
         },
         "id": "en-us",
         "localeID": "en_US",
-        "pluralCat": function(n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+        "pluralCat": function(n, opt_precision) {  console.log("anonymous inner function #37674");var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
         });
         }]);
 
         jqLite(function() {
-            console.log('');
+            console.log('jqLite 37679');
             angularInit(window.document, bootstrap);
         });
 
