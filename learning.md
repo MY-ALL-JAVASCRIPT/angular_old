@@ -36,11 +36,15 @@ angular template syntax : more about template syntax @[https://angular.io/guide/
     Interpolation {{ }}
     Property binding [ ]
     Event binding ( )
+    [()]
 
 
 Most Angular code can be written with just the latest JavaScript,
     > using types for dependency injection,
     > and using decorators for metadata.
+
+
+console.trace();
 -----------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------
 
