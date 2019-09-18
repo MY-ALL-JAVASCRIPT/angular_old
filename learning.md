@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 why angular ..??
-    we need a page synchronisation on a event basis,
+    we need a page synchronisation on a event basis, with database
     we can't write document.getElementById("#idName") every time
     we need a solution, that helps us manpulating the dom element efficienty...
     so ANGULR :)
@@ -75,7 +75,7 @@ and by this time, following functions are initialised to javascript
 
 
 **enum has more to do with sequencial storage date like array, properties are constant and readonly
-**it have both bidirectional feature  (in the sense key=>value, value=>key)
+**it have bidirectional reading feature  (in the sense key=>value, value=>key)
 
 
 
@@ -279,8 +279,7 @@ after then with forEach() loop function #15365 the following functions get execu
   isFunction #836
   isArray #800
   [3-times]anonymous inner function #15366
-
-
+[[ -- end of 6th foreach loop -- ]]
 after then @ #15975 minErr() function get called
 
 
@@ -288,14 +287,25 @@ after then @ #15975 minErr() function get called
 
 
 
+------------------------------------------------------------------
+sandboxing code::
+angular.js is not sandboxed
+description N/A
+
+
+###
+from local storage value, it's not allowed to remove value through index, so it's requires to remove all the nodes and then reassign the array
+
+###
+advantage of using javascript over java,,
+
+automatic object-property propagation, happens in javascript,,
+angular.js takes advantage of the system,
+indexed zero property propagatioon, that allows both synchronous & asynchronus class-property propagation.
+
+
+php - without a clone operator, the object's property value is auto propagating,, through new instances..
 
 
 
-
-
-
-
-
-
-
-
+-- : end of documentation : --
