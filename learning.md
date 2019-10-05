@@ -289,6 +289,12 @@ after then @ #15975 minErr() function get called
 
 ------------------------------------------------------------------
 sandboxing code::
+
+(sandboxing : A sandbox is a testing environment that isolates untested code changes and outright experimentation from the production environment or repository,[1] in the context of software development including Web development and revision control.)
+
+(sandboxing : sandboxing iframe, causes lazy loading of the videos
+that means, video is not being auto played, for example from source such as instagram)
+
 angular.js is not sandboxed
 description N/A
 

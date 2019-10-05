@@ -10,6 +10,9 @@ analysing tracker
 
 optionally the line number can be seen with the browser console, for more tracking option
 
+now tracker is @ 16012 line
+watch ========================= sign on browser console
+
 #
 
 ------------------------------------------------------------
