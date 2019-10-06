@@ -280,7 +280,394 @@ after then with forEach() loop function #15365 the following functions get execu
   isArray #800
   [3-times]anonymous inner function #15366
 [[ -- end of 6th foreach loop -- ]]
-after then @ #15975 minErr() function get called
+after then @ #15975 minErr() function get called & function scope ends @ line #16011
+
+
+then we are calling to createMap() function with below expression. from line no #16014
+var OPERATORS = createMap();
+
+after than forEach loop get executed, so we are calling to below functions
+forEach(), isFunction(), isArray()
+
+--
+then next function call calls to minErr() happens @ line number #20623
+then next function call calls to minErr() happens @ line number #22036
+then next function call calls to minErr() happens @ line number #22299
+--
+
+
+after than, @ line #22478, we called function urlResolve() & followed by isString()
+
+than @line #23642 we, calling dateGetter() function for several times.. along with dateStrGetter(), weekGetter() as well..
+
+after than on line #23911 we called function valueFn()
+& next call to valueFn() function is from line #23939
+after than, the next call to valueFn() happened from line #24814
+
+
+
+than @ line #25188 forEach() function loop get executed for 8 itteration & the following function get executed
+  #1st iteration
+    forEach
+    isFunction
+    isArray
+    isArrayLike
+    isWindow
+    isArray
+    isString
+    isNumber
+    isBlankObject
+  #2nd iteration
+    anonymous inner function #25189
+  #3rd iteration
+    anonymous inner function #25189
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #4th iteration
+    anonymous inner function #25189
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #5th iteration
+    anonymous inner function #25189
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #6th iteration
+    anonymous inner function #25189
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #7th iteration
+    anonymous inner function #25189
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #8th iteration
+    anonymous inner function #25189
+    directiveNormalize #11663
+    anonymous inner function #11667
+
+after than @ line #25226 forEach() function get execuetd for 7 iterations, & the following function call happened.
+  #1st iteration
+    forEach
+    isFunction #836
+    isArray #800
+    isArrayLike
+    isWindow #862
+    isArray #800
+    isString #742
+    isNumber #765
+    isBlankObject #724
+  #2nd iteration
+    anonymous inner function #25227
+  #3rd iteration
+    anonymous inner function #25227
+  #4th iteration
+    anonymous inner function #25227
+  #5th iteration
+    anonymous inner function #25227
+  #6th iteration
+    anonymous inner function #25227
+  #7th iteration
+    anonymous inner function #25227
+
+than @ line #25255 the next forEach() loop for 4 iterations & the following function calls happened
+  #1st iteration
+    forEach
+    isFunction #836
+    isArray #800
+  #2nd iteration
+    anonymous inner function #25255
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #3rd iteration
+    anonymous inner function #25255
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #4th iteration
+    anonymous inner function #25255
+    directiveNormalize #11663
+    anonymous inner function #11667
+
+after than @ line #25304 calls to function valueFn(), happened
+
+than @ line #25666, calls to addSetValidityMethod() happened
+
+after than @ line #25959 & @ line #25951 formDirectiveFactory() function get called
+
+after than @ line #26099 function createMap() get called. followed than,,
+@ line #26100 forEach() loop function get executed for 6 iterations
+  #1st iteration
+    forEach
+    isFunction #836
+    isArray #800
+  #2nd iteration
+    anonymous inner function #26101
+  #3rd iteration
+    anonymous inner function #26101
+  #4th iteration
+    anonymous inner function #26101
+  #5th iteration
+    anonymous inner function #26101
+  #6th iteration
+    anonymous inner function #26101
+
+after than @ line #26105 variable "inputType" is initialised.
+var inputType = {...};
+for which below function calls execuetd
+  createDateParser #27523
+  createDateInputType #27584
+  createDateParser #27523
+  createDateInputType #27584
+  createDateParser #27523
+  createDateInputType #27584
+  createDateInputType #27584
+  createDateParser #27523
+  createDateInputType #27584
+
+than @ line #28810 function valueFn() get called
+
+--
+than after @ line #29165 classDirective() function get called
+after tahn @ line #29274 classDirective() function get called
+after than @ line #29384 classDirective() function get called
+--
+
+than @ line #29438, calling ngDirective() function, so there by calling,,
+other two functions such as : isFunction() & valueFn()
+
+than @ line #29935 forEach() loop function get executed for 19 iteration,
+there by calling the following functions
+
+  #1st Iteration
+    forEach
+    isFunction #836
+    isArray #800
+  #2nd Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #3rd Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #4th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #5th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #6th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #7th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #8th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #9th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #10th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #11th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #12th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #13th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #14th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #15th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #16th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #17th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #18th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+  #19th Iteration
+    directiveNormalize #11663
+    anonymous inner function #11667
+
+--
+after than @ line #30918 we called function ngDirective(), followed by isFunction() & valueFn() function.
+
+than we called minErr() function @ line #31090
+
+after than @ line #32234 we called function addSetValidityMethod()
+than @ line #32588 we called ModelOptions() function
+
+
+after than @ line #33124 we called function ngDirective() #24793 & there by we called function isFunction() #836, valueFn() #651
+
+than @ line #33130 we called function minErr() function
+after than, @ line #34357, we called minErr() function
+
+than @ line #35585, ngDirective() function get called, followed,, isFunction() & valueFn() is get called.
+
+after than @ line #35806 we called ngDirective() function, so followed by isFunction(), valueFn() function is also get called.
+
+after than @ line #35827 ngDirective() function get called & so there by we called isFunction(), valueFn() function.
+
+than @ line #35997 we called minErr() function
+
+than @ line #37528 we called bindJQuery() function, & there by we also called
+"var jq is a function  #1384" & "isDefined #694" & "isUndefined #677"
+
+
+after than we called publishExternalAPI() function @ line #37530 & so there by the following function call happened.
+  publishExternalAPI #2871
+  extend
+  baseExtend
+  isObject #712
+  setHashKey
+  setupModuleLoader #2283
+  minErr
+  minErr
+  inner function ensure() #2287
+  inner function ensure() #2287
+  inner function ensure() inside setupModuleLoader() #2296
+  module() inner function inside ensure() > inside setupModuleLoader() #2351
+  var assertNotHasOwnProperty is a function inside module() ensure() > setupModuleLoader() #2354
+  inner function ensure() #2287
+  invokeLater is a inner function #2659
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLater is a inner function #2659
+  invokeLater is a inner function #2659
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  is a anonymous function inside > inside invokeLater() #2662
+  property info: is a function #2420
+  isDefined #694
+  isObject #712
+call to publishExternalAPI() function ends here.
+
+
+than @ line #37532 call to angular.module() function happens, hence call to below functions happened.
+  module() inner function inside ensure() > inside setupModuleLoader() #2351
+  var assertNotHasOwnProperty is a function inside module() ensure() > setupModuleLoader() #2354
+  inner function ensure() #2287
+  invokeLater is a inner function #2659
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLater is a inner function #2659
+  invokeLater is a inner function #2659
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  invokeLaterAndSetModuleName is a inner function #2674
+  is a anonymous function inside > inside invokeLater() #2662
+
+
+
+& than @ line #37678 we called function, jqLite()
+  isString #742
+  JQLite #3296
+  isString #742
+  isFunction #836
+  jqLiteReady #3568
+
+
+than @ line #37685 the following function call happened
+!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend(...)
+& there by the following function call happened..
+  csp declared as a function #1316
+  isDefined #694
+  Inner function, noUnsafeEval #1334 declared inside csp=function() #1334
+  JQLite #3296
+  isString #742
+  JQLite #3296
+  isString #742
+  isFunction #836
+  jqLiteAddNodes #3489
+  JQLite.prototype[name] is a function #4102
+  isUndefined #677
+  property prepend: is a inner function #3999
+  JQLite #3296
+  isString #742
+  varibale trim is a function #916
+  isString #742
+  jqLiteParseHTML #3265
+  jqLiteBuildFragment #3231
+  jqLiteIsTextNode #3210
+  concat #1400
+  forEach
+  isFunction #836
+  isArray #800
+  anonymous inner function #3258
+  jqLiteAddNodes #3489
+  forEach
+  isFunction #836
+  isArray #800
+  isArrayLike
+  isWindow #862
+  isArray #800
+  isString #742
+  anonymous inner function #4003
+  isDefined #694
+  isDefined #694
+
+
+--------------- END OF PROGRAMME FILE ---------------
+after then the below function call happened
+
+trigger is a inner function #3570
+jqLite #37679
+angularInit #1895
+forEach
+isFunction #836
+isArray #800
+forEach
+isFunction #836
+isArray #800
+
+
+--------------- END OF PROCEDURE CALLS ---------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

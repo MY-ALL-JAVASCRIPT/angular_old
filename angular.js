@@ -15972,7 +15972,7 @@ console.log('jvascript initialisation happened here..');
         *     Or gives undesired access to variables likes document or window?    *
         * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-       console.log('before minErr #15975 -catch'); var $parseMinErr = minErr('$parse'); console.log('before minErr #15975 -catch');
+       console.log('before minErr #15975 -catch'); var $parseMinErr = minErr('$parse'); console.log('after minErr #15975 -catch');
 
         var objectValueOf = {}.constructor.prototype.valueOf;
 
@@ -16009,7 +16009,7 @@ console.log('jvascript initialisation happened here..');
         // such a 'broken' object as a key.
         return name + '';
         }
-console.log('=========================================');
+
 
         var OPERATORS = createMap();
         forEach('+ - * / % === !== == != < > <= >= && || ! = |'.split(' '), function(operator) { OPERATORS[operator] = true; });
@@ -20620,7 +20620,7 @@ console.log('=========================================');
 
         /* exported $SceProvider, $SceDelegateProvider */
 
-        console.log('before minErr #20623 -catch'); var $sceMinErr = minErr('$sce'); console.log('before minErr #20623 -catch');
+        console.log('before minErr #20623 -catch'); var $sceMinErr = minErr('$sce'); console.log('after minErr #20623 -catch');
 
         var SCE_CONTEXTS = {
         // HTML is used when there's HTML rendered (e.g. ng-bind-html, iframe srcdoc binding).
@@ -34354,7 +34354,7 @@ console.log('=========================================');
         *
         */
 
-       console.log('before minErr #34357 -catch'); var ngRefMinErr = minErr('ngRef'); console.log('before minErr #34357 -catch');
+       console.log('before minErr #34357 -catch'); var ngRefMinErr = minErr('ngRef'); console.log('after minErr #34357 -catch');
 
         var ngRefDirective = ['$parse', function($parse) {
             console.log("anonymous inner function #34360");
@@ -37685,5 +37685,6 @@ console.log('=========================================');
         !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend(
             '<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>'
             );
+    console.log('===========================------ END OF DOCUMENT ------=========================');
 
 //..
